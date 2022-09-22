@@ -15,7 +15,8 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 
 import { useEffect } from 'react';
-import Style from './register-page.module.scss'
+import Style from './cadastro-page.module.scss'
+import logoIFMS from '../../../assets/img/ifms-logo.png'
 
 const CadastroPage: React.FC<any> = (prop) => {
 
@@ -39,17 +40,17 @@ const CadastroPage: React.FC<any> = (prop) => {
                             <CCard className="mx-4">
                                 <CCardBody className="p-4">
                                     <CForm>
-                                        <h1>Register</h1>
-                                        <p className="text-medium-emphasis">Create your account</p>
+                                        <h1>SISOC</h1>
+                                        <p className="text-medium-emphasis">Cadastre-se para acessar.</p>
                                         <CInputGroup className="mb-3">
                                             <CInputGroupText>
                                                 <CIcon icon={cilUser} />
                                             </CInputGroupText>
-                                            <CFormInput placeholder="Username" autoComplete="username" />
+                                            <CFormInput placeholder="Nome Completo" autoComplete="username" />
                                         </CInputGroup>
                                         <CInputGroup className="mb-3">
                                             <CInputGroupText>@</CInputGroupText>
-                                            <CFormInput placeholder="Email" autoComplete="email" />
+                                            <CFormInput placeholder="E-mail" autoComplete="email" />
                                         </CInputGroup>
                                         <CInputGroup className="mb-3">
                                             <CInputGroupText>
@@ -57,7 +58,7 @@ const CadastroPage: React.FC<any> = (prop) => {
                                             </CInputGroupText>
                                             <CFormInput
                                                 type="password"
-                                                placeholder="Password"
+                                                placeholder="Senha"
                                                 autoComplete="new-password"
                                             />
                                         </CInputGroup>
@@ -67,12 +68,12 @@ const CadastroPage: React.FC<any> = (prop) => {
                                             </CInputGroupText>
                                             <CFormInput
                                                 type="password"
-                                                placeholder="Repeat password"
+                                                placeholder="Repetir Senha"
                                                 autoComplete="new-password"
                                             />
                                         </CInputGroup>
                                         <div className="d-grid">
-                                            <CButton color="success">Create Account</CButton>
+                                            <CButton color="success">Cadastrar</CButton>
                                         </div>
                                     </CForm>
                                 </CCardBody>

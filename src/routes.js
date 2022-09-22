@@ -3,6 +3,7 @@ import { Routes, HashRouter, Route, Navigate, BrowserRouter } from 'react-router
 import LoginPage from './public/pages/Login/login-page';
 import CadastroPage from './public/pages/Cadastro/cadastro-page';
 import Page404 from './secure/pages/Page404/page-404';
+import HomePage from './secure/pages/Home/home-page';
 
 const RoutesSystem = (props) => {
 
@@ -17,15 +18,15 @@ const RoutesSystem = (props) => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/home' element={
-                    
-                    <SecuredRoute redirectTo="/register">
+                <Route path='/a' element={
+                    <SecuredRoute redirectTo="/login">
                         <LoginPage />
-                    </SecuredRoute>} 
-                    />
+                    </SecuredRoute>}
+                />
 
                 <Route path="/cadastrar" name="Cadastro" element={<CadastroPage />} />
                 <Route path="/login" name="Login" element={<LoginPage />} />
+                <Route path="/home" name="Home" element={<HomePage />} />
                 <Route path="*" name="teste" element={<Page404 />} />
             </Routes>
         </BrowserRouter>

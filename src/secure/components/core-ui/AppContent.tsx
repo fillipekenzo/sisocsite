@@ -3,9 +3,9 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
 
 // routes config
-import SecureRoutes from '../../../secure/pages/secure-routes'
+import SecureRoutes from '../../pages/secure-routes'
 
-const AppContent = () => {
+const AppContent: React.FC<any> = (prop) => {
   return (
     <CContainer lg>
       <Suspense fallback={<CSpinner color="primary" />}>
@@ -16,8 +16,6 @@ const AppContent = () => {
                 <Route
                   key={idx}
                   path={route.path}
-                  exact={route.exact}
-                  name={route.name}
                   element={<route.element />}
                 />
               )
@@ -30,4 +28,4 @@ const AppContent = () => {
   )
 }
 
-export default React.memo(AppContent)
+export default AppContent

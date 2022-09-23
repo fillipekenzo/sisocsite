@@ -4,6 +4,7 @@ import LoginPage from './public/pages/Login/login-page';
 import CadastroPage from './public/pages/Cadastro/cadastro-page';
 import Page404 from './secure/pages/Page404/page-404';
 import HomePage from './secure/pages/Home/home-page';
+import TipoOcorrenciaPage from './secure/pages/TipoOcorrencia/tipo-ocorrencia-page';
 
 const RoutesSystem = (props) => {
 
@@ -26,8 +27,8 @@ const RoutesSystem = (props) => {
 
                 <Route path="/cadastrar" name="Cadastro" element={<CadastroPage />} />
                 <Route path="/login" name="Login" element={<LoginPage />} />
-                <Route path="/home" name="Home" element={<HomePage />} />
-                <Route path="*" name="teste" element={<Page404 />} />
+                <Route path="*" name="Home" element={<HomePage />} />
+                {/* <Route path="" name="teste" element={<Page404 />} /> */}
             </Routes>
         </BrowserRouter>
     );

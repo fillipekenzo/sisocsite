@@ -1,21 +1,25 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
 
-import SecureRoutes from '../../../secure/pages/secure-routes'
+import SecureRoutes from '../../pages/secure-routes'
 
 import { CBreadcrumb, CBreadcrumbItem } from '@coreui/react'
 
-const AppBreadcrumb = () => {
+const AppBreadcrumb: React.FC<any> = (prop) => {
+
   const currentLocation = useLocation().pathname
 
-  const getRouteName = (pathname, routes) => {
-    const currentRoute = routes.find((route) => route.path === pathname)
+  const getRouteName = (pathname: any, routes: any) => {
+    console.log(routes);
+    console.log(pathname);
+
+    const currentRoute = routes.find((route: any) => route.path === pathname)
     return currentRoute ? currentRoute.name : false
   }
 
-  const getBreadcrumbs = (location) => {
-    const breadcrumbs = []
-    location.split('/').reduce((prev, curr, index, array) => {
+  const getBreadcrumbs = (location: any) => {
+    const breadcrumbs: any[] = []
+    location.split('/').reduce((prev: any, curr: any, index: any, array: any) => {
       const currentPathname = `${prev}/${curr}`
       const routeName = getRouteName(currentPathname, SecureRoutes)
       routeName &&
@@ -48,4 +52,4 @@ const AppBreadcrumb = () => {
   )
 }
 
-export default React.memo(AppBreadcrumb)
+export default AppBreadcrumb

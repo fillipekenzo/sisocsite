@@ -20,15 +20,15 @@ import { useEffect } from 'react';
 import Style from './login-page.module.scss'
 import logoIFMS from '../../../assets/img/ifms-logo.png'
 
-const TipoUsuarioPage: React.FC<any> = (prop) => {
+const TipoOcorrenciaPage: React.FC<any> = (prop) => {
 
     useEffect(() => {
     }, [])
 
     return (
         <>
-            <h1>teste2</h1>
+            <h1>teste</h1>
         </>
     )
 }
-export default TipoUsuarioPage;
+export default TipoOcorrenciaPage;

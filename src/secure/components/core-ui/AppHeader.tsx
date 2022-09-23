@@ -17,31 +17,34 @@ import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 import { logo } from '../../../assets/brand/logo'
+import { useAppDispatch, useAppSelector } from '../../../features/hooks'
+import { sidebarState, show } from '../../../features/slices/sidebar-slice'
+import logoIFMS from '../../../assets/img/ifms.png'
 
-const AppHeader = () => {
-  const dispatch = useDispatch()
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+const AppHeader: React.FC<any> = (prop) => {
+  const dispatch = useAppDispatch();
+  const sidebar = useAppSelector(sidebarState);
 
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
         <CHeaderToggler
           className="ps-1"
-          onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
+          onClick={() => dispatch(show(!sidebar.sidebarShow))}
         >
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
-        <CHeaderBrand className="mx-auto d-md-none" to="/">
-          <CIcon icon={logo} height={48} alt="Logo" />
+        <CHeaderBrand className="mx-auto d-md-none">
+          <div style={{display:'flex'}}>
+            <h3 style={{ margin: '0px' }}>SISOC</h3>
+            <img src={logoIFMS} style={{ width: '30px' }}></img>
+          </div>
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
           <CNavItem>
-            <CNavLink to="/dashboard" component={NavLink}>
-              Dashboard
+            <CNavLink to="/home" component={NavLink}>
+              Home
             </CNavLink>
-          </CNavItem>
-          <CNavItem>
-            <CNavLink href="#">Users</CNavLink>
           </CNavItem>
           <CNavItem>
             <CNavLink href="#">Settings</CNavLink>
@@ -50,17 +53,7 @@ const AppHeader = () => {
         <CHeaderNav>
           <CNavItem>
             <CNavLink href="#">
-              <CIcon icon={cilBell} size="lg" />
-            </CNavLink>
-          </CNavItem>
-          <CNavItem>
-            <CNavLink href="#">
-              <CIcon icon={cilList} size="lg" />
-            </CNavLink>
-          </CNavItem>
-          <CNavItem>
-            <CNavLink href="#">
-              <CIcon icon={cilEnvelopeOpen} size="lg" />
+              Nome Usuário
             </CNavLink>
           </CNavItem>
         </CHeaderNav>

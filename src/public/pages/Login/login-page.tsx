@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useCallback, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
     CButton,
     CCard,
@@ -8,7 +8,11 @@ import {
     CCol,
     CContainer,
     CForm,
+    CFormCheck,
+    CFormFeedback,
     CFormInput,
+    CFormLabel,
+    CFormSelect,
     CInputGroup,
     CInputGroupText,
     CRow,
@@ -19,18 +23,94 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useEffect } from 'react';
 import Style from './login-page.module.scss'
 import logoIFMS from '../../../assets/img/ifms-logo.png'
+import { useToast } from '../../../features/toast'
+import { useAuth } from '../../../features/auth'
 
 interface LoginProps {
     location: any;
 }
-const LoginPage: React.FC<LoginProps> = (prop) => {
+
+interface FormData {
+    email: string;
+    senha: string;
+}
+
+const LoginPage: React.FC<any> = (prop) => {
+    const { addToast } = useToast();
+    const [validated, setValidated] = useState(false)
+    const { signIn, user } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { from } = location.state || { from: { pathname: '/' } };
 
     useEffect(() => {
     }, [])
 
-    const onFinish = (values: any) => {
+    // const handleSubmit = (event: any) => {
+    //     console.log(event);
 
-    }
+    //     const form = event.currentTarget
+    //     if (form.checkValidity() === false) {
+    //         event.preventDefault()
+    //         event.stopPropagation()
+    //     }
+    //     setValidated(true)
+    //     addToast({
+    //         title: 'Erro ao fazer login',
+    //         description: 'Verifique suas credenciais',
+    //         type: 'error',
+    //     });
+    // }
+
+    const handleSubmit = useCallback(
+        async (event: any) => {
+            console.log(event);
+            addToast({
+                title: 'Erro ao fazer login',
+                description: 'Verifique suas credenciais',
+                type: 'error',
+            });
+            const form = event.currentTarget
+            if (form.checkValidity() === false) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            setValidated(true)
+           
+            // addToast({
+            //     title: 'Erro ao fazer login',
+            //     description: 'Verifique suas credenciais',
+            //     type: 'error',
+            // });
+            // try {
+            //     const form = data
+            //     if (form.checkValidity() === false) {
+            //         data.preventDefault()
+            //         data.stopPropagation()
+            //     }
+            //     setValidated(true)
+            //     await signIn({
+            //         email: data.email.toLowerCase(),
+            //         senha: data.senha,
+            //     });
+
+            //     // navigate(from);
+            // } catch (ex) {
+            //     // if (ex instanceof Yup.ValidationError) {
+            //     //     const errors = getValidationErrors(ex);
+            //     //     formRef.current?.setErrors(errors);
+            //     //     return;
+            //     // }
+
+            //     addToast({
+            //         title: 'Erro ao fazer login',
+            //         description: 'Verifique suas credenciais',
+            //         type: 'error',
+            //     });
+            // }
+        },
+        [signIn, addToast, history, from]
+    );
 
     const onFinishFailed = (errorInfo: any) => {
 
@@ -52,14 +132,26 @@ const LoginPage: React.FC<LoginProps> = (prop) => {
                                 </CCard>
                                 <CCard className="p-4">
                                     <CCardBody>
-                                        <CForm>
+                                        <CForm
+                                            className="row g-3 needs-validation"
+                                            noValidate
+                                            validated={validated}
+                                            onSubmit={handleSubmit}
+                                        >
                                             <h1>SISOC</h1>
                                             <p className="text-medium-emphasis">Faça seu Login</p>
                                             <CInputGroup className="mb-3">
                                                 <CInputGroupText>
                                                     <CIcon icon={cilUser} />
                                                 </CInputGroupText>
-                                                <CFormInput placeholder="E-mail" autoComplete="e-mail" />
+                                                <CFormInput
+                                                    type="text"
+                                                    placeholder="E-mail"
+                                                    feedbackValid="E-mail válido!"
+                                                    feedbackInvalid="Insira um e-mail válido!"
+                                                    id="email"
+                                                    required
+                                                />
                                             </CInputGroup>
                                             <CInputGroup className="mb-4">
                                                 <CInputGroupText>
@@ -68,12 +160,14 @@ const LoginPage: React.FC<LoginProps> = (prop) => {
                                                 <CFormInput
                                                     type="password"
                                                     placeholder="Senha"
-                                                    autoComplete="senha"
+                                                    id="senha"
+                                                    required
                                                 />
+
                                             </CInputGroup>
                                             <CRow>
                                                 <CCol xs={12}>
-                                                    <CButton color="primary" className={`px-4 ${Style.buttonEntrar}`}>
+                                                    <CButton color="primary" type='submit' className={`px-4 ${Style.buttonEntrar}`}>
                                                         Entrar
                                                     </CButton>
                                                 </CCol>
@@ -95,7 +189,6 @@ const LoginPage: React.FC<LoginProps> = (prop) => {
                                         </CForm>
                                     </CCardBody>
                                 </CCard>
-
                             </CCardGroup>
                         </CCol>
                     </CRow>

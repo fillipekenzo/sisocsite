@@ -19,11 +19,11 @@ const RoutesSystem = (props) => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/a' element={
+                {/* <Route path='/a' element={
                     <SecuredRoute redirectTo="/login">
                         <LoginPage />
                     </SecuredRoute>}
-                />
+                /> */}
 
                 <Route path="/cadastrar" name="Cadastro" element={<CadastroPage />} />
                 <Route path="/login" name="Login" element={<LoginPage />} />

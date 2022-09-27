@@ -10,9 +10,6 @@ const AppBreadcrumb: React.FC<any> = (prop) => {
   const currentLocation = useLocation().pathname
 
   const getRouteName = (pathname: any, routes: any) => {
-    console.log(routes);
-    console.log(pathname);
-
     const currentRoute = routes.find((route: any) => route.path === pathname)
     return currentRoute ? currentRoute.name : false
   }

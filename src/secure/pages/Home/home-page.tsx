@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import Style from './login-page.module.scss'
 import TipoUsuarioPage from '../TipoUsuario/tipo-usuario-page';
 import TipoOcorrenciaPage from '../TipoOcorrencia/tipo-ocorrencia-page';
+import Page404 from '../Page404/page-404';
 
 const SecuredRoute = ({ children, redirectTo }: any) => {
     const isLoggedIn = !!localStorage.getItem('usuarioLogado');
@@ -32,9 +33,11 @@ const HomePage: React.FC<any> = (prop) => {
                                             <TipoUsuarioPage />
                                         </SecuredRoute>}
                                     /> */}
-                                    <Route path="/"  element={<TipoOcorrenciaPage />} />
-                                    <Route path="/tipo-ocorrencia"  element={<TipoOcorrenciaPage />} />
-                                    <Route path="/tipo-usuario"  element={<TipoUsuarioPage />} />
+                                    <Route path="/" element={<TipoOcorrenciaPage />} />
+                                    <Route path="/tipo-ocorrencia" element={<TipoOcorrenciaPage />} />
+                                    <Route path="/tipo-usuario" element={<TipoUsuarioPage />} />
+                                    <Route path="*" element={<Page404 />} />
+
                                     {/* <Route path="/" element={<Navigate to="" replace />} /> */}
                                 </Routes>
                             </Suspense>

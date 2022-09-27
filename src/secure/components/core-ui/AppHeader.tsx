@@ -20,8 +20,10 @@ import { logo } from '../../../assets/brand/logo'
 import { useAppDispatch, useAppSelector } from '../../../features/hooks'
 import { sidebarState, show } from '../../../features/slices/sidebar-slice'
 import logoIFMS from '../../../assets/img/ifms.png'
+import { useAuth } from '../../../features/auth'
 
 const AppHeader: React.FC<any> = (prop) => {
+  const { signOut, user } = useAuth();
   const dispatch = useAppDispatch();
   const sidebar = useAppSelector(sidebarState);
 
@@ -53,7 +55,7 @@ const AppHeader: React.FC<any> = (prop) => {
         <CHeaderNav>
           <CNavItem>
             <CNavLink href="#">
-              Nome Usuário
+              {user.Nome}
             </CNavLink>
           </CNavItem>
         </CHeaderNav>

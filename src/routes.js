@@ -5,32 +5,32 @@ import CadastroPage from './public/pages/Cadastro/cadastro-page';
 import Page404 from './secure/pages/Page404/page-404';
 import HomePage from './secure/pages/Home/home-page';
 import TipoOcorrenciaPage from './secure/pages/TipoOcorrencia/tipo-ocorrencia-page';
+import TipoUsuarioPage from './secure/pages/TipoUsuario/tipo-usuario-page';
 
 const RoutesSystem = (props) => {
 
     const isLoggedInFunc = () => !!localStorage.getItem('usuarioLogado');
 
     const SecuredRoute = ({ children, redirectTo }) => {
-        const isLoggedIn = !!localStorage.getItem('usuarioLogado');
-        console.log(isLoggedIn);
+        const isLoggedIn = !!localStorage.getItem('@Sisoc:user');
         return isLoggedIn ? children : <Navigate to={redirectTo} />
     }
 
     return (
-        <BrowserRouter>
+        <HashRouter>
             <Routes>
-                {/* <Route path='/a' element={
-                    <SecuredRoute redirectTo="/login">
-                        <LoginPage />
-                    </SecuredRoute>}
-                /> */}
 
-                <Route path="/cadastrar" name="Cadastro" element={<CadastroPage />} />
-                <Route path="/login" name="Login" element={<LoginPage />} />
-                <Route path="*" name="Home" element={<HomePage />} />
-                {/* <Route path="" name="teste" element={<Page404 />} /> */}
+                <Route index path="/cadastrar" name="Cadastro" element={<CadastroPage />} />
+                <Route index path="/login" name="Login" state={null} element={<LoginPage />} />
+
+                <Route index path='*' element={
+                    <SecuredRoute redirectTo="/login">
+                        <HomePage />
+                    </SecuredRoute>}
+                />
+
             </Routes>
-        </BrowserRouter>
+        </HashRouter>
     );
 };
 

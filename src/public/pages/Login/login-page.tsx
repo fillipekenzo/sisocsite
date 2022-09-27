@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
     CButton,
@@ -7,27 +7,23 @@ import {
     CCardGroup,
     CCol,
     CContainer,
-    CForm,
-    CFormCheck,
-    CFormFeedback,
-    CFormInput,
-    CFormLabel,
-    CFormSelect,
-    CInputGroup,
-    CInputGroupText,
     CRow,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
+import { cilLockLocked, cilUser, cilLockUnlocked } from '@coreui/icons'
 
 import { useEffect } from 'react';
 import Style from './login-page.module.scss'
 import logoIFMS from '../../../assets/img/ifms-logo.png'
 import { useToast } from '../../../features/toast'
 import { useAuth } from '../../../features/auth'
+import ReactDOM from "react-dom/client";
+
+import * as Yup from 'yup';
+import { Formik, Form, Field } from 'formik'
 
 interface LoginProps {
-    location: any;
+    state: any;
 }
 
 interface FormData {
@@ -35,86 +31,63 @@ interface FormData {
     senha: string;
 }
 
-const LoginPage: React.FC<any> = (prop) => {
-    const { addToast } = useToast();
+const LoginPage: React.FC<LoginProps> = (prop) => {
     const [validated, setValidated] = useState(false)
     const { signIn, user } = useAuth();
+    const { addToast } = useToast();
     const navigate = useNavigate();
     const location = useLocation();
     const { from } = location.state || { from: { pathname: '/' } };
+    const [passwordType, setPasswordType] = useState("password");
+    const [passwordVisible, setPasswordVisible] = useState(false);
+
+    const initialForm = {
+        email: '',
+        senha: '',
+    };
 
     useEffect(() => {
+       
     }, [])
 
-    // const handleSubmit = (event: any) => {
-    //     console.log(event);
-
-    //     const form = event.currentTarget
-    //     if (form.checkValidity() === false) {
-    //         event.preventDefault()
-    //         event.stopPropagation()
-    //     }
-    //     setValidated(true)
-    //     addToast({
-    //         title: 'Erro ao fazer login',
-    //         description: 'Verifique suas credenciais',
-    //         type: 'error',
-    //     });
-    // }
+    const SchemaValidation = Yup.object().shape({
+        senha: Yup.string()
+            .min(4, 'Muito curta')
+            .max(8, 'Muito longa')
+            .required('Senha obrigatória'),
+        email: Yup.string().email('Digite um e-mail válido').required('E-mail obrigatório'),
+    });
 
     const handleSubmit = useCallback(
-        async (event: any) => {
-            console.log(event);
-            addToast({
-                title: 'Erro ao fazer login',
-                description: 'Verifique suas credenciais',
-                type: 'error',
-            });
-            const form = event.currentTarget
-            if (form.checkValidity() === false) {
-                event.preventDefault()
-                event.stopPropagation()
+        async (data: FormData) => {
+            try {
+                await signIn({
+                    email: data.email.toLowerCase(),
+                    senha: data.senha,
+                });
+
+                navigate(from);
+
+            } catch (ex) {
+                addToast({
+                    title: 'Erro ao fazer login',
+                    description: 'Verifique suas credenciais',
+                    type: 'error',
+                });
             }
-            setValidated(true)
-           
-            // addToast({
-            //     title: 'Erro ao fazer login',
-            //     description: 'Verifique suas credenciais',
-            //     type: 'error',
-            // });
-            // try {
-            //     const form = data
-            //     if (form.checkValidity() === false) {
-            //         data.preventDefault()
-            //         data.stopPropagation()
-            //     }
-            //     setValidated(true)
-            //     await signIn({
-            //         email: data.email.toLowerCase(),
-            //         senha: data.senha,
-            //     });
-
-            //     // navigate(from);
-            // } catch (ex) {
-            //     // if (ex instanceof Yup.ValidationError) {
-            //     //     const errors = getValidationErrors(ex);
-            //     //     formRef.current?.setErrors(errors);
-            //     //     return;
-            //     // }
-
-            //     addToast({
-            //         title: 'Erro ao fazer login',
-            //         description: 'Verifique suas credenciais',
-            //         type: 'error',
-            //     });
-            // }
         },
         [signIn, addToast, history, from]
     );
 
-    const onFinishFailed = (errorInfo: any) => {
-
-    };
+    const togglePassword = () => {
+        if (passwordType === "password") {
+            setPasswordType("text")
+            setPasswordVisible(true)
+            return;
+        }
+        setPasswordVisible(false)
+        setPasswordType("password")
+    }
 
     return (
         <>
@@ -123,7 +96,7 @@ const LoginPage: React.FC<any> = (prop) => {
                     <CRow className="justify-content-center">
                         <CCol md={8}>
                             <CCardGroup>
-                                <CCard className="text-white py-5" style={{ width: '4%' }}>
+                                <CCard className={`text-white py-5`} >
                                     <CCardBody className="text-center">
                                         <div>
                                             <img src={logoIFMS} className={Style.logoIFMS}></img>
@@ -132,61 +105,57 @@ const LoginPage: React.FC<any> = (prop) => {
                                 </CCard>
                                 <CCard className="p-4">
                                     <CCardBody>
-                                        <CForm
-                                            className="row g-3 needs-validation"
-                                            noValidate
-                                            validated={validated}
-                                            onSubmit={handleSubmit}
-                                        >
+                                        <div>
                                             <h1>SISOC</h1>
                                             <p className="text-medium-emphasis">Faça seu Login</p>
-                                            <CInputGroup className="mb-3">
-                                                <CInputGroupText>
-                                                    <CIcon icon={cilUser} />
-                                                </CInputGroupText>
-                                                <CFormInput
-                                                    type="text"
-                                                    placeholder="E-mail"
-                                                    feedbackValid="E-mail válido!"
-                                                    feedbackInvalid="Insira um e-mail válido!"
-                                                    id="email"
-                                                    required
-                                                />
-                                            </CInputGroup>
-                                            <CInputGroup className="mb-4">
-                                                <CInputGroupText>
-                                                    <CIcon icon={cilLockLocked} />
-                                                </CInputGroupText>
-                                                <CFormInput
-                                                    type="password"
-                                                    placeholder="Senha"
-                                                    id="senha"
-                                                    required
-                                                />
+                                        </div>
+                                        <Formik
+                                            initialValues={initialForm}
+                                            onSubmit={handleSubmit}
+                                            validationSchema={SchemaValidation}
+                                        >
+                                            {({ errors, touched }) => (
+                                                <Form>
+                                                    <div className="input-group mb-3">
+                                                        <span className="input-group-text" id="basic-addon3"><CIcon icon={cilUser} /></span>
+                                                        <Field type="email" className="form-control" name="email" id="email" placeholder="E-mail" />
+                                                        {errors.email && touched.email ? (
+                                                            <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.email}</div>
+                                                        ) : null}
+                                                    </div>
 
-                                            </CInputGroup>
-                                            <CRow>
-                                                <CCol xs={12}>
-                                                    <CButton color="primary" type='submit' className={`px-4 ${Style.buttonEntrar}`}>
-                                                        Entrar
-                                                    </CButton>
-                                                </CCol>
-                                            </CRow>
-                                            <CRow>
-                                                <CCol xs={6}>
-                                                    <Link to="/cadastrar">
-                                                        <CButton color="link" className={`px-0 ${Style.link}`}>
-                                                            Cadastre-se
-                                                        </CButton>
-                                                    </Link>
-                                                </CCol>
-                                                <CCol xs={6} className="text-right">
-                                                    <CButton color="link" className={`px-0 ${Style.link}`}>
-                                                        Esqueceu sua senha?
-                                                    </CButton>
-                                                </CCol>
-                                            </CRow>
-                                        </CForm>
+                                                    <div className="input-group mb-3">
+                                                        <span className="input-group-text" id="basic-addon3" onClick={() => { togglePassword() }}><CIcon icon={passwordVisible ? cilLockUnlocked : cilLockLocked} /></span>
+                                                        <Field type={passwordType} className="form-control" name="senha" id="senha" placeholder="Senha" />
+                                                        {errors.senha && touched.senha ? (
+                                                            <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.senha}</div>
+                                                        ) : null}
+                                                    </div>
+
+                                                    <CRow>
+                                                        <CCol xs={12}>
+                                                            <CButton color="primary" type='submit' className={`px-4 ${Style.buttonEntrar}`}>
+                                                                Entrar
+                                                            </CButton>
+                                                        </CCol>
+                                                    </CRow>
+                                                    <CRow>
+                                                        <CCol xs={6}>
+                                                            <Link to="/cadastrar">
+                                                                <CButton color="link" className={`px-0 ${Style.link}`}>
+                                                                    Cadastre-se
+                                                                </CButton>
+                                                            </Link>
+                                                        </CCol>
+                                                        <CCol xs={6} className="text-right">
+                                                            <CButton color="link" className={`px-0 ${Style.link}`}>
+                                                                Esqueceu sua senha?
+                                                            </CButton>
+                                                        </CCol>
+                                                    </CRow>
+                                                </Form>
+                                            )}
+                                        </Formik>
                                     </CCardBody>
                                 </CCard>
                             </CCardGroup>

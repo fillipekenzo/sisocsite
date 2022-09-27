@@ -22,7 +22,6 @@ export const ToastProvider: React.FC<any> = ({ children }) => {
 
   const addToast = useCallback(
     ({ type, title, description }: Omit<ToastMessage, 'id'>) => {
-      console.log('oas');
       
       const id = uuid();
 

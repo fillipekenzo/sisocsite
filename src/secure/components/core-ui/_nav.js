@@ -17,35 +17,41 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
 const _nav = [
   {
-    component: CNavItem,
-    name: 'Dashboard',
-    to: '/tipo-ocorrencia',
-    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-  },
-  {
     component: CNavTitle,
-    name: 'Theme',
+    name: 'Cadastros',
   },
   {
     component: CNavItem,
-    name: 'Colors',
+    name: 'Tipo Usuário',
     to: '/tipo-usuario',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
-    name: 'Typography',
-    to: '/theme/typography',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+    name: 'Tipo Ocorrência',
+    to: '/tipo-ocorrencia',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Setor',
+    to: '/tipo-ocorrencia',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Módulo',
+    to: '/tipo-ocorrencia',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
     component: CNavTitle,
-    name: 'Components',
+    name: 'Interações',
   },
   {
     component: CNavGroup,
-    name: 'Base',
-    to: '/base',
+    name: 'Ocorrências',
+    to: '/ocorrencia',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
     items: [
       {

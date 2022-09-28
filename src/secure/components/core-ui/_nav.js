@@ -35,7 +35,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Setor',
-    to: '/tipo-ocorrencia',
+    to: '/setor',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {

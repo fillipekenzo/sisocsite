@@ -106,8 +106,7 @@ const TipoUsuarioEdicaoModal: React.FC<TipoUsuarioCadastroModalProps> = (props) 
                     onSubmit={handleSubmit}
                     validationSchema={SchemaValidation}
                 >
-                    {({ errors, touched, isSubmitting, setValues }) => {
-                        // setValues(props.model,true)
+                    {({ errors, touched }) => {
                         return (
                             <Form>
                                 <CContainer >

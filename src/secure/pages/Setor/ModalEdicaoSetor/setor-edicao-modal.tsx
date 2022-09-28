@@ -11,26 +11,26 @@ import {
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './tipo-ocorrencia-edicao-modal.module.scss'
+import Style from './setor-edicao-modal.module.scss'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useToast } from '../../../../features/toast';
-import TipoOcorrenciaService from '../../../../services/tipo-ocorrencia-service/tipo-ocorrencia-service';
+import SetorService from '../../../../services/setor-service/setor-service';
 
-interface TipoOcorrenciaCadastroModalProps {
+interface SetorCadastroModalProps {
     visivel: boolean;
     setVisivelFalse?: any;
     model: any;
 }
 
-const TipoOcorrenciaEdicaoModal: React.FC<TipoOcorrenciaCadastroModalProps> = (props) => {
+const SetorEdicaoModal: React.FC<SetorCadastroModalProps> = (props) => {
 
     const { addToast } = useToast();
     const [visible, setVisible] = useState(false);
     const [initialForm, setInitialForm] = useState({
-        TipoOcorrenciaID: 0,
+        SetorID: 0,
         Nome: '',
-        Descricao: '',
+        Sigla: '',
     });
 
     useEffect(() => {
@@ -43,13 +43,13 @@ const TipoOcorrenciaEdicaoModal: React.FC<TipoOcorrenciaCadastroModalProps> = (p
             .min(2, 'Muito curta')
             .max(100, 'Muito longa')
             .required('Nome obrigatório'),
-        Descricao: Yup.string().required('Descrição obrigatória'),
+        Sigla: Yup.string().required('Sigla obrigatória'),
     });
 
     const handleSubmit = useCallback(
         async (data: any) => {
             try {
-                TipoOcorrenciaService.put(data)
+                SetorService.put(data)
                     .then((res) => {
                         if (res.success) {
                             addToast({
@@ -62,7 +62,7 @@ const TipoOcorrenciaEdicaoModal: React.FC<TipoOcorrenciaCadastroModalProps> = (p
                     .finally(() => {
                         props.setVisivelFalse()
                     })
-                    .catch((ex:any) => {
+                    .catch((ex: any) => {
                         if (ex.response != undefined) {
                             ex.response.data.error.map((a: any) => {
                                 addToast({
@@ -81,7 +81,7 @@ const TipoOcorrenciaEdicaoModal: React.FC<TipoOcorrenciaCadastroModalProps> = (p
                         }
                     })
 
-            } catch (ex:any) {
+            } catch (ex: any) {
                 addToast({
                     title: 'Erro',
                     description: 'Não foi possível executar esta ação',
@@ -111,17 +111,17 @@ const TipoOcorrenciaEdicaoModal: React.FC<TipoOcorrenciaCadastroModalProps> = (p
                                     <Field type="number" className="form-control" name="tipoOcorrenciaID" id="tipoOcorrenciaID" hidden />
                                     <div className="mb-3">
                                         <label htmlFor="Nome" className="form-label">Nome</label>
-                                        <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Tipo Ocorrência" />
+                                        <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Setor" />
                                         {errors.Nome && touched.Nome ? (
                                             <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Nome}</div>
                                         ) : null}
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="Descricao" className="form-label">Descrição</label>
-                                        <Field type="text" className="form-control" name="Descricao" id="Descricao" placeholder="Descrição do Tipo Ocorrência" />
-                                        {errors.Descricao && touched.Descricao ? (
-                                            <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Descricao}</div>
+                                        <label htmlFor="Sigla" className="form-label">Sigla</label>
+                                        <Field type="text" className="form-control" name="Sigla" id="Sigla" placeholder="Descrição do Setor" />
+                                        {errors.Sigla && touched.Sigla ? (
+                                            <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Sigla}</div>
                                         ) : null}
                                     </div>
 
@@ -142,4 +142,4 @@ const TipoOcorrenciaEdicaoModal: React.FC<TipoOcorrenciaCadastroModalProps> = (p
         </CModal>
     )
 }
-export default TipoOcorrenciaEdicaoModal;
+export default SetorEdicaoModal;

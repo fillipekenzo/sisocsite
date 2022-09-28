@@ -4,8 +4,9 @@ import TipoUsuarioPage from './TipoUsuario/tipo-usuario-page'
 
 const SecureRoutes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/tipo-usuario', exact: true, name: 'TipoUsuario', element: TipoUsuarioPage },
-  { path: '/tipo-ocorrencia', exact: true, name: 'TipoOcorrencia', element: TipoOcorrenciaPage },
+  { path: '/tipo-usuario', exact: true, name: 'Tipo Usuário', element: TipoUsuarioPage },
+  { path: '/tipo-ocorrencia', exact: true, name: 'Tipo Ocorrência', element: TipoOcorrenciaPage },
+  { path: '/setor', exact: true, name: 'Setor', element: TipoOcorrenciaPage },
 
 ]
 

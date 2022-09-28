@@ -11,18 +11,18 @@ import {
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './tipo-ocorrencia-cadastro-modal.module.scss'
+import Style from './setor-cadastro-modal.module.scss'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useToast } from '../../../../features/toast';
-import TipoOcorrenciaService from '../../../../services/tipo-ocorrencia-service/tipo-ocorrencia-service';
+import SetorService from '../../../../services/setor-service/setor-service';
 
-interface TipoOcorrenciaCadastroModalProps {
+interface SetorCadastroModalProps {
     visivel: boolean;
     setVisivelFalse?: any;
 }
 
-const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = (props) => {
+const SetorCadastroModal: React.FC<SetorCadastroModalProps> = (props) => {
 
     const { addToast } = useToast();
     const [visible, setVisible] = useState(false);
@@ -33,7 +33,7 @@ const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = 
 
     const initialForm = {
         Nome: '',
-        Descricao: '',
+        Sigla: '',
     };
 
     const SchemaValidation = Yup.object().shape({
@@ -41,13 +41,13 @@ const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = 
             .min(2, 'Muito curta')
             .max(100, 'Muito longa')
             .required('Nome obrigatório'),
-        Descricao: Yup.string().required('Descrição obrigatória'),
+        Sigla: Yup.string().required('Sigla obrigatória'),
     });
 
     const handleSubmit = useCallback(
         async (data: any) => {
             try {
-                TipoOcorrenciaService.post(data)
+                SetorService.post(data)
                     .then((res) => {
                         if (res.success) {
                             addToast({
@@ -93,7 +93,7 @@ const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = 
     return (
         <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()}>
             <CModalHeader>
-                <CModalTitle>Cadastrar Tipo Ocorrência</CModalTitle>
+                <CModalTitle>Cadastrar Setor</CModalTitle>
             </CModalHeader>
             <CModalBody>
                 <Formik
@@ -106,17 +106,17 @@ const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = 
                             <CContainer >
                                 <div className="mb-3">
                                     <label htmlFor="Nome" className="form-label">Nome</label>
-                                    <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Tipo Ocorrência" />
+                                    <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Setor" />
                                     {errors.Nome && touched.Nome ? (
                                         <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Nome}</div>
                                     ) : null}
                                 </div>
 
                                 <div className="mb-3">
-                                    <label htmlFor="Descricao" className="form-label">Descrição</label>
-                                    <Field type="text" className="form-control" name="Descricao" id="Descricao" placeholder="Descrição do Tipo Ocorrência" />
-                                    {errors.Descricao && touched.Descricao ? (
-                                        <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Descricao}</div>
+                                    <label htmlFor="Sigla" className="form-label">Sigla</label>
+                                    <Field type="text" className="form-control" name="Sigla" id="Sigla" placeholder="Sigla do Setor" />
+                                    {errors.Sigla && touched.Sigla ? (
+                                        <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Sigla}</div>
                                     ) : null}
                                 </div>
 
@@ -136,4 +136,4 @@ const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = 
         </CModal>
     )
 }
-export default TipoOcorrenciaCadastroModal;
+export default SetorCadastroModal;

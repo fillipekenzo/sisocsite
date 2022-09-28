@@ -11,26 +11,24 @@ import {
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './tipo-usuario-edicao-modal.module.scss'
+import Style from './tipo-ocorrencia-edicao-modal.module.scss'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { cilLockLocked, cilUser } from '@coreui/icons';
-import CIcon from '@coreui/icons-react';
 import { useToast } from '../../../../features/toast';
-import TipoUsuarioService from '../../../../services/tipo-usuario-service/tipo-usuario-service';
+import TipoOcorrenciaService from '../../../../services/tipo-ocorrencia-service/tipo-ocorrencia-service';
 
-interface TipoUsuarioCadastroModalProps {
+interface TipoOcorrenciaCadastroModalProps {
     visivel: boolean;
     setVisivelFalse?: any;
     model: any;
 }
 
-const TipoUsuarioEdicaoModal: React.FC<TipoUsuarioCadastroModalProps> = (props) => {
+const TipoOcorrenciaEdicaoModal: React.FC<TipoOcorrenciaCadastroModalProps> = (props) => {
 
     const { addToast } = useToast();
     const [visible, setVisible] = useState(false);
     const [initialForm, setInitialForm] = useState({
-        TipoUsuarioID: 0,
+        TipoOcorrenciaID: 0,
         Nome: '',
         Descricao: '',
     });
@@ -51,7 +49,7 @@ const TipoUsuarioEdicaoModal: React.FC<TipoUsuarioCadastroModalProps> = (props) 
     const handleSubmit = useCallback(
         async (data: any) => {
             try {
-                TipoUsuarioService.put(data)
+                TipoOcorrenciaService.put(data)
                     .then((res) => {
                         if (res.success) {
                             addToast({
@@ -64,7 +62,7 @@ const TipoUsuarioEdicaoModal: React.FC<TipoUsuarioCadastroModalProps> = (props) 
                     .finally(() => {
                         props.setVisivelFalse()
                     })
-                    .catch((ex: any) => {
+                    .catch((ex:any) => {
                         if (ex.response != undefined) {
                             ex.response.data.error.map((a: any) => {
                                 addToast({
@@ -83,7 +81,7 @@ const TipoUsuarioEdicaoModal: React.FC<TipoUsuarioCadastroModalProps> = (props) 
                         }
                     })
 
-            } catch (ex: any) {
+            } catch (ex:any) {
                 addToast({
                     title: 'Erro',
                     description: 'Não foi possível executar esta ação',
@@ -97,7 +95,7 @@ const TipoUsuarioEdicaoModal: React.FC<TipoUsuarioCadastroModalProps> = (props) 
     return (
         <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()}>
             <CModalHeader>
-                <CModalTitle>Editar Tipo Usuário</CModalTitle>
+                <CModalTitle>Editar Tipo Ocorrência</CModalTitle>
             </CModalHeader>
             <CModalBody>
                 <Formik
@@ -111,7 +109,7 @@ const TipoUsuarioEdicaoModal: React.FC<TipoUsuarioCadastroModalProps> = (props) 
                         return (
                             <Form>
                                 <CContainer >
-                                    <Field type="number" className="form-control" name="tipoUsuarioID" id="tipoUsuarioID" hidden />
+                                    <Field type="number" className="form-control" name="tipoOcorrenciaID" id="tipoOcorrenciaID" hidden />
                                     <div className="mb-3">
                                         <label htmlFor="Nome" className="form-label">Nome</label>
                                         <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Tipo Usuário" />
@@ -145,4 +143,4 @@ const TipoUsuarioEdicaoModal: React.FC<TipoUsuarioCadastroModalProps> = (props) 
         </CModal>
     )
 }
-export default TipoUsuarioEdicaoModal;
+export default TipoOcorrenciaEdicaoModal;

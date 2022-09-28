@@ -11,20 +11,18 @@ import {
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './tipo-usuario-cadastro-modal.module.scss'
+import Style from './tipo-ocorrencia-cadastro-modal.module.scss'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { cilLockLocked, cilUser } from '@coreui/icons';
-import CIcon from '@coreui/icons-react';
 import { useToast } from '../../../../features/toast';
-import TipoUsuarioService from '../../../../services/tipo-usuario-service/tipo-usuario-service';
+import TipoOcorrenciaService from '../../../../services/tipo-ocorrencia-service/tipo-ocorrencia-service';
 
-interface TipoUsuarioCadastroModalProps {
+interface TipoOcorrenciaCadastroModalProps {
     visivel: boolean;
     setVisivelFalse?: any;
 }
 
-const TipoUsuarioCadastroModal: React.FC<TipoUsuarioCadastroModalProps> = (props) => {
+const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = (props) => {
 
     const { addToast } = useToast();
     const [visible, setVisible] = useState(false);
@@ -49,7 +47,7 @@ const TipoUsuarioCadastroModal: React.FC<TipoUsuarioCadastroModalProps> = (props
     const handleSubmit = useCallback(
         async (data: any) => {
             try {
-                TipoUsuarioService.post(data)
+                TipoOcorrenciaService.post(data)
                     .then((res) => {
                         if (res.success) {
                             addToast({
@@ -95,7 +93,7 @@ const TipoUsuarioCadastroModal: React.FC<TipoUsuarioCadastroModalProps> = (props
     return (
         <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()}>
             <CModalHeader>
-                <CModalTitle>Cadastrar Tipo Usuário</CModalTitle>
+                <CModalTitle>Cadastrar Tipo Ocorrência</CModalTitle>
             </CModalHeader>
             <CModalBody>
                 <Formik
@@ -138,4 +136,4 @@ const TipoUsuarioCadastroModal: React.FC<TipoUsuarioCadastroModalProps> = (props
         </CModal>
     )
 }
-export default TipoUsuarioCadastroModal;
+export default TipoOcorrenciaCadastroModal;

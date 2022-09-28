@@ -9,7 +9,7 @@ import {
 
 import { useEffect } from 'react';
 import Style from './tipo-usuario-page.module.scss'
-import TipoUsuarioService from '../../../services/tipo-usuario-service.ts/tipo-usuario-service';
+import TipoUsuarioService from '../../../services/tipo-usuario-service/tipo-usuario-service';
 import { useToast } from '../../../features/toast';
 import TipoUsuarioCadastroModal from './ModalCadastroTipoUsuario/tipo-usuario-cadastro-modal';
 import TipoUsuarioEdicaoModal from './ModalEdicaoTipoUsuario/tipo-usuario-edicao-modal';

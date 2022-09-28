@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
     CButton,
@@ -17,7 +17,6 @@ import Style from './login-page.module.scss'
 import logoIFMS from '../../../assets/img/ifms-logo.png'
 import { useToast } from '../../../features/toast'
 import { useAuth } from '../../../features/auth'
-import ReactDOM from "react-dom/client";
 
 import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik'
@@ -47,7 +46,7 @@ const LoginPage: React.FC<LoginProps> = (prop) => {
     };
 
     useEffect(() => {
-       
+
     }, [])
 
     const SchemaValidation = Yup.object().shape({
@@ -76,7 +75,7 @@ const LoginPage: React.FC<LoginProps> = (prop) => {
                 });
             }
         },
-        [signIn, addToast, history, from]
+        [signIn, addToast, from]
     );
 
     const togglePassword = () => {

@@ -8,27 +8,26 @@ interface Props {
 
 const toastTypes = {
   info: css`
-    background: #ebf8ff;
-    color: #3172b7;
+    background: #f9ed9e;
+    color: #b6841f;
   `,
   success: css`
-    background: #e6fffa;
-    color: #2e656a;
+    background: #affbb8;
+    color: #27633d;
   `,
   error: css`
-    background: #fddede;
+    background: #f79f9f;
     color: #c53030;
   `,
 };
 
 export const Container = styled(animated.div) <Props>`
   width: 360px;
-
   position: relative;
   padding: 16px 30px 16px 16px;
   border-radius: 10px;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-
+  z-index:10000;
   display: flex;
 
   & + div {

@@ -33,8 +33,6 @@ const ModuloPage: React.FC<any> = (prop) => {
         setLoading(true)
         ModuloService.get()
             .then((data) => {
-                console.log(data);
-
                 data.data.map((d: any) => {
                     d.AtivoString = d.Ativo ? 'Sim' : 'Não';
                     d.PossuiMenuString = d.PossuiMenu ? 'Sim' : 'Não';

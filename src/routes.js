@@ -19,10 +19,9 @@ const RoutesSystem = (props) => {
     return (
         <HashRouter>
             <Routes>
-
                 <Route index path="/cadastrar" name="Cadastro" element={<CadastroPage />} />
                 <Route index path="/login" name="Login" state={null} element={<LoginPage />} />
-
+                
                 <Route index path='*' element={
                     <SecuredRoute redirectTo="/login">
                         <HomePage />

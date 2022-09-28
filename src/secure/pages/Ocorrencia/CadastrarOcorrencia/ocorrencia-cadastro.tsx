@@ -3,39 +3,54 @@ import {
     CButton,
     CCol,
     CContainer,
-    CModal,
-    CModalBody,
-    CModalHeader,
-    CModalTitle,
+    CPopover,
     CRow,
+    CSpinner,
+    CTable,
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './modulo-cadastro-modal.module.scss'
+import Style from './ocorrencia-cadastro-page.module.scss'
+import { useToast } from '../../../../features/toast';
+import OcorrenciaService from '../../../../services/ocorrencia-service/ocorrencia-service';
+import TipoOcorrenciaService from '../../../../services/tipo-ocorrencia-service/tipo-ocorrencia-service';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { useToast } from '../../../../features/toast';
-import ModuloService from '../../../../services/modulo-service/modulo-service';
 
-interface ModuloCadastroModalProps {
-    visivel: boolean;
-    setVisivelFalse?: any;
-}
-
-const ModuloCadastroModal: React.FC<ModuloCadastroModalProps> = (props) => {
-
+const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
+    const [visibleCadastrar, setVisibleCadastrar] = useState(false);
+    const [visibleEditar, setVisibleEditar] = useState(false);
+    const [modelEditar, setModelEditar] = useState();
+    const [loading, setLoading] = useState(false);
+    const [dados, setDados] = useState<any[]>([]);
+    const [tipoOcorrencias, setTipoOcorrencias] = useState<any[]>([]);
     const { addToast } = useToast();
-    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        setVisible(props.visivel)
-    }, [props.visivel])
+        carregarDados();
+    }, [])
+
+    useEffect(() => {
+        carregarDados();
+    }, [visibleEditar, visibleCadastrar])
+
+    const carregarDados = async (): Promise<void> => {
+        setLoading(true)
+        TipoOcorrenciaService.get()
+            .then((data) => {
+                data.data.map((d: any) => {
+                   
+                })
+                setTipoOcorrencias(data.data);
+            })
+            .finally(() => {
+                setLoading(false)
+            })
+    };
 
     const initialForm = {
         Nome: '',
-        NavegarURL: '',
-        Ativo: true,
-        PossuiMenu: true,
+        Descricao: '',
     };
 
     const SchemaValidation = Yup.object().shape({
@@ -43,13 +58,13 @@ const ModuloCadastroModal: React.FC<ModuloCadastroModalProps> = (props) => {
             .min(2, 'Muito curta')
             .max(100, 'Muito longa')
             .required('Nome obrigatório'),
-        NavegarURL: Yup.string().required('NavegarURL obrigatória'),
+        Descricao: Yup.string().required('Descrição obrigatória'),
     });
 
     const handleSubmit = useCallback(
         async (data: any) => {
             try {
-                ModuloService.post(data)
+                TipoOcorrenciaService.post(data)
                     .then((res) => {
                         if (res.success) {
                             addToast({
@@ -60,7 +75,6 @@ const ModuloCadastroModal: React.FC<ModuloCadastroModalProps> = (props) => {
                         }
                     })
                     .finally(() => {
-                        props.setVisivelFalse()
                     })
                     .catch((ex) => {
                         if (ex.response != undefined) {
@@ -92,13 +106,12 @@ const ModuloCadastroModal: React.FC<ModuloCadastroModalProps> = (props) => {
         [addToast, history]
     );
 
+
     return (
-        <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()} backdrop='static'>
-            <CModalHeader>
-                <CModalTitle>Cadastrar Módulo</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-                <Formik
+        <>
+            <CSpinner hidden={!loading} />
+            <h2>Nova Ocorrência</h2>
+            <Formik
                     initialValues={initialForm}
                     onSubmit={handleSubmit}
                     validationSchema={SchemaValidation}
@@ -108,37 +121,18 @@ const ModuloCadastroModal: React.FC<ModuloCadastroModalProps> = (props) => {
                             <CContainer >
                                 <div className="mb-3">
                                     <label htmlFor="Nome" className="form-label">Nome</label>
-                                    <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Módulo" />
+                                    <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Tipo Ocorrência" />
                                     {errors.Nome && touched.Nome ? (
                                         <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Nome}</div>
                                     ) : null}
                                 </div>
 
                                 <div className="mb-3">
-                                    <label htmlFor="NavegarURL" className="form-label">NavegarURL</label>
-                                    <Field type="text" className="form-control" name="NavegarURL" id="NavegarURL" placeholder="NavegarURL do Módulo" />
-                                    {errors.NavegarURL && touched.NavegarURL ? (
-                                        <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.NavegarURL}</div>
+                                    <label htmlFor="Descricao" className="form-label">Descrição</label>
+                                    <Field type="text" className="form-control" name="Descricao" id="Descricao" placeholder="Descrição do Tipo Ocorrência" />
+                                    {errors.Descricao && touched.Descricao ? (
+                                        <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Descricao}</div>
                                     ) : null}
-                                </div>
-
-                                <div className="mb-3">
-                                    <CRow>
-                                        <CCol xs={6} >
-                                            <label htmlFor="Ativo" className="form-label" id="NavegarURL">Ativo</label>
-                                            <Field as="select" className='form-select' name="Ativo">
-                                                <option value="true">Sim</option>
-                                                <option value="false">Não</option>
-                                            </Field>
-                                        </CCol>
-                                        <CCol xs={6} >
-                                            <label htmlFor="PossuiMenu" className="form-label" id="PossuiMenu">Possui Menu</label>
-                                            <Field as="select" className='form-select' name="PossuiMenu">
-                                                <option value="true">Sim</option>
-                                                <option value="false">Não</option>
-                                            </Field>
-                                        </CCol>
-                                    </CRow>
                                 </div>
 
                                 <CRow>
@@ -152,9 +146,7 @@ const ModuloCadastroModal: React.FC<ModuloCadastroModalProps> = (props) => {
                         </Form>
                     )}
                 </Formik>
-
-            </CModalBody>
-        </CModal>
+        </>
     )
 }
-export default ModuloCadastroModal;
+export default OcorrenciaCadastrarPage;

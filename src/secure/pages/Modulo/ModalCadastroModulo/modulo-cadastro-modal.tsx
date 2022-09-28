@@ -11,18 +11,18 @@ import {
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './tipo-ocorrencia-cadastro-modal.module.scss'
+import Style from './modulo-cadastro-modal.module.scss'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useToast } from '../../../../features/toast';
-import TipoOcorrenciaService from '../../../../services/tipo-ocorrencia-service/tipo-ocorrencia-service';
+import ModuloService from '../../../../services/modulo-service/modulo-service';
 
-interface TipoOcorrenciaCadastroModalProps {
+interface ModuloCadastroModalProps {
     visivel: boolean;
     setVisivelFalse?: any;
 }
 
-const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = (props) => {
+const ModuloCadastroModal: React.FC<ModuloCadastroModalProps> = (props) => {
 
     const { addToast } = useToast();
     const [visible, setVisible] = useState(false);
@@ -33,7 +33,9 @@ const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = 
 
     const initialForm = {
         Nome: '',
-        Descricao: '',
+        NavegarURL: '',
+        Ativo: true,
+        PossuiMenu: true,
     };
 
     const SchemaValidation = Yup.object().shape({
@@ -41,13 +43,15 @@ const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = 
             .min(2, 'Muito curta')
             .max(100, 'Muito longa')
             .required('Nome obrigatório'),
-        Descricao: Yup.string().required('Descrição obrigatória'),
+        NavegarURL: Yup.string().required('NavegarURL obrigatória'),
     });
 
     const handleSubmit = useCallback(
         async (data: any) => {
             try {
-                TipoOcorrenciaService.post(data)
+                console.log(data);
+                
+                ModuloService.post(data)
                     .then((res) => {
                         if (res.success) {
                             addToast({
@@ -93,7 +97,7 @@ const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = 
     return (
         <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()} backdrop='static'>
             <CModalHeader>
-                <CModalTitle>Cadastrar Tipo Ocorrência</CModalTitle>
+                <CModalTitle>Cadastrar Módulo</CModalTitle>
             </CModalHeader>
             <CModalBody>
                 <Formik
@@ -106,18 +110,37 @@ const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = 
                             <CContainer >
                                 <div className="mb-3">
                                     <label htmlFor="Nome" className="form-label">Nome</label>
-                                    <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Tipo Ocorrência" />
+                                    <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Módulo" />
                                     {errors.Nome && touched.Nome ? (
                                         <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Nome}</div>
                                     ) : null}
                                 </div>
 
                                 <div className="mb-3">
-                                    <label htmlFor="Descricao" className="form-label">Descrição</label>
-                                    <Field type="text" className="form-control" name="Descricao" id="Descricao" placeholder="Descrição do Tipo Ocorrência" />
-                                    {errors.Descricao && touched.Descricao ? (
-                                        <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Descricao}</div>
+                                    <label htmlFor="NavegarURL" className="form-label">NavegarURL</label>
+                                    <Field type="text" className="form-control" name="NavegarURL" id="NavegarURL" placeholder="NavegarURL do Módulo" />
+                                    {errors.NavegarURL && touched.NavegarURL ? (
+                                        <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.NavegarURL}</div>
                                     ) : null}
+                                </div>
+
+                                <div className="mb-3">
+                                    <CRow>
+                                        <CCol xs={6} >
+                                            <label htmlFor="Ativo" className="form-label" id="NavegarURL">Ativo</label>
+                                            <Field as="select" className='form-select' name="Ativo">
+                                                <option value="true">Sim</option>
+                                                <option value="false">Não</option>
+                                            </Field>
+                                        </CCol>
+                                        <CCol xs={6} >
+                                            <label htmlFor="PossuiMenu" className="form-label" id="PossuiMenu">Possui Menu</label>
+                                            <Field as="select" className='form-select' name="PossuiMenu">
+                                                <option value="true">Sim</option>
+                                                <option value="false">Não</option>
+                                            </Field>
+                                        </CCol>
+                                    </CRow>
                                 </div>
 
                                 <CRow>
@@ -136,4 +159,4 @@ const TipoOcorrenciaCadastroModal: React.FC<TipoOcorrenciaCadastroModalProps> = 
         </CModal>
     )
 }
-export default TipoOcorrenciaCadastroModal;
+export default ModuloCadastroModal;

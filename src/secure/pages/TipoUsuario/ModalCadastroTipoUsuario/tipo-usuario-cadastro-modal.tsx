@@ -93,7 +93,7 @@ const TipoUsuarioCadastroModal: React.FC<TipoUsuarioCadastroModalProps> = (props
     );
 
     return (
-        <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()}>
+        <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()} backdrop='static'>
             <CModalHeader>
                 <CModalTitle>Cadastrar Tipo Usuário</CModalTitle>
             </CModalHeader>

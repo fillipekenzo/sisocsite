@@ -9,6 +9,7 @@ import TipoUsuarioPage from '../TipoUsuario/tipo-usuario-page';
 import TipoOcorrenciaPage from '../TipoOcorrencia/tipo-ocorrencia-page';
 import Page404 from '../Page404/page-404';
 import SetorPage from '../Setor/setor-page';
+import ModuloPage from '../Modulo/modulo-page';
 
 const SecuredRoute = ({ children, redirectTo }: any) => {
     const isLoggedIn = !!localStorage.getItem('usuarioLogado');
@@ -29,18 +30,12 @@ const HomePage: React.FC<any> = (prop) => {
                         <CContainer lg>
                             <Suspense fallback={<CSpinner color="primary" />}>
                                 <Routes>
-                                    {/* <Route path='/a' element={
-                                        <SecuredRoute redirectTo="/login">
-                                            <TipoUsuarioPage />
-                                        </SecuredRoute>}
-                                    /> */}
                                     <Route path="/" element={<TipoOcorrenciaPage />} />
                                     <Route path="/tipo-ocorrencia" element={<TipoOcorrenciaPage />} />
                                     <Route path="/tipo-usuario" element={<TipoUsuarioPage />} />
                                     <Route path="/setor" element={<SetorPage />} />
+                                    <Route path="/modulo" element={<ModuloPage />} />
                                     <Route path="*" element={<Page404 />} />
-
-                                    {/* <Route path="/" element={<Navigate to="" replace />} /> */}
                                 </Routes>
                             </Suspense>
                         </CContainer>

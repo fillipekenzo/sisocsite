@@ -91,7 +91,7 @@ const SetorCadastroModal: React.FC<SetorCadastroModalProps> = (props) => {
     );
 
     return (
-        <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()}>
+        <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()} backdrop='static'>
             <CModalHeader>
                 <CModalTitle>Cadastrar Setor</CModalTitle>
             </CModalHeader>

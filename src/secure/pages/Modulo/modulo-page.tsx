@@ -7,13 +7,13 @@ import {
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './setor-page.module.scss'
+import Style from './modulo-page.module.scss'
 import { useToast } from '../../../features/toast';
-import SetorService from '../../../services/setor-service/setor-service';
-import SetorCadastroModal from './ModalCadastroSetor/setor-cadastro-modal';
-import SetorEdicaoModal from './ModalEdicaoSetor/setor-edicao-modal';
+import ModuloService from '../../../services/modulo-service/modulo-service';
+import ModuloCadastroModal from './ModalCadastroModulo/modulo-cadastro-modal';
+import ModuloEdicaoModal from './ModalEdicaoModulo/modulo-edicao-modal';
 
-const SetorPage: React.FC<any> = (prop) => {
+const ModuloPage: React.FC<any> = (prop) => {
     const [visibleCadastrar, setVisibleCadastrar] = useState(false);
     const [visibleEditar, setVisibleEditar] = useState(false);
     const [modelEditar, setModelEditar] = useState();
@@ -31,9 +31,13 @@ const SetorPage: React.FC<any> = (prop) => {
 
     const carregarDados = async (): Promise<void> => {
         setLoading(true)
-        SetorService.get()
+        ModuloService.get()
             .then((data) => {
+                console.log(data);
+
                 data.data.map((d: any) => {
+                    d.AtivoString = d.Ativo ? 'Sim' : 'Não';
+                    d.PossuiMenuString = d.PossuiMenu ? 'Sim' : 'Não';
                     d.Acoes = <>
                         <CButton shape="rounded-pill" variant="ghost" color="info" size="sm" onClick={() => { setModelEditar(d), setVisibleEditar(true) }}>Editar</CButton>
                         <CPopover
@@ -41,13 +45,13 @@ const SetorPage: React.FC<any> = (prop) => {
                             title="Exluir registro"
                             content={<> Tem certeza que deseja excluir esse registro?
                                 <div className={Style.buttonConfirm}>
-                                    <CButton color='dark' size='sm' variant="outline" onClick={() => { fecharPopover(d.SetorID) }} >Não</CButton> <CButton color='danger' size='sm' onClick={() => excluirRegistro(d.SetorID)}>Sim</CButton>
+                                    <CButton color='dark' size='sm' variant="outline" onClick={() => { fecharPopover(d.ModuloID) }} >Não</CButton> <CButton color='danger' size='sm' onClick={() => excluirRegistro(d.ModuloID)}>Sim</CButton>
                                 </div>
                             </>
                             }
                             placement="top"
                         >
-                            <CButton shape="rounded-pill" variant="ghost" id={`excluir${d.SetorID}`} color="danger" size="sm">Excluir</CButton>
+                            <CButton shape="rounded-pill" variant="ghost" id={`excluir${d.ModuloID}`} color="danger" size="sm">Excluir</CButton>
                         </CPopover>
                     </>;
                 })
@@ -68,7 +72,7 @@ const SetorPage: React.FC<any> = (prop) => {
         async (id: number) => {
             try {
                 setLoading(true)
-                SetorService.delete(id)
+                ModuloService.delete(id)
                     .then((data) => {
                         if (data.success) {
                             addToast({
@@ -115,7 +119,7 @@ const SetorPage: React.FC<any> = (prop) => {
 
     const columns = [
         {
-            key: 'SetorID',
+            key: 'ModuloID',
             label: 'ID',
             _props: { scope: 'col' },
         },
@@ -125,8 +129,18 @@ const SetorPage: React.FC<any> = (prop) => {
             _props: { scope: 'col' },
         },
         {
-            key: 'Sigla',
-            label: 'Sigla',
+            key: 'NavegarURL',
+            label: 'NavegarURL',
+            _props: { scope: 'col' },
+        },
+        {
+            key: 'AtivoString',
+            label: 'Ativo',
+            _props: { scope: 'col' },
+        },
+        {
+            key: 'PossuiMenuString',
+            label: 'Possui Menu',
             _props: { scope: 'col' },
         },
         {
@@ -138,10 +152,10 @@ const SetorPage: React.FC<any> = (prop) => {
 
     return (
         <>
-            <SetorCadastroModal setVisivelFalse={() => setVisibleCadastrar(false)} visivel={visibleCadastrar} />
-            <SetorEdicaoModal model={modelEditar} setVisivelFalse={() => setVisibleEditar(false)} visivel={visibleEditar} />
+            <ModuloCadastroModal setVisivelFalse={() => setVisibleCadastrar(false)} visivel={visibleCadastrar} />
+            <ModuloEdicaoModal model={modelEditar} setVisivelFalse={() => setVisibleEditar(false)} visivel={visibleEditar} />
             <CSpinner hidden={!loading} />
-            <h2>Setor</h2>
+            <h2>Modulo</h2>
             <div className={Style.divButtonCadastar}>
                 <CButton color="primary" variant="outline" onClick={() => { setVisibleCadastrar(true) }}>Cadastrar</CButton>
             </div>
@@ -150,4 +164,4 @@ const SetorPage: React.FC<any> = (prop) => {
         </>
     )
 }
-export default SetorPage;
+export default ModuloPage;

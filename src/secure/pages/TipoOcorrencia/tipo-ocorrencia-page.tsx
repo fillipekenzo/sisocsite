@@ -18,18 +18,18 @@ const TipoOcorrenciaPage: React.FC<any> = (prop) => {
     const [visibleEditar, setVisibleEditar] = useState(false);
     const [modelEditar, setModelEditar] = useState();
     const [loading, setLoading] = useState(false);
-    const [tipos, setTipos] = useState<any[]>([]);
+    const [dados, setDados] = useState<any[]>([]);
     const { addToast } = useToast();
 
     useEffect(() => {
-        carregarTipos();
+        carregarDados();
     }, [])
 
     useEffect(() => {
-        carregarTipos();
+        carregarDados();
     }, [visibleEditar, visibleCadastrar])
 
-    const carregarTipos = async (): Promise<void> => {
+    const carregarDados = async (): Promise<void> => {
         setLoading(true)
         TipoOcorrenciaService.get()
             .then((data) => {
@@ -51,7 +51,7 @@ const TipoOcorrenciaPage: React.FC<any> = (prop) => {
                         </CPopover>
                     </>;
                 })
-                setTipos(data.data);
+                setDados(data.data);
             })
             .finally(() => {
                 setLoading(false)
@@ -78,7 +78,7 @@ const TipoOcorrenciaPage: React.FC<any> = (prop) => {
                             });
                         }
                     }).finally(() => {
-                        carregarTipos();
+                        carregarDados();
                         fecharPopover(id)
                         setLoading(false)
                     })
@@ -109,7 +109,7 @@ const TipoOcorrenciaPage: React.FC<any> = (prop) => {
                 });
             }
         },
-        [tipos, addToast]
+        [dados, addToast]
     );
 
 
@@ -117,22 +117,22 @@ const TipoOcorrenciaPage: React.FC<any> = (prop) => {
         {
             key: 'TipoOcorrenciaID',
             label: 'ID',
-            _props: { className: 'w-25', scope: 'col' },
+            _props: { scope: 'col' },
         },
         {
             key: 'Nome',
             label: 'Nome',
-            _props: { className: 'w-25', scope: 'col' },
+            _props: { scope: 'col' },
         },
         {
             key: 'Descricao',
             label: 'Descrição',
-            _props: { className: 'w-25', scope: 'col' },
+            _props: { scope: 'col' },
         },
         {
             key: 'Acoes',
             label: 'Ações',
-            _props: { className: 'w-25', scope: 'col' },
+            _props: { scope: 'col' },
         },
     ]
 
@@ -145,7 +145,7 @@ const TipoOcorrenciaPage: React.FC<any> = (prop) => {
             <div className={Style.divButtonCadastar}>
                 <CButton color="primary" variant="outline" onClick={() => { setVisibleCadastrar(true) }}>Cadastrar</CButton>
             </div>
-            <CTable caption={`Total de registros ${tipos.length}`} responsive columns={columns} items={tipos} tableHeadProps={{ color: 'primary' }} color='secondary' hover bordered borderColor='dark' />
+            <CTable caption={`Total de registros ${dados.length}`} responsive columns={columns} items={dados} tableHeadProps={{ color: 'primary' }} color='secondary' hover bordered borderColor='dark' />
 
         </>
     )

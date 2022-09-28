@@ -41,7 +41,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Módulo',
-    to: '/tipo-ocorrencia',
+    to: '/modulo',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {

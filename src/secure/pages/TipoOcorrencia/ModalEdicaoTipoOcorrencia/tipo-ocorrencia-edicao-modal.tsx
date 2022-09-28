@@ -93,7 +93,7 @@ const TipoOcorrenciaEdicaoModal: React.FC<TipoOcorrenciaCadastroModalProps> = (p
     );
 
     return (
-        <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()}>
+        <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()} backdrop='static'>
             <CModalHeader>
                 <CModalTitle>Editar Tipo Ocorrência</CModalTitle>
             </CModalHeader>

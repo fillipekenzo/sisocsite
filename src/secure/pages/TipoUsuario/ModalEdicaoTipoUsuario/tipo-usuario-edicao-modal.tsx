@@ -95,7 +95,7 @@ const TipoUsuarioEdicaoModal: React.FC<TipoUsuarioCadastroModalProps> = (props) 
     );
 
     return (
-        <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()}>
+        <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()} backdrop='static'>
             <CModalHeader>
                 <CModalTitle>Editar Tipo Usuário</CModalTitle>
             </CModalHeader>

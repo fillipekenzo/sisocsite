@@ -11,6 +11,7 @@ import Page404 from '../Page404/page-404';
 import SetorPage from '../Setor/setor-page';
 import ModuloPage from '../Modulo/modulo-page';
 import OcorrenciaCadastrarPage from '../Ocorrencia/CadastrarOcorrencia/ocorrencia-cadastro-page';
+import OcorrenciaPage from '../Ocorrencia/ocorrencia-page';
 
 const SecuredRoute = ({ children, redirectTo }: any) => {
     const isLoggedIn = !!localStorage.getItem('usuarioLogado');
@@ -36,6 +37,7 @@ const HomePage: React.FC<any> = (prop) => {
                                     <Route path="/tipo-usuario" element={<TipoUsuarioPage />} />
                                     <Route path="/setor" element={<SetorPage />} />
                                     <Route path="/modulo" element={<ModuloPage />} />
+                                    <Route path="/ocorrencia" element={<OcorrenciaPage />} />
                                     <Route path="/ocorrencia/cadastrar" element={<OcorrenciaCadastrarPage />} />
                                     <Route path="*" element={<Page404 />} />
                                 </Routes>

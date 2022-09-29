@@ -47,19 +47,19 @@ const AppHeaderDropdown: React.FC<any> = (prop) => {
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-light fw-semibold py-2">Conta</CDropdownHeader>
-        <CDropdownItem href="#">
+        <CDropdownItem >
           <CIcon icon={cilBell} className="me-2" />
           {user.Nome}
         </CDropdownItem>
-        <CDropdownItem href="#">
+        <CDropdownItem>
           <CIcon icon={cilEnvelopeOpen} className="me-2" />
           {user.Email}
         </CDropdownItem>
-        <CDropdownItem href="#">
+        <CDropdownItem >
           <CIcon icon={cilTask} className="me-2" />
           {user.TipoUsuario.Nome}
         </CDropdownItem>
-        <CDropdownItem href="#">
+        <CDropdownItem >
           <CIcon icon={cilCog} className="me-2" />
           Configurações
         </CDropdownItem>

@@ -1,16 +1,10 @@
 import React, { useCallback, useState } from 'react'
 import {
-    CAccordion,
-    CAccordionBody,
-    CAccordionHeader,
-    CAccordionItem,
     CButton,
     CCol,
     CContainer,
-    CPopover,
     CRow,
     CSpinner,
-    CTable,
 } from '@coreui/react'
 
 import { useEffect } from 'react';
@@ -23,13 +17,10 @@ import * as Yup from 'yup';
 import EnumeradorService from '../../../../services/enumerador-service/enumerador-service';
 import SetorService from '../../../../services/setor-service/setor-service';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../../features/auth';
 
 const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
-    const [visibleCadastrar, setVisibleCadastrar] = useState(false);
-    const [visibleEditar, setVisibleEditar] = useState(false);
-    const [modelEditar, setModelEditar] = useState();
     const [loading, setLoading] = useState(false);
-    const [dados, setDados] = useState<any[]>([]);
     const [tipoOcorrencias, setTipoOcorrencias] = useState<any[]>([]);
     const [setores, setSetores] = useState<any[]>([]);
     const [urgenciaENUM, setUrgenciaENUM] = useState<any[]>([]);
@@ -38,14 +29,12 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
     const location = useLocation();
     const { from } = location.state || { from: { pathname: '/' } };
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     useEffect(() => {
         carregarDados();
     }, [])
 
-    useEffect(() => {
-        carregarDados();
-    }, [visibleEditar, visibleCadastrar])
 
     const carregarDados = async (): Promise<void> => {
         setLoading(true)
@@ -71,8 +60,8 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
         Descricao: '',
         UrgenciaENUM: '',
         SituacaoENUM: '',
-        SetorID: 'null',
-        TipoOcorrenciaID: 'null',
+        SetorID: '',
+        TipoOcorrenciaID: '',
     };
 
     const SchemaValidation = Yup.object().shape({
@@ -80,7 +69,7 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
         SetorID: Yup.string().required('Setor obrigatorio'),
         SituacaoENUM: Yup.string().required('Situação obrigatoria'),
         UrgenciaENUM: Yup.string().required('Urgência obrigatoria'),
-        Nome: Yup.string()
+        Assunto: Yup.string()
             .min(2, 'Muito curta')
             .max(100, 'Muito longa')
             .required('Nome obrigatório'),
@@ -89,9 +78,8 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
 
     const handleSubmit = useCallback(
         async (data: any) => {
-            console.log(data);
-
             try {
+                data.UsuarioCadastroID = user.UsuarioID;
                 OcorrenciaService.post(data)
                     .then((res) => {
                         if (res.success) {
@@ -146,101 +134,103 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
             >
                 {({ errors, touched }) => (
                     <Form className={Style.formulario}>
-                        <div className="mb-3">
-                            <CRow>
-                                <CCol xs={6} >
-                                    <label htmlFor="TipoOcorrenciaID" className="form-label" >Tipo Ocorrência</label>
-                                    <Field as="select" className='form-select' name="TipoOcorrenciaID">
-                                        <option value='null' disabled>Selecione</option>
-                                        {tipoOcorrencias.map(t => {
-                                            return (
-                                                <option value={t.TipoOcorrenciaID}>{t.Nome}</option>
-                                            )
-                                        })}
-                                    </Field>
-                                    {errors.TipoOcorrenciaID && touched.TipoOcorrenciaID ? (
-                                        <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.TipoOcorrenciaID}</div>
-                                    ) : null}
-                                </CCol>
-                                <CCol xs={6} >
-                                    <label htmlFor="SetorID" className="form-label" >Setor</label>
-                                    <Field as="select" className='form-select' name="SetorID">
-                                        <option value='null' disabled>Selecione</option>
-                                        {setores.map(s => {
-                                            return (
-                                                <option value={s.SetorID}>{s.Nome}</option>
-                                            )
-                                        })}
-                                    </Field>
-                                    {errors.SetorID && touched.SetorID ? (
-                                        <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.SetorID}</div>
-                                    ) : null}
-                                </CCol>
-                            </CRow>
-                        </div>
+                        <CContainer>
+                            <div className="mb-3">
+                                <CRow>
+                                    <CCol xs={6} >
+                                        <label htmlFor="TipoOcorrenciaID" className="form-label" >Tipo Ocorrência</label>
+                                        <Field as="select" className='form-select' name="TipoOcorrenciaID">
+                                            <option value='' disabled>Selecione</option>
+                                            {tipoOcorrencias.map(t => {
+                                                return (
+                                                    <option value={t.TipoOcorrenciaID}>{t.Nome}</option>
+                                                )
+                                            })}
+                                        </Field>
+                                        {errors.TipoOcorrenciaID && touched.TipoOcorrenciaID ? (
+                                            <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.TipoOcorrenciaID}</div>
+                                        ) : null}
+                                    </CCol>
+                                    <CCol xs={6} >
+                                        <label htmlFor="SetorID" className="form-label" >Setor</label>
+                                        <Field as="select" className='form-select' name="SetorID">
+                                            <option value='' disabled>Selecione</option>
+                                            {setores.map(s => {
+                                                return (
+                                                    <option value={s.SetorID}>{s.Nome}</option>
+                                                )
+                                            })}
+                                        </Field>
+                                        {errors.SetorID && touched.SetorID ? (
+                                            <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.SetorID}</div>
+                                        ) : null}
+                                    </CCol>
+                                </CRow>
+                            </div>
 
-                        <div className="mb-3">
-                            <CRow>
-                                <CCol xs={6} >
-                                    <label htmlFor="UrgenciaENUM" className="form-label" >Urgência</label>
-                                    <Field as="select" className='form-select' name="UrgenciaENUM">
-                                        <option value='null' disabled>Selecione</option>
-                                        {urgenciaENUM.map(u => {
-                                            return (
-                                                <option value={u.Enum}>{u.Texto}</option>
-                                            )
-                                        })}
-                                    </Field>
-                                    {errors.UrgenciaENUM && touched.UrgenciaENUM ? (
-                                        <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.UrgenciaENUM}</div>
-                                    ) : null}
-                                </CCol>
-                                <CCol xs={6} >
-                                    <label htmlFor="SituacaoENUM" className="form-label" >Situação</label>
-                                    <Field as="select" className='form-select' name="SituacaoENUM">
-                                        <option value='null' disabled>Selecione</option>
-                                        {situacaoENUM.map(u => {
-                                            return (
-                                                <option value={u.Enum}>{u.Texto}</option>
-                                            )
-                                        })}
-                                    </Field>
-                                    {errors.SituacaoENUM && touched.SituacaoENUM ? (
-                                        <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.SituacaoENUM}</div>
-                                    ) : null}
-                                </CCol>
-                            </CRow>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="Assunto" className="form-label">Assunto</label>
-                            <Field type="text" className="form-control" name="Assunto" id="Assunto" placeholder="Assunto da Ocorrência" />
-                            {errors.Assunto && touched.Assunto ? (
-                                <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Assunto}</div>
-                            ) : null}
-                        </div>
+                            <div className="mb-3">
+                                <CRow>
+                                    <CCol xs={6} >
+                                        <label htmlFor="UrgenciaENUM" className="form-label" >Urgência</label>
+                                        <Field as="select" className='form-select' name="UrgenciaENUM">
+                                            <option value='' disabled>Selecione</option>
+                                            {urgenciaENUM.map(u => {
+                                                return (
+                                                    <option value={u.Enum}>{u.Texto}</option>
+                                                )
+                                            })}
+                                        </Field>
+                                        {errors.UrgenciaENUM && touched.UrgenciaENUM ? (
+                                            <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.UrgenciaENUM}</div>
+                                        ) : null}
+                                    </CCol>
+                                    <CCol xs={6} >
+                                        <label htmlFor="SituacaoENUM" className="form-label" >Situação</label>
+                                        <Field as="select" className='form-select' name="SituacaoENUM">
+                                            <option value='' disabled>Selecione</option>
+                                            {situacaoENUM.map(u => {
+                                                return (
+                                                    <option value={u.Enum}>{u.Texto}</option>
+                                                )
+                                            })}
+                                        </Field>
+                                        {errors.SituacaoENUM && touched.SituacaoENUM ? (
+                                            <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.SituacaoENUM}</div>
+                                        ) : null}
+                                    </CCol>
+                                </CRow>
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="Assunto" className="form-label">Assunto</label>
+                                <Field type="text" className="form-control" name="Assunto" id="Assunto" placeholder="Assunto da Ocorrência" />
+                                {errors.Assunto && touched.Assunto ? (
+                                    <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Assunto}</div>
+                                ) : null}
+                            </div>
 
-                        <div className="mb-3">
-                            <label htmlFor="Descricao" className="form-label">Descrição</label>
-                            <Field as="textarea" rows='10' maxLength="1000" type="text" className="form-control" name="Descricao" id="Descricao" placeholder="Descrição da Ocorrência" />
-                            {errors.Descricao && touched.Descricao ? (
-                                <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Descricao}</div>
-                            ) : null}
-                        </div>
+                            <div className="mb-3">
+                                <label htmlFor="Descricao" className="form-label">Descrição</label>
+                                <Field as="textarea" rows='10' maxLength="1000" type="text" className="form-control" name="Descricao" id="Descricao" placeholder="Descrição da Ocorrência" />
+                                {errors.Descricao && touched.Descricao ? (
+                                    <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Descricao}</div>
+                                ) : null}
+                            </div>
 
-                        {/* <div className="mb-3">
+                            {/* <div className="mb-3">
                             <Field type="file" className="form-control" aria-label="file example" name="Anexo" id="Anexo" placeholder="Anexos" multiple />
                         </div> */}
 
-                        <CRow>
-                            <CCol xs={12} className={Style.buttonCadastrar}>
-                                <CButton color="dark" type='button' onClick={() => { navigate(from) }} className={`m-3 px-4 ${Style.buttonEntrar}`}>
-                                    Voltar
-                                </CButton>
-                                <CButton color="primary" type='submit' className={`m-3 px-4 ${Style.buttonEntrar}`}>
-                                    Salvar
-                                </CButton>
-                            </CCol>
-                        </CRow>
+                            <CRow>
+                                <CCol xs={12} className={Style.buttonCadastrar}>
+                                    <CButton color="dark" type='button' onClick={() => { navigate(from) }} className={`m-3 px-4 ${Style.buttonEntrar}`}>
+                                        Voltar
+                                    </CButton>
+                                    <CButton color="primary" type='submit' className={`m-3 px-4 ${Style.buttonEntrar}`}>
+                                        Salvar
+                                    </CButton>
+                                </CCol>
+                            </CRow>
+                        </CContainer>
                     </Form>
                 )}
             </Formik>

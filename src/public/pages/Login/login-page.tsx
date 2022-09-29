@@ -31,7 +31,6 @@ interface FormData {
 }
 
 const LoginPage: React.FC<LoginProps> = (prop) => {
-    const [validated, setValidated] = useState(false)
     const { signIn, user } = useAuth();
     const { addToast } = useToast();
     const navigate = useNavigate();

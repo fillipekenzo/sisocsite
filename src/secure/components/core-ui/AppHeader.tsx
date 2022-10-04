@@ -48,9 +48,6 @@ const AppHeader: React.FC<any> = (prop) => {
               Home
             </CNavLink>
           </CNavItem>
-          <CNavItem>
-            <CNavLink href="#">Settings</CNavLink>
-          </CNavItem>
         </CHeaderNav>
         <CHeaderNav>
           <CNavItem>

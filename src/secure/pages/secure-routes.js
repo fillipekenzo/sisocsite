@@ -1,6 +1,7 @@
 import React from 'react'
 import ModuloPage from './Modulo/modulo-page'
 import OcorrenciaCadastrarPage from './Ocorrencia/CadastrarOcorrencia/ocorrencia-cadastro-page'
+import OcorrenciaDashboardPage from './Ocorrencia/DashboardOcorrencia/ocorrencia-dashboard-page'
 import SetorPage from './Setor/setor-page'
 import TipoOcorrenciaPage from './TipoOcorrencia/tipo-ocorrencia-page'
 import TipoUsuarioPage from './TipoUsuario/tipo-usuario-page'
@@ -13,6 +14,7 @@ const SecureRoutes = [
   { path: '/modulo', exact: true, name: 'Módulo', element: ModuloPage },
   { path: '/ocorrencia', exact: true, name: 'Ocorrência', element: OcorrenciaCadastrarPage },
   { path: '/ocorrencia/cadastrar', exact: true, name: 'Cadastrar', element: OcorrenciaCadastrarPage },
+  { path: '/ocorrencia/dashboard', exact: true, name: 'Dashboard', element: OcorrenciaDashboardPage },
 
 ]
 

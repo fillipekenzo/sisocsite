@@ -3,7 +3,7 @@ import { CFooter } from '@coreui/react'
 
 const AppFooter: React.FC<any> = (prop) => {
   return (
-    <CFooter>
+    <CFooter style={{fontSize:'12px'}}>
       <div>
         <a href="https://www.ifms.edu.br/" target="_blank" rel="noopener noreferrer">
           IFMS

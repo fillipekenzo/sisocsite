@@ -9,12 +9,12 @@ interface IPermissaoModel {
     Cadastrar: boolean,
     Editar: boolean,
     Excluir: boolean,
-    ModuloID?: number,
+    MenuID?: number,
     TipoUsuarioID?: number,
 }
 
 interface  IPermissaoFiltroModel {
-    ModuloID?: number,
+    MenuID?: number,
     TipoUsuarioID?: number,
 }
 
@@ -28,7 +28,7 @@ const PermissaoService = {
     },
 
     getComFiltro: async (permissaoFiltroModel: IPermissaoFiltroModel): Promise<RespostaWebAPI<any>> => {
-        return Api.get(`${OperacoesWebAPI.Permissao}/comfiltros?moduloID=${permissaoFiltroModel?.ModuloID}&tipoUsuarioID=${permissaoFiltroModel.TipoUsuarioID}`,)
+        return Api.get(`${OperacoesWebAPI.Permissao}/comfiltros?menuID=${permissaoFiltroModel?.MenuID}&tipoUsuarioID=${permissaoFiltroModel.TipoUsuarioID}`,)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data
             })

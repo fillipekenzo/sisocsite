@@ -7,13 +7,13 @@ import {
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './modulo-page.module.scss'
+import Style from './menu-page.module.scss'
 import { useToast } from '../../../features/toast';
-import ModuloService from '../../../services/modulo-service/modulo-service';
-import ModuloCadastroModal from './ModalCadastroModulo/modulo-cadastro-modal';
-import ModuloEdicaoModal from './ModalEdicaoModulo/modulo-edicao-modal';
+import MenuService from '../../../services/menu-service/menu-service';
+import MenuCadastroModal from './ModalCadastroMenu/menu-cadastro-modal';
+import MenuEdicaoModal from './ModalEdicaoMenu/menu-edicao-modal';
 
-const ModuloPage: React.FC<any> = (prop) => {
+const MenuPage: React.FC<any> = (prop) => {
     const [visibleCadastrar, setVisibleCadastrar] = useState(false);
     const [visibleEditar, setVisibleEditar] = useState(false);
     const [modelEditar, setModelEditar] = useState();
@@ -31,7 +31,7 @@ const ModuloPage: React.FC<any> = (prop) => {
 
     const carregarDados = async (): Promise<void> => {
         setLoading(true)
-        ModuloService.get()
+        MenuService.get()
             .then((data) => {
                 data.data.map((d: any) => {
                     d.AtivoString = d.Ativo ? 'Sim' : 'Não';
@@ -43,13 +43,13 @@ const ModuloPage: React.FC<any> = (prop) => {
                             title="Exluir registro"
                             content={<> Tem certeza que deseja excluir esse registro?
                                 <div className={Style.buttonConfirm}>
-                                    <CButton color='dark' size='sm' variant="outline" onClick={() => { fecharPopover(d.ModuloID) }} >Não</CButton> <CButton color='danger' size='sm' onClick={() => excluirRegistro(d.ModuloID)}>Sim</CButton>
+                                    <CButton color='dark' size='sm' variant="outline" onClick={() => { fecharPopover(d.MenuID) }} >Não</CButton> <CButton color='danger' size='sm' onClick={() => excluirRegistro(d.MenuID)}>Sim</CButton>
                                 </div>
                             </>
                             }
                             placement="top"
                         >
-                            <CButton shape="rounded-pill" variant="ghost" id={`excluir${d.ModuloID}`} color="danger" size="sm">Excluir</CButton>
+                            <CButton shape="rounded-pill" variant="ghost" id={`excluir${d.MenuID}`} color="danger" size="sm">Excluir</CButton>
                         </CPopover>
                     </>;
                 })
@@ -70,7 +70,7 @@ const ModuloPage: React.FC<any> = (prop) => {
         async (id: number) => {
             try {
                 setLoading(true)
-                ModuloService.delete(id)
+                MenuService.delete(id)
                     .then((data) => {
                         if (data.success) {
                             addToast({
@@ -117,7 +117,7 @@ const ModuloPage: React.FC<any> = (prop) => {
 
     const columns = [
         {
-            key: 'ModuloID',
+            key: 'MenuID',
             label: 'ID',
             _props: { scope: 'col' },
         },
@@ -150,10 +150,10 @@ const ModuloPage: React.FC<any> = (prop) => {
 
     return (
         <>
-            <ModuloCadastroModal setVisivelFalse={() => setVisibleCadastrar(false)} visivel={visibleCadastrar} />
-            <ModuloEdicaoModal model={modelEditar} setVisivelFalse={() => setVisibleEditar(false)} visivel={visibleEditar} />
+            <MenuCadastroModal setVisivelFalse={() => setVisibleCadastrar(false)} visivel={visibleCadastrar} />
+            <MenuEdicaoModal model={modelEditar} setVisivelFalse={() => setVisibleEditar(false)} visivel={visibleEditar} />
             <CSpinner hidden={!loading} />
-            <h2>Modulo</h2>
+            <h2>Menu</h2>
             <div className={Style.divButtonCadastar}>
                 <CButton color="primary" variant="outline" onClick={() => { setVisibleCadastrar(true) }}>Cadastrar</CButton>
             </div>
@@ -162,4 +162,4 @@ const ModuloPage: React.FC<any> = (prop) => {
         </>
     )
 }
-export default ModuloPage;
+export default MenuPage;

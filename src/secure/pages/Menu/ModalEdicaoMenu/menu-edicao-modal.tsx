@@ -11,24 +11,24 @@ import {
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './modulo-edicao-modal.module.scss'
+import Style from './menu-edicao-modal.module.scss'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useToast } from '../../../../features/toast';
-import ModuloService from '../../../../services/modulo-service/modulo-service';
+import MenuService from '../../../../services/menu-service/menu-service';
 
-interface ModuloCadastroModalProps {
+interface MenuCadastroModalProps {
     visivel: boolean;
     setVisivelFalse?: any;
     model: any;
 }
 
-const ModuloEdicaoModal: React.FC<ModuloCadastroModalProps> = (props) => {
+const MenuEdicaoModal: React.FC<MenuCadastroModalProps> = (props) => {
 
     const { addToast } = useToast();
     const [visible, setVisible] = useState(false);
     const [initialForm, setInitialForm] = useState({
-        ModuloID: 0,
+        MenuID: 0,
         Nome: '',
         NavegarURL: '',
         Ativo: true,
@@ -51,7 +51,7 @@ const ModuloEdicaoModal: React.FC<ModuloCadastroModalProps> = (props) => {
     const handleSubmit = useCallback(
         async (data: any) => {
             try {
-                ModuloService.put(data)
+                MenuService.put(data)
                     .then((res) => {
                         if (res.success) {
                             addToast({
@@ -97,7 +97,7 @@ const ModuloEdicaoModal: React.FC<ModuloCadastroModalProps> = (props) => {
     return (
         <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()} backdrop='static'>
             <CModalHeader>
-                <CModalTitle>Editar Módulo</CModalTitle>
+                <CModalTitle>Editar Menu</CModalTitle>
             </CModalHeader>
             <CModalBody>
                 <Formik
@@ -113,7 +113,7 @@ const ModuloEdicaoModal: React.FC<ModuloCadastroModalProps> = (props) => {
                                     <Field type="number" className="form-control" name="tipoOcorrenciaID" id="tipoOcorrenciaID" hidden />
                                     <div className="mb-3">
                                         <label htmlFor="Nome" className="form-label">Nome</label>
-                                        <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Módulo" />
+                                        <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Menu" />
                                         {errors.Nome && touched.Nome ? (
                                             <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Nome}</div>
                                         ) : null}
@@ -121,7 +121,7 @@ const ModuloEdicaoModal: React.FC<ModuloCadastroModalProps> = (props) => {
 
                                     <div className="mb-3">
                                         <label htmlFor="NavegarURL" className="form-label">NavegarURL</label>
-                                        <Field type="text" className="form-control" name="NavegarURL" id="NavegarURL" placeholder="NavegarURL do Módulo" />
+                                        <Field type="text" className="form-control" name="NavegarURL" id="NavegarURL" placeholder="NavegarURL do Menu" />
                                         {errors.NavegarURL && touched.NavegarURL ? (
                                             <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.NavegarURL}</div>
                                         ) : null}
@@ -163,4 +163,4 @@ const ModuloEdicaoModal: React.FC<ModuloCadastroModalProps> = (props) => {
         </CModal>
     )
 }
-export default ModuloEdicaoModal;
+export default MenuEdicaoModal;

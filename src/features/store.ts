@@ -1,10 +1,10 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import moduloReducer from './slices/modulo-slice'
+import menuReducer from './slices/menu-slice'
 import sidebarReducer from './slices/sidebar-slice'
 
 export const store = configureStore({
   reducer: {
-    modulo: moduloReducer,
+    menu: menuReducer,
     sidebar: sidebarReducer
   },
 });

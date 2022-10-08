@@ -11,18 +11,18 @@ import {
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './modulo-cadastro-modal.module.scss'
+import Style from './menu-cadastro-modal.module.scss'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useToast } from '../../../../features/toast';
-import ModuloService from '../../../../services/modulo-service/modulo-service';
+import MenuService from '../../../../services/menu-service/menu-service';
 
-interface ModuloCadastroModalProps {
+interface MenuCadastroModalProps {
     visivel: boolean;
     setVisivelFalse?: any;
 }
 
-const ModuloCadastroModal: React.FC<ModuloCadastroModalProps> = (props) => {
+const MenuCadastroModal: React.FC<MenuCadastroModalProps> = (props) => {
 
     const { addToast } = useToast();
     const [visible, setVisible] = useState(false);
@@ -49,7 +49,7 @@ const ModuloCadastroModal: React.FC<ModuloCadastroModalProps> = (props) => {
     const handleSubmit = useCallback(
         async (data: any) => {
             try {
-                ModuloService.post(data)
+                MenuService.post(data)
                     .then((res) => {
                         if (res.success) {
                             addToast({
@@ -157,4 +157,4 @@ const ModuloCadastroModal: React.FC<ModuloCadastroModalProps> = (props) => {
         </CModal>
     )
 }
-export default ModuloCadastroModal;
+export default MenuCadastroModal;

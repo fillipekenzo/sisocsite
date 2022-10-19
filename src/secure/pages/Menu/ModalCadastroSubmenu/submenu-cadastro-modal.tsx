@@ -11,27 +11,31 @@ import {
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './menu-cadastro-modal.module.scss'
+import Style from './submenu-cadastro-modal.module.scss'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useToast } from '../../../../features/toast';
-import MenuService from '../../../../services/menu-service/menu-service';
+import SubmenuService from '../../../../services/submenu-service/submenu-service';
 
-interface MenuCadastroModalProps {
+interface SubmenuCadastroModalProps {
     visivel: boolean;
     setVisivelFalse?: any;
+    menuID?: any;
 }
 
-const MenuCadastroModal: React.FC<MenuCadastroModalProps> = (props) => {
+const SubmenuCadastroModal: React.FC<SubmenuCadastroModalProps> = (props) => {
 
     const { addToast } = useToast();
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
         setVisible(props.visivel)
+        console.log(props.menuID);
+        
     }, [props.visivel])
 
     const initialForm = {
+        MenuID: props.menuID,
         Nome: '',
         NavegarURL: '',
         Ativo: true,
@@ -51,7 +55,7 @@ const MenuCadastroModal: React.FC<MenuCadastroModalProps> = (props) => {
     const handleSubmit = useCallback(
         async (data: any) => {
             try {
-                MenuService.post(data)
+                SubmenuService.post(data)
                     .then((res) => {
                         if (res.success) {
                             addToast({
@@ -97,7 +101,7 @@ const MenuCadastroModal: React.FC<MenuCadastroModalProps> = (props) => {
     return (
         <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()} backdrop='static'>
             <CModalHeader>
-                <CModalTitle>Cadastrar Menu</CModalTitle>
+                <CModalTitle>Cadastrar Submenu</CModalTitle>
             </CModalHeader>
             <CModalBody>
                 <Formik
@@ -108,9 +112,10 @@ const MenuCadastroModal: React.FC<MenuCadastroModalProps> = (props) => {
                     {({ errors, touched }) => (
                         <Form>
                             <CContainer >
+                                <Field type="number" className="form-control" name="MenuID" id="MenuID" hidden />
                                 <div className="mb-3">
                                     <label htmlFor="Nome" className="form-label">Nome</label>
-                                    <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Menu" />
+                                    <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Submenu" />
                                     {errors.Nome && touched.Nome ? (
                                         <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Nome}</div>
                                     ) : null}
@@ -118,7 +123,7 @@ const MenuCadastroModal: React.FC<MenuCadastroModalProps> = (props) => {
 
                                 <div className="mb-3">
                                     <label htmlFor="NavegarURL" className="form-label">NavegarURL</label>
-                                    <Field type="text" className="form-control" name="NavegarURL" id="NavegarURL" placeholder="NavegarURL do Menu" />
+                                    <Field type="text" className="form-control" name="NavegarURL" id="NavegarURL" placeholder="NavegarURL do Submenu" />
                                     {errors.NavegarURL && touched.NavegarURL ? (
                                         <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.NavegarURL}</div>
                                     ) : null}
@@ -126,23 +131,16 @@ const MenuCadastroModal: React.FC<MenuCadastroModalProps> = (props) => {
 
                                 <div className="mb-3">
                                     <CRow>
-                                        <CCol xs={4} >
+                                        <CCol xs={6} >
                                             <label htmlFor="Ativo" className="form-label" id="NavegarURL">Ativo</label>
                                             <Field as="select" className='form-select' name="Ativo">
                                                 <option value="true">Sim</option>
                                                 <option value="false">Não</option>
                                             </Field>
                                         </CCol>
-                                        <CCol xs={4} >
-                                            <label htmlFor="PossuiMenu" className="form-label" id="PossuiMenu">Possui Menu</label>
-                                            <Field as="select" className='form-select' name="PossuiMenu">
-                                                <option value="true">Sim</option>
-                                                <option value="false">Não</option>
-                                            </Field>
-                                        </CCol>
-                                        <CCol xs={4} >
+                                        <CCol xs={6} >
                                             <label htmlFor="Ordem" className="form-label" id="Ordem">Ordem</label>
-                                            <Field type="number" className="form-control" name="Ordem" id="Ordem" placeholder="Ordem do Menu" />
+                                            <Field type="number" className="form-control" name="Ordem" id="Ordem" placeholder="Ordem do Submenu" />
                                             {errors.Ordem && touched.Ordem ? (
                                                 <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Ordem}</div>
                                             ) : null}
@@ -166,4 +164,4 @@ const MenuCadastroModal: React.FC<MenuCadastroModalProps> = (props) => {
         </CModal>
     )
 }
-export default MenuCadastroModal;
+export default SubmenuCadastroModal;

@@ -11,23 +11,24 @@ import {
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './menu-edicao-modal.module.scss'
+import Style from './submenu-edicao-modal.module.scss'
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useToast } from '../../../../features/toast';
-import MenuService from '../../../../services/menu-service/menu-service';
+import SubmenuService from '../../../../services/submenu-service/submenu-service';
 
-interface MenuCadastroModalProps {
+interface SubmenuCadastroModalProps {
     visivel: boolean;
     setVisivelFalse?: any;
     model: any;
 }
 
-const MenuEdicaoModal: React.FC<MenuCadastroModalProps> = (props) => {
+const SubmenuEdicaoModal: React.FC<SubmenuCadastroModalProps> = (props) => {
 
     const { addToast } = useToast();
     const [visible, setVisible] = useState(false);
     const [initialForm, setInitialForm] = useState({
+        SubmenuID: 0,
         MenuID: 0,
         Nome: '',
         NavegarURL: '',
@@ -53,7 +54,7 @@ const MenuEdicaoModal: React.FC<MenuCadastroModalProps> = (props) => {
     const handleSubmit = useCallback(
         async (data: any) => {
             try {
-                MenuService.put(data)
+                SubmenuService.put(data)
                     .then((res) => {
                         if (res.success) {
                             addToast({
@@ -99,7 +100,7 @@ const MenuEdicaoModal: React.FC<MenuCadastroModalProps> = (props) => {
     return (
         <CModal alignment="center" visible={visible} onClose={() => props.setVisivelFalse()} backdrop='static'>
             <CModalHeader>
-                <CModalTitle>Editar Menu</CModalTitle>
+                <CModalTitle>Editar Submenu</CModalTitle>
             </CModalHeader>
             <CModalBody>
                 <Formik
@@ -112,10 +113,11 @@ const MenuEdicaoModal: React.FC<MenuCadastroModalProps> = (props) => {
                         return (
                             <Form>
                                 <CContainer >
+                                    <Field type="number" className="form-control" name="SubmenuID" id="SubmenuID" hidden />
                                     <Field type="number" className="form-control" name="MenuID" id="MenuID" hidden />
                                     <div className="mb-3">
                                         <label htmlFor="Nome" className="form-label">Nome</label>
-                                        <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Menu" />
+                                        <Field type="text" className="form-control" name="Nome" id="Nome" placeholder="Nome do Submenu" />
                                         {errors.Nome && touched.Nome ? (
                                             <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Nome}</div>
                                         ) : null}
@@ -123,7 +125,7 @@ const MenuEdicaoModal: React.FC<MenuCadastroModalProps> = (props) => {
 
                                     <div className="mb-3">
                                         <label htmlFor="NavegarURL" className="form-label">NavegarURL</label>
-                                        <Field type="text" className="form-control" name="NavegarURL" id="NavegarURL" placeholder="NavegarURL do Menu" />
+                                        <Field type="text" className="form-control" name="NavegarURL" id="NavegarURL" placeholder="NavegarURL do Submenu" />
                                         {errors.NavegarURL && touched.NavegarURL ? (
                                             <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.NavegarURL}</div>
                                         ) : null}
@@ -131,21 +133,14 @@ const MenuEdicaoModal: React.FC<MenuCadastroModalProps> = (props) => {
 
                                     <div className="mb-3">
                                         <CRow>
-                                            <CCol xs={4} >
+                                            <CCol xs={6} >
                                                 <label htmlFor="Ativo" className="form-label" id="NavegarURL">Ativo</label>
                                                 <Field as="select" className='form-select' name="Ativo">
                                                     <option value="true">Sim</option>
                                                     <option value="false">Não</option>
                                                 </Field>
                                             </CCol>
-                                            <CCol xs={4} >
-                                                <label htmlFor="PossuiMenu" className="form-label" id="PossuiMenu">Possui Menu</label>
-                                                <Field as="select" className='form-select' name="PossuiMenu">
-                                                    <option value="true">Sim</option>
-                                                    <option value="false">Não</option>
-                                                </Field>
-                                            </CCol>
-                                            <CCol xs={4} >
+                                            <CCol xs={6} >
                                                 <label htmlFor="Ordem" className="form-label" id="Ordem">Ordem</label>
                                                 <Field type="number" className="form-control" name="Ordem" id="Ordem" placeholder="Ordem do Menu" />
                                                 {errors.Ordem && touched.Ordem ? (
@@ -172,4 +167,4 @@ const MenuEdicaoModal: React.FC<MenuCadastroModalProps> = (props) => {
         </CModal>
     )
 }
-export default MenuEdicaoModal;
+export default SubmenuEdicaoModal;

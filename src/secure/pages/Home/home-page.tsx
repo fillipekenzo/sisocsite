@@ -13,6 +13,7 @@ import MenuPage from '../Menu/menu-page';
 import OcorrenciaCadastrarPage from '../Ocorrencia/CadastrarOcorrencia/ocorrencia-cadastro-page';
 import OcorrenciaPage from '../Ocorrencia/ocorrencia-page';
 import OcorrenciaDashboardPage from '../Ocorrencia/DashboardOcorrencia/ocorrencia-dashboard-page';
+import PermissaoPage from '../Permissao/permissao-page';
 
 const SecuredRoute = ({ children, redirectTo }: any) => {
     const isLoggedIn = !!localStorage.getItem('usuarioLogado');
@@ -38,6 +39,7 @@ const HomePage: React.FC<any> = (prop) => {
                                     <Route path="/tipo-usuario" element={<TipoUsuarioPage />} />
                                     <Route path="/setor" element={<SetorPage />} />
                                     <Route path="/menu" element={<MenuPage />} />
+                                    <Route path="/permissao" element={<PermissaoPage />} />
                                     <Route path="/ocorrencia" element={<OcorrenciaPage />} />
                                     <Route path="/ocorrencia/cadastrar" element={<OcorrenciaCadastrarPage />} />
                                     <Route path="/ocorrencia/dashboard" element={<OcorrenciaDashboardPage />} />

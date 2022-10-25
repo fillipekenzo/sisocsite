@@ -27,6 +27,13 @@ const PermissaoService = {
             })
     },
 
+    getByMenuID: async (id:number): Promise<RespostaWebAPI<any>> => {
+        return Api.get(`${OperacoesWebAPI.Permissao}/getbymenuid?id=${id}`)
+            .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
+                return axiosResponse.data
+            })
+    },
+
     getComFiltro: async (permissaoFiltroModel: IPermissaoFiltroModel): Promise<RespostaWebAPI<any>> => {
         return Api.get(`${OperacoesWebAPI.Permissao}/comfiltros?menuID=${permissaoFiltroModel?.MenuID}&tipoUsuarioID=${permissaoFiltroModel.TipoUsuarioID}`,)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {

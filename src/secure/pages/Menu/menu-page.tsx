@@ -200,7 +200,6 @@ const MenuPage: React.FC<any> = (prop) => {
     );
 
     const columns = useMemo<MRT_ColumnDef<any>[]>(
-        //column definitions...
         () => [
             {
                 accessorKey: 'MenuID',

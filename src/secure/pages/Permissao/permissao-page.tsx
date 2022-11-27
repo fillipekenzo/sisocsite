@@ -47,36 +47,39 @@ const PermissaoPage: React.FC<any> = (prop) => {
     };
 
     const selecionarMenu = async (id: number) => {
-        setMenuID(id)
         setLoading(true);
         PermissaoService.getByMenuID(id)
             .then((data) => {
                 console.log(data.data);
-                
                 data.data.map((d: any) => {
                     d.TipoUsuarioString = d.TipoUsuarioNavigation.Nome;
                     d.PossuiMenuString = d.PossuiMenu ? 'Sim' : 'Não';
-                    d.ConsultarCheck = <><CFormCheck type="checkbox" id="gridCheck" checked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d.TipoUsuarioID, "Consultar") }}/></>;
-                    d.CadastrarCheck = <><CFormCheck type="checkbox" id="gridCheck" checked={d.Cadastrar}/></>;
-                    d.EditarCheck = <><CFormCheck type="checkbox" id="gridCheck" checked={d.Editar}/></>;
-                    d.ExcluirCheck = <><CFormCheck type="checkbox" id="gridCheck" checked={d.Excluir}/></>;
-                    d.TodosCheck = <><CFormCheck type="checkbox" id="gridCheck" checked={d.Consultar}/></>;
+                    d.ConsultarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d, "Consultar") }} /></>;
+                    d.CadastrarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Cadastrar} onChange={(e: any) => { onNativeChange(e, d, "Cadastrar") }} /></>;
+                    d.EditarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Editar} onChange={(e: any) => { onNativeChange(e, d, "Editar") }}  /></>;
+                    d.ExcluirCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Excluir") }}  /></>;
+                    d.TodosCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar && d.Cadastrar && d.Editar && d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Todos") }}  /></>;
                 })
-                console.log(data.data);
+
                 setDados(data.data);
             })
             .finally(() => {
+                setMenuID(id)
                 setLoading(false)
             })
     }
 
-    const onNativeChange = async (e: any, perfilid: number, acao: any) => {
+    const onNativeChange = async (e: any, permissao: any, acao: any) => {
         let permissaoResponse: any = null;
+        console.log(e);
+        console.log(acao);
+        console.log(permissao);
+
         setLoading(true);
-        PermissaoService.getByMenuID(menuID)
+        PermissaoService.getByMenuIDTipoUsuarioID(permissao.MenuID, permissao.TipoUsuarioID)
             .then(response => {
                 console.log(response);
-                
+
                 if (response.data)
                     permissaoResponse = response.data;
             })
@@ -85,42 +88,47 @@ const PermissaoPage: React.FC<any> = (prop) => {
                 if (permissaoResponse != null) {
                     if (e.target.checked) {
                         if (acao == 'Consultar')
-                            permissaoResponse.consultar = true;
+                            permissaoResponse.Consultar = true;
                         if (acao == 'Cadastrar')
-                            permissaoResponse.cadastrar = true;
+                            permissaoResponse.Cadastrar = true;
                         if (acao == 'Editar')
-                            permissaoResponse.editar = true;
+                            permissaoResponse.Editar = true;
                         if (acao == 'Excluir')
-                            permissaoResponse.excluir = true;
+                            permissaoResponse.Excluir = true;
                         if (acao == 'Todos') {
-                            permissaoResponse.consultar = true;
-                            permissaoResponse.cadastrar = true;
-                            permissaoResponse.editar = true;
-                            permissaoResponse.excluir = true;
+                            permissaoResponse.Consultar = true;
+                            permissaoResponse.Cadastrar = true;
+                            permissaoResponse.Editar = true;
+                            permissaoResponse.Excluir = true;
                         }
                     }
                     else {
                         if (acao == 'Consultar')
-                            permissaoResponse.consultar = false;
+                            permissaoResponse.Consultar = false;
                         if (acao == 'Cadastrar')
-                            permissaoResponse.cadastrar = false;
+                            permissaoResponse.Cadastrar = false;
                         if (acao == 'Editar')
-                            permissaoResponse.editar = false;
+                            permissaoResponse.Editar = false;
                         if (acao == 'Excluir')
-                            permissaoResponse.excluir = false;
+                            permissaoResponse.Excluir = false;
                         if (acao == 'Todos') {
-                            permissaoResponse.consultar = false;
-                            permissaoResponse.cadastrar = false;
-                            permissaoResponse.editar = false;
-                            permissaoResponse.excluir = false;
+                            permissaoResponse.Consultar = false;
+                            permissaoResponse.Cadastrar = false;
+                            permissaoResponse.Editar = false;
+                            permissaoResponse.Excluir = false;
                         }
                     }
+                    console.log(permissaoResponse);
 
                     PermissaoService.put(permissaoResponse)
                         .finally(() => {
-                            carregarPermissoesMenu();
+                            selecionarMenu(permissaoResponse.MenuID);
                             setLoading(false)
-
+                            addToast({
+                                title: 'Sucesso!',
+                                description: 'Registro alterado com sucesso',
+                                type: 'success',
+                            });
                             // MenuService.getPorPerfil(sessionStorage.getItem('grupoID')).then((response) => {
                             //     sessionStorage.setItem('modulos', JSON.stringify(response.data));
                             // })
@@ -135,15 +143,22 @@ const PermissaoPage: React.FC<any> = (prop) => {
 
     const carregarPermissoesMenu = async (): Promise<void> => {
         setLoading(true)
-        PermissaoService.getByID(menuID)
+        PermissaoService.getByMenuID(menuID)
             .then((data) => {
+                console.log(data.data);
+
                 data.data.map((d: any) => {
                     d.TipoUsuarioString = d.TipoUsuarioNavigation.Nome;
                     d.PossuiMenuString = d.PossuiMenu ? 'Sim' : 'Não';
-                    d.Acoes = <>
-                        <CButton shape="rounded-pill" variant="ghost" color="primary" size="sm"  >Adicionar Submenu</CButton>
-                    </>;
+                    d.ConsultarCheck = <><input className="form-check-input" type="checkbox" value={d.Consultar} id="flexCheckChecked" checked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d, "Consultar") }} /></>;
+
+                    {/* <CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d, "Consultar") }} /></>; */}
+                    d.CadastrarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Cadastrar} onChange={(e: any) => { onNativeChange(e, d, "Cadastrar") }} /></>;
+                    d.EditarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Editar} onChange={(e: any) => { onNativeChange(e, d, "Editar") }}  /></>;
+                    d.ExcluirCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Excluir") }}  /></>;
+                    d.TodosCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar && d.Cadastrar && d.Editar && d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Todos") }}  /></>;
                 })
+                console.log(data.data);
                 setDados(data.data);
             })
             .finally(() => {
@@ -234,8 +249,9 @@ const PermissaoPage: React.FC<any> = (prop) => {
                 <fieldset className={Style.fieldsetConsulta}>
 
                     <label htmlFor="MenuID" className="form-label" >Menu</label>
-                    <select className='form-select' name="MenuID" onChange={(event) => { selecionarMenu(parseInt(event.target.value));
-                     }}>
+                    <select defaultValue={''} className='form-select' name="MenuID" onChange={(event) => {
+                        selecionarMenu(parseInt(event.target.value));
+                    }}>
                         <option value='' disabled>Selecione</option>
                         {menus.map(s => {
                             return (
@@ -246,6 +262,7 @@ const PermissaoPage: React.FC<any> = (prop) => {
                 </fieldset>
             </div>
             <MaterialReactTable
+                autoResetAll={true}
                 columns={columns}
                 data={dados}
                 enableColumnActions={false}

@@ -16,7 +16,9 @@ import {
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import MenuService from '../../../services/menu-service/menu-service'
-const navigation = MenuService.get()
+const navigation = MenuService.get().then((res)=>{
+  console.log(res);
+})
 
 const _nav = [
   {

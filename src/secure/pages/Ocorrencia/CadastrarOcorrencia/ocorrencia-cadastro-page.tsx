@@ -216,9 +216,9 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
                                 ) : null}
                             </div>
 
-                            {/* <div className="mb-3">
-                            <Field type="file" className="form-control" aria-label="file example" name="Anexo" id="Anexo" placeholder="Anexos" multiple />
-                        </div> */}
+                            <div className="mb-3">
+                                <Field type="file" className="form-control" aria-label="file example" name="file" id="file" placeholder="Anexos" multiple />
+                            </div>
 
                             <CRow>
                                 <CCol xs={12} className={Style.buttonCadastrar}>

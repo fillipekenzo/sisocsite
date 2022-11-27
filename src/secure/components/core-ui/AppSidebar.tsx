@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react'
+import { CNavGroup, CNavItem, CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
 import AppSidebarNav from './AppSidebarNav'
@@ -16,10 +16,56 @@ import 'simplebar/dist/simplebar.min.css'
 import navigation from './_nav'
 import { useAppDispatch, useAppSelector } from '../../../features/hooks'
 import { sidebarState, show, unfoldable } from '../../../features/slices/sidebar-slice'
+import MenuService from '../../../services/menu-service/menu-service'
+import { cilCursor, cilPuzzle } from '@coreui/icons'
 
 const AppSidebar: React.FC<any> = (prop) => {
   const dispatch = useAppDispatch();
   const sidebar = useAppSelector(sidebarState);
+  const [menus, setMenus] = useState<any[]>([]);
+  const user = JSON.parse(localStorage.getItem('@Sisoc:user') || '');
+
+  useEffect(() => {
+    carregarMenus();
+  }, [])
+
+  const carregarMenus = () => {
+    let menusAux: any[] = [];
+    let subMenusAux: any[] = [];
+
+    MenuService.getPorTipoUsuarioID(user.TipoUsuario.TipoUsuarioID).then((res) => {
+      res.data.map((m: any) => {
+        //Caso tenha Submenu
+        if (m.Submenus.length > 0) {
+          m.Submenus.map((s: any) => {
+            subMenusAux.push({
+              component: CNavItem,
+              name: s.Nome,
+              to: m.NavegarURL + s.NavegarURL,
+            })
+          })
+          menusAux.push({
+            component: CNavGroup,
+            name: m.Nome,
+            to: m.NavegarURL,
+            icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+            items: subMenusAux
+          })
+        }
+        //Caso NÃO tenha Submenu
+        else {
+          menusAux.push({
+            component: CNavItem,
+            name: m.Nome,
+            to: m.NavegarURL,
+            icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+          })
+        }
+        subMenusAux = [];
+      })
+      setMenus(menusAux)
+    })
+  }
 
   return (
     <CSidebar
@@ -36,7 +82,7 @@ const AppSidebar: React.FC<any> = (prop) => {
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>
-          <AppSidebarNav items={navigation} />
+          <AppSidebarNav items={menus} />
         </SimpleBar>
       </CSidebarNav>
       <CSidebarToggler

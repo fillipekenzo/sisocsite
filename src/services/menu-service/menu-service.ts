@@ -11,7 +11,7 @@ interface IMenuModel {
     PossuiMenu: boolean,
 }
 
-interface  IMenuFiltroModel {
+interface IMenuFiltroModel {
     Nome?: string,
     NavegarURL?: string,
     Ativo: boolean,
@@ -26,6 +26,13 @@ const MenuService = {
             })
     },
 
+    getPorTipoUsuarioID: async (tipoUsuarioID: number): Promise<RespostaWebAPI<any>> => {
+        return Api.get(`${OperacoesWebAPI.Menu}/getbytipousuarioid?tipousuarioid=${tipoUsuarioID}`)
+            .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
+                return axiosResponse.data
+            })
+    },
+
     getComFiltro: async (menuFiltroModel: IMenuFiltroModel): Promise<RespostaWebAPI<any>> => {
         return Api.get(`${OperacoesWebAPI.Menu}/comfiltros?nome=${menuFiltroModel?.Nome}&navegarURL=${menuFiltroModel.NavegarURL}&ativo=${menuFiltroModel.Ativo}`,)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
@@ -33,7 +40,7 @@ const MenuService = {
             })
     },
 
-    getByID: async (id:number): Promise<RespostaWebAPI<any>> => {
+    getByID: async (id: number): Promise<RespostaWebAPI<any>> => {
         return Api.get(`${OperacoesWebAPI.Menu}/getbyid?id=${id}`)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data
@@ -53,8 +60,8 @@ const MenuService = {
                 return axiosResponse.data
             })
     },
-    
-    delete: async (menuID : number): Promise<RespostaWebAPI<any>> => {
+
+    delete: async (menuID: number): Promise<RespostaWebAPI<any>> => {
         return Api.delete(`${OperacoesWebAPI.Menu}?id=${menuID}`)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data

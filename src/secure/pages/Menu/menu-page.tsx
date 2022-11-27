@@ -4,7 +4,6 @@ import {
     CPopover,
     CSpinner,
 } from '@coreui/react'
-
 import { useEffect } from 'react';
 import Style from './menu-page.module.scss'
 import { useToast } from '../../../features/toast';

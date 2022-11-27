@@ -8,6 +8,7 @@ import {
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
+  CNavLink,
 } from '@coreui/react'
 import {
   cilBell,
@@ -27,6 +28,7 @@ import CIcon from '@coreui/icons-react'
 import avatar from '../../../../assets/avatars/avatar.png'
 import { useAuth } from '../../../../features/auth'
 import { useNavigate } from 'react-router-dom'
+import Style from './Styles.module.scss'
 
 const AppHeaderDropdown: React.FC<any> = (prop) => {
   const { signOut, user } = useAuth();
@@ -42,12 +44,16 @@ const AppHeaderDropdown: React.FC<any> = (prop) => {
 
   return (
     <CDropdown variant="nav-item">
-      <CDropdownToggle className="py-0" caret={false}>
+      <CDropdownToggle className={`py-1 ${Style.divDropdown}`} caret={false}>
+        <CNavLink>
+          {user.Nome}
+        </CNavLink>
         <CAvatar color="secondary" size="md" >{retornaIniciais(user.Nome)}</CAvatar>
       </CDropdownToggle>
+
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-light fw-semibold py-2">Conta</CDropdownHeader>
-        <CDropdownItem >
+        <CDropdownItem href="#">
           <CIcon icon={cilBell} className="me-2" />
           {user.Nome}
         </CDropdownItem>

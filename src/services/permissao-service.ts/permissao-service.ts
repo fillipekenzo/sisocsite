@@ -13,7 +13,7 @@ interface IPermissaoModel {
     TipoUsuarioID?: number,
 }
 
-interface  IPermissaoFiltroModel {
+interface IPermissaoFiltroModel {
     MenuID?: number,
     TipoUsuarioID?: number,
 }
@@ -27,8 +27,15 @@ const PermissaoService = {
             })
     },
 
-    getByMenuID: async (id:number): Promise<RespostaWebAPI<any>> => {
+    getByMenuID: async (id: number): Promise<RespostaWebAPI<any>> => {
         return Api.get(`${OperacoesWebAPI.Permissao}/getbymenuid?id=${id}`)
+            .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
+                return axiosResponse.data
+            })
+    },
+
+    getByMenuIDTipoUsuarioID: async (menuID: number, tipoUsuarioID: number): Promise<RespostaWebAPI<any>> => {
+        return Api.get(`${OperacoesWebAPI.Permissao}/getbymenuidtipousuarioid?menuID=${menuID}&tipoUsuarioID=${tipoUsuarioID}`)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data
             })
@@ -41,7 +48,7 @@ const PermissaoService = {
             })
     },
 
-    getByID: async (id:number): Promise<RespostaWebAPI<any>> => {
+    getByID: async (id: number): Promise<RespostaWebAPI<any>> => {
         return Api.get(`${OperacoesWebAPI.Permissao}/getbyid?id=${id}`)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data
@@ -61,8 +68,8 @@ const PermissaoService = {
                 return axiosResponse.data
             })
     },
-    
-    delete: async (permissaoID : number): Promise<RespostaWebAPI<any>> => {
+
+    delete: async (permissaoID: number): Promise<RespostaWebAPI<any>> => {
         return Api.delete(`${OperacoesWebAPI.Permissao}?id=${permissaoID}`)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data

@@ -51,7 +51,7 @@ const LoginPage: React.FC<LoginProps> = (prop) => {
     const SchemaValidation = Yup.object().shape({
         senha: Yup.string()
             .min(4, 'Muito curta')
-            .max(8, 'Muito longa')
+            .max(12, 'Muito longa')
             .required('Senha obrigatória'),
         email: Yup.string().email('Digite um e-mail válido').required('E-mail obrigatório'),
     });

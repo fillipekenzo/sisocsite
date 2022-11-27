@@ -2,8 +2,6 @@ import React, { Suspense } from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../../components/core-ui'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
-
-import { useEffect } from 'react';
 import Style from './login-page.module.scss'
 import TipoUsuarioPage from '../TipoUsuario/tipo-usuario-page';
 import TipoOcorrenciaPage from '../TipoOcorrencia/tipo-ocorrencia-page';
@@ -20,9 +18,7 @@ const SecuredRoute = ({ children, redirectTo }: any) => {
     return isLoggedIn ? children : <Navigate to={redirectTo} />
 }
 
-
 const HomePage: React.FC<any> = (prop) => {
-
 
     return (
         <>
@@ -42,6 +38,7 @@ const HomePage: React.FC<any> = (prop) => {
                                     <Route path="/permissao" element={<PermissaoPage />} />
                                     <Route path="/ocorrencia" element={<OcorrenciaPage />} />
                                     <Route path="/ocorrencia/cadastrar" element={<OcorrenciaCadastrarPage />} />
+                                    <Route path="/ocorrencia/consultar" element={<OcorrenciaPage />} />
                                     <Route path="/ocorrencia/dashboard" element={<OcorrenciaDashboardPage />} />
                                     <Route path="*" element={<Page404 />} />
                                 </Routes>

@@ -49,13 +49,7 @@ const AppHeader: React.FC<any> = (prop) => {
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
-        <CHeaderNav>
-          <CNavItem>
-            <CNavLink href="#">
-              {user.Nome}
-            </CNavLink>
-          </CNavItem>
-        </CHeaderNav>
+        
         <CHeaderNav className="ms-3">
           <AppHeaderDropdown />
         </CHeaderNav>

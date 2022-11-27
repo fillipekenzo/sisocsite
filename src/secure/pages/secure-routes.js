@@ -16,6 +16,7 @@ const SecureRoutes = [
   { path: '/permissao', exact: true, name: 'Permissao', element: PermissaoPage },
   { path: '/ocorrencia', exact: true, name: 'Ocorrência', element: OcorrenciaCadastrarPage },
   { path: '/ocorrencia/cadastrar', exact: true, name: 'Cadastrar', element: OcorrenciaCadastrarPage },
+  { path: '/ocorrencia/consultar', exact: true, name: 'Consultar', element: OcorrenciaCadastrarPage },
   { path: '/ocorrencia/dashboard', exact: true, name: 'Dashboard', element: OcorrenciaDashboardPage },
 
 ]

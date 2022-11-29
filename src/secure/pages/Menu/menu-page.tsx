@@ -287,7 +287,6 @@ const MenuPage: React.FC<any> = (prop) => {
                 columns={columns}
                 data={dados}
                 enableColumnActions={false}
-                enableColumnFilters={false}
                 enableExpanding
                 localization={MRT_Localization_PT_BR}
                 getSubRows={(originalRow, index) => originalRow.Submenus} //default, can customize

@@ -14,9 +14,10 @@ interface IOcorrenciaModel {
     UsuarioCadastroID?: number,
     TipoOcorrenciaID?: number,
     SetorID?: number,
+    File?: any,
 }
 
-interface  IOcorrenciaFiltroModel {
+interface IOcorrenciaFiltroModel {
     Assunto?: string,
     Descricao?: string,
     SituacaoENUM: string,
@@ -39,15 +40,18 @@ const OcorrenciaService = {
             })
     },
 
-    getByID: async (id:number): Promise<RespostaWebAPI<any>> => {
+    getByID: async (id: number): Promise<RespostaWebAPI<any>> => {
         return Api.get(`${OperacoesWebAPI.Ocorrencia}/getbyid?id=${id}`)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data
             })
     },
 
-    post: async (ocorrenciaModel: IOcorrenciaModel): Promise<RespostaWebAPI<any>> => {
-        return Api.post(`${OperacoesWebAPI.Ocorrencia}`, ocorrenciaModel)
+    post: async (ocorrenciaModel: IOcorrenciaModel, formData: any): Promise<RespostaWebAPI<any>> => {
+        console.log(formData);
+
+        ocorrenciaModel.File = formData;
+        return Api.post(`${OperacoesWebAPI.Ocorrencia}`, ocorrenciaModel, { headers: { "Content-Type": "multipart/form-data" } })
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data
             })
@@ -59,8 +63,8 @@ const OcorrenciaService = {
                 return axiosResponse.data
             })
     },
-    
-    delete: async (ocorrenciaID : number): Promise<RespostaWebAPI<any>> => {
+
+    delete: async (ocorrenciaID: number): Promise<RespostaWebAPI<any>> => {
         return Api.delete(`${OperacoesWebAPI.Ocorrencia}?id=${ocorrenciaID}`)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data

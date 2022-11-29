@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
     CButton,
@@ -13,6 +13,8 @@ import TipoUsuarioService from '../../../services/tipo-usuario-service/tipo-usua
 import { useToast } from '../../../features/toast';
 import TipoUsuarioCadastroModal from './ModalCadastroTipoUsuario/tipo-usuario-cadastro-modal';
 import TipoUsuarioEdicaoModal from './ModalEdicaoTipoUsuario/tipo-usuario-edicao-modal';
+import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
+import { MRT_Localization_PT_BR } from 'material-react-table/locales/pt-BR';
 
 const TipoUsuarioPage: React.FC<any> = (prop) => {
     const [visibleCadastrar, setVisibleCadastrar] = useState(false);
@@ -114,28 +116,57 @@ const TipoUsuarioPage: React.FC<any> = (prop) => {
     );
 
 
-    const columns = [
-        {
-            key: 'TipoUsuarioID',
-            label: 'ID',
-            _props: { className: 'w-25', scope: 'col' },
-        },
-        {
-            key: 'Nome',
-            label: 'Nome',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'Descricao',
-            label: 'Descrição',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'Acoes',
-            label: 'Ações',
-            _props: { scope: 'col' },
-        },
-    ]
+    const columns = useMemo<MRT_ColumnDef<any>[]>(
+        () => [
+            {
+                accessorKey: 'TipoUsuarioID',
+                header: 'ID',
+                muiTableHeadCellProps: {
+                    align: 'center',
+                },
+                muiTableBodyCellProps: {
+                    align: 'center',
+                },
+                size: 40
+            },
+            {
+                accessorKey: 'Nome',
+                header: 'Nome',
+
+                muiTableHeadCellProps: {
+                    align: 'center',
+                },
+                muiTableBodyCellProps: {
+                    align: 'center',
+                },
+                size: 20
+            },
+
+            {
+                accessorKey: 'Descricao',
+                header: 'Descricao',
+                muiTableHeadCellProps: {
+                    align: 'center',
+                },
+                muiTableBodyCellProps: {
+                    align: 'center',
+                },
+                size: 20
+            },
+            {
+                accessorKey: 'Acoes',
+                header: 'Ações',
+                muiTableHeadCellProps: {
+                    align: 'center',
+                },
+                muiTableBodyCellProps: {
+                    align: 'center',
+                },
+                size: 20
+            },
+
+        ],
+        [],);
 
     return (
         <>
@@ -146,8 +177,13 @@ const TipoUsuarioPage: React.FC<any> = (prop) => {
             <div className={Style.divButtonCadastar}>
                 <CButton color="primary" variant="outline" onClick={() => { setVisibleCadastrar(true) }}>Cadastrar</CButton>
             </div>
-            <CTable caption={`Total de registros ${dados.length}`} responsive columns={columns} items={dados} tableHeadProps={{ color: 'primary' }} color='secondary' hover bordered borderColor='dark' />
-
+            <MaterialReactTable
+                autoResetAll={true}
+                columns={columns}
+                data={dados}
+                enableColumnActions={false}
+                localization={MRT_Localization_PT_BR}
+            />
         </>
     )
 }

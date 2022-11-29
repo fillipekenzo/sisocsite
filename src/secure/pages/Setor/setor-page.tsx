@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import {
     CButton,
     CPopover,
@@ -12,6 +12,8 @@ import { useToast } from '../../../features/toast';
 import SetorService from '../../../services/setor-service/setor-service';
 import SetorCadastroModal from './ModalCadastroSetor/setor-cadastro-modal';
 import SetorEdicaoModal from './ModalEdicaoSetor/setor-edicao-modal';
+import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
+import { MRT_Localization_PT_BR } from 'material-react-table/locales/pt-BR';
 
 const SetorPage: React.FC<any> = (prop) => {
     const [visibleCadastrar, setVisibleCadastrar] = useState(false);
@@ -112,30 +114,57 @@ const SetorPage: React.FC<any> = (prop) => {
         [dados, addToast]
     );
 
+    const columns = useMemo<MRT_ColumnDef<any>[]>(
+        () => [
+            {
+                accessorKey: 'SetorID',
+                header: 'ID',
+                muiTableHeadCellProps: {
+                    align: 'center',
+                },
+                muiTableBodyCellProps: {
+                    align: 'center',
+                },
+                size: 40
+            },
+            {
+                accessorKey: 'Nome',
+                header: 'Nome',
 
-    const columns = [
-        {
-            key: 'SetorID',
-            label: 'ID',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'Nome',
-            label: 'Nome',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'Sigla',
-            label: 'Sigla',
-            _props: { scope: 'col' },
-        },
-        {
-            key: 'Acoes',
-            label: 'Ações',
-            _props: { scope: 'col' },
-        },
-    ]
+                muiTableHeadCellProps: {
+                    align: 'center',
+                },
+                muiTableBodyCellProps: {
+                    align: 'center',
+                },
+                size: 20
+            },
 
+            {
+                accessorKey: 'Sigla',
+                header: 'Sigla',
+                muiTableHeadCellProps: {
+                    align: 'center',
+                },
+                muiTableBodyCellProps: {
+                    align: 'center',
+                },
+                size: 20
+            },
+            {
+                accessorKey: 'Acoes',
+                header: 'Ações',
+                muiTableHeadCellProps: {
+                    align: 'center',
+                },
+                muiTableBodyCellProps: {
+                    align: 'center',
+                },
+                size: 20
+            },
+
+        ],
+        [],);
     return (
         <>
             <SetorCadastroModal setVisivelFalse={() => setVisibleCadastrar(false)} visivel={visibleCadastrar} />
@@ -145,8 +174,13 @@ const SetorPage: React.FC<any> = (prop) => {
             <div className={Style.divButtonCadastar}>
                 <CButton color="primary" variant="outline" onClick={() => { setVisibleCadastrar(true) }}>Cadastrar</CButton>
             </div>
-            <CTable caption={`Total de registros ${dados.length}`} responsive columns={columns} items={dados} tableHeadProps={{ color: 'primary' }} color='secondary' hover bordered borderColor='dark' />
-
+            <MaterialReactTable
+                autoResetAll={true}
+                columns={columns}
+                data={dados}
+                enableColumnActions={false}
+                localization={MRT_Localization_PT_BR}
+            />
         </>
     )
 }

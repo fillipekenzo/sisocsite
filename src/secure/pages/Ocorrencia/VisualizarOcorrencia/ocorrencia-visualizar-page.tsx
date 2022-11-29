@@ -3,12 +3,13 @@ import {
     CButton,
     CCol,
     CContainer,
+    CImage,
     CRow,
     CSpinner,
 } from '@coreui/react'
 
 import { useEffect } from 'react';
-import Style from './ocorrencia-cadastro-page.module.scss'
+import Style from './ocorrencia-visualizar-page.module.scss'
 import { useToast } from '../../../../features/toast';
 import OcorrenciaService from '../../../../services/ocorrencia-service/ocorrencia-service';
 import TipoOcorrenciaService from '../../../../services/tipo-ocorrencia-service/tipo-ocorrencia-service';
@@ -16,10 +17,13 @@ import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import EnumeradorService from '../../../../services/enumerador-service/enumerador-service';
 import SetorService from '../../../../services/setor-service/setor-service';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../../../features/auth';
+import moment from 'moment';
+import CIcon from '@coreui/icons-react';
+import { cilVerticalAlignBottom } from '@coreui/icons';
 
-const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
+const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
     const [loading, setLoading] = useState(false);
     const [tipoOcorrencias, setTipoOcorrencias] = useState<any[]>([]);
     const [setores, setSetores] = useState<any[]>([]);
@@ -31,13 +35,36 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const [fileAnexo, setFileAnexo] = useState<any>(null);
+    const { id } = useParams<any>();
+    const [ocorrencia, setOcorrencia] = useState<any>(null);
+
+    const [initialForm, setInitialForm] = useState({
+        OcorrenciaID: 0,
+        Assunto: '',
+        Descricao: '',
+        UrgenciaENUM: '',
+        SituacaoENUM: '',
+        SetorID: '',
+        TipoOcorrenciaID: '',
+    });
 
     useEffect(() => {
-        carregarDados();
+        carregarOcorrencia();
     }, [])
+
+    useEffect(() => {
+        setInitialForm(ocorrencia)
+    }, [ocorrencia])
+
+    useEffect(() => {
+        console.log(initialForm);
+        carregarDados();
+
+    }, [initialForm])
 
     const carregarDados = async (): Promise<void> => {
         setLoading(true)
+
         EnumeradorService.get('ESituacaoOcorrencia')
             .then((response: any) => { setSituacaoENUM(response.data) })
             .finally(() => setLoading(false))
@@ -53,70 +80,36 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
         SetorService.get()
             .then((response: any) => { setSetores(response.data) })
             .finally(() => setLoading(false))
+
+
     };
 
-    const initialForm = {
-        Assunto: '',
-        Descricao: '',
-        UrgenciaENUM: '',
-        SituacaoENUM: '',
-        SetorID: '',
-        TipoOcorrenciaID: '',
+    const carregarOcorrencia = async (): Promise<void> => {
+        setLoading(true)
+        OcorrenciaService.getByID(parseInt(id || ''))
+            .then((response: any) => {
+                console.log(response);
+                setOcorrencia(response.data)
+                setInitialForm(response.data)
+            })
+            .finally(() => setLoading(false))
     };
 
     const SchemaValidation = Yup.object().shape({
-        TipoOcorrenciaID: Yup.string().required('Tipo Ocorrência obrigatoria'),
-        SetorID: Yup.string().required('Setor obrigatorio'),
-        SituacaoENUM: Yup.string().required('Situação obrigatoria'),
-        UrgenciaENUM: Yup.string().required('Urgência obrigatoria'),
-        Assunto: Yup.string()
-            .min(2, 'Muito curto')
-            .max(200, 'Muito longa')
-            .required('Assunto obrigatório'),
-        Descricao: Yup.string().required('Descrição obrigatória'),
     });
 
-    const changeFile = (value: any) => {
+    const downloadAnexo = (value: any) => {
         console.log(value);
-        setFileAnexo(value);
+        let link = document.createElement('a');
+        link.href = value.AnexoURL;
+        link.download = value.Nome;
+        link.click();
+        link.remove();
     }
+
 
     const handleSubmit = (data: any) => {
         try {
-            console.log(fileAnexo);
-            console.log(data);
-            data.UsuarioCadastroID = user.UsuarioID;
-            OcorrenciaService.post(data, fileAnexo)
-                .then((res) => {
-                    if (res.success) {
-                        addToast({
-                            title: 'Sucesso!',
-                            description: 'Registro cadastrado com sucesso',
-                            type: 'success',
-                        });
-                    }
-                })
-                .finally(() => {
-                    navigate('/ocorrencia')
-                })
-                .catch((ex) => {
-                    if (ex.response != undefined) {
-                        ex.response.data.error.map((a: any) => {
-                            addToast({
-                                title: 'Erro',
-                                description: a,
-                                type: 'error',
-                            });
-                        })
-                    }
-                    else {
-                        addToast({
-                            title: 'Erro',
-                            description: 'Erro na conexão com servidor',
-                            type: 'error',
-                        });
-                    }
-                })
 
         } catch (ex) {
             addToast({
@@ -130,7 +123,6 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
     return (
         <>
             <CSpinner hidden={!loading} />
-            <h2>Nova Ocorrência</h2>
             <Formik
                 initialValues={initialForm}
                 onSubmit={handleSubmit}
@@ -140,10 +132,12 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
                     <Form className={Style.formulario}>
                         <CContainer>
                             <div className="mb-3">
+                                <h2 className={Style.tituloOcorrencia}>#{ocorrencia?.OcorrenciaID} - {ocorrencia?.Assunto}</h2>
+                                <p className={Style.subTituloOcorrencia}>Por: {ocorrencia?.UsuarioCadastroNavigation?.Nome} - Data Criação: {moment(new Date(ocorrencia?.DataHoraCadastro)).format('DD/MM/YYYY HH:mm:SS')}  </p>
                                 <CRow>
                                     <CCol xs={6} >
                                         <label htmlFor="TipoOcorrenciaID" className="form-label" >Tipo Ocorrência</label>
-                                        <Field as="select" className='form-select' name="TipoOcorrenciaID">
+                                        <Field as="select" className='form-select' name="TipoOcorrenciaID" value={ocorrencia?.TipoOcorrenciaID} disabled>
                                             <option value='' disabled>Selecione</option>
                                             {tipoOcorrencias.map(t => {
                                                 return (
@@ -157,7 +151,7 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
                                     </CCol>
                                     <CCol xs={6} >
                                         <label htmlFor="SetorID" className="form-label" >Setor</label>
-                                        <Field as="select" className='form-select' name="SetorID">
+                                        <Field as="select" className='form-select' name="SetorID" value={ocorrencia?.SetorID} disabled>
                                             <option value='' disabled>Selecione</option>
                                             {setores.map(s => {
                                                 return (
@@ -176,7 +170,7 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
                                 <CRow>
                                     <CCol xs={6} >
                                         <label htmlFor="UrgenciaENUM" className="form-label" >Urgência</label>
-                                        <Field as="select" className='form-select' name="UrgenciaENUM">
+                                        <Field as="select" className='form-select' name="UrgenciaENUM" value={ocorrencia?.UrgenciaENUM} disabled>
                                             <option value='' disabled>Selecione</option>
                                             {urgenciaENUM.map(u => {
                                                 return (
@@ -190,7 +184,7 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
                                     </CCol>
                                     <CCol xs={6} >
                                         <label htmlFor="SituacaoENUM" className="form-label" >Situação</label>
-                                        <Field as="select" className='form-select' name="SituacaoENUM">
+                                        <Field as="select" className='form-select' name="SituacaoENUM" value={ocorrencia?.SituacaoENUM} disabled>
                                             <option value='' disabled>Selecione</option>
                                             {situacaoENUM.map(u => {
                                                 return (
@@ -206,7 +200,7 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="Assunto" className="form-label">Assunto</label>
-                                <Field type="text" className="form-control" name="Assunto" id="Assunto" placeholder="Assunto da Ocorrência" />
+                                <Field type="text" className="form-control" name="Assunto" id="Assunto" placeholder="Assunto da Ocorrência" value={ocorrencia?.Assunto} disabled />
                                 {errors.Assunto && touched.Assunto ? (
                                     <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Assunto}</div>
                                 ) : null}
@@ -214,25 +208,32 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
 
                             <div className="mb-3">
                                 <label htmlFor="Descricao" className="form-label">Descrição</label>
-                                <Field as="textarea" rows='10' maxLength="1000" type="text" className="form-control" name="Descricao" id="Descricao" placeholder="Descrição da Ocorrência" />
+                                <Field as="textarea" rows='10' maxLength="1000" type="text" className="form-control" name="Descricao" id="Descricao" placeholder="Descrição da Ocorrência" value={ocorrencia?.Descricao} disabled />
                                 {errors.Descricao && touched.Descricao ? (
                                     <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Descricao}</div>
                                 ) : null}
                             </div>
 
                             <div className="mb-3">
-                                <input onChange={(event: any) => {
-                                    changeFile(event.currentTarget.files[0]);
-                                }} className="form-control" type="file" name="File" id="File" placeholder="Anexos" />
+                                <label htmlFor="Anexos" className="form-label">Anexos </label>
+                                <br></br>
+                                {ocorrencia?.Anexos.map((a: any) => {
+                                    return (
+                                        <>
+                                            <div>
+                                                <CButton color="Dark" variant="outline" onClick={() => downloadAnexo(a)}>{a.Nome}  <CIcon icon={cilVerticalAlignBottom} className="me-2" /></CButton>
+                                            </div>
+                                        </>
+                                    )
+                                })}
                             </div>
-
                             <CRow>
                                 <CCol xs={12} className={Style.buttonCadastrar}>
                                     <CButton color="dark" type='button' onClick={() => { navigate(from) }} className={`m-3 px-4 ${Style.buttonEntrar}`}>
                                         Voltar
                                     </CButton>
-                                    <CButton color="primary" type='submit' className={`m-3 px-4 ${Style.buttonEntrar}`}>
-                                        Salvar
+                                    <CButton color="primary" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`}>
+                                        Resolver
                                     </CButton>
                                 </CCol>
                             </CRow>
@@ -243,4 +244,4 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
         </>
     )
 }
-export default OcorrenciaCadastrarPage;
+export default OcorrenciaVisualizarPage;

@@ -56,9 +56,9 @@ const PermissaoPage: React.FC<any> = (prop) => {
                     d.PossuiMenuString = d.PossuiMenu ? 'Sim' : 'Não';
                     d.ConsultarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d, "Consultar") }} /></>;
                     d.CadastrarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Cadastrar} onChange={(e: any) => { onNativeChange(e, d, "Cadastrar") }} /></>;
-                    d.EditarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Editar} onChange={(e: any) => { onNativeChange(e, d, "Editar") }}  /></>;
-                    d.ExcluirCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Excluir") }}  /></>;
-                    d.TodosCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar && d.Cadastrar && d.Editar && d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Todos") }}  /></>;
+                    d.EditarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Editar} onChange={(e: any) => { onNativeChange(e, d, "Editar") }} /></>;
+                    d.ExcluirCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Excluir") }} /></>;
+                    d.TodosCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar && d.Cadastrar && d.Editar && d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Todos") }} /></>;
                 })
 
                 setDados(data.data);
@@ -79,7 +79,6 @@ const PermissaoPage: React.FC<any> = (prop) => {
         PermissaoService.getByMenuIDTipoUsuarioID(permissao.MenuID, permissao.TipoUsuarioID)
             .then(response => {
                 console.log(response);
-
                 if (response.data)
                     permissaoResponse = response.data;
             })
@@ -152,11 +151,11 @@ const PermissaoPage: React.FC<any> = (prop) => {
                     d.PossuiMenuString = d.PossuiMenu ? 'Sim' : 'Não';
                     d.ConsultarCheck = <><input className="form-check-input" type="checkbox" value={d.Consultar} id="flexCheckChecked" checked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d, "Consultar") }} /></>;
 
-                    {/* <CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d, "Consultar") }} /></>; */}
+                    {/* <CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d, "Consultar") }} /></>; */ }
                     d.CadastrarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Cadastrar} onChange={(e: any) => { onNativeChange(e, d, "Cadastrar") }} /></>;
-                    d.EditarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Editar} onChange={(e: any) => { onNativeChange(e, d, "Editar") }}  /></>;
-                    d.ExcluirCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Excluir") }}  /></>;
-                    d.TodosCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar && d.Cadastrar && d.Editar && d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Todos") }}  /></>;
+                    d.EditarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Editar} onChange={(e: any) => { onNativeChange(e, d, "Editar") }} /></>;
+                    d.ExcluirCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Excluir") }} /></>;
+                    d.TodosCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar && d.Cadastrar && d.Editar && d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Todos") }} /></>;
                 })
                 console.log(data.data);
                 setDados(data.data);

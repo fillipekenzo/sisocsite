@@ -12,7 +12,7 @@ interface IAnexoModel {
     OcorrenciaID?: number,
 }
 
-interface  IAnexoFiltroModel {
+interface IAnexoFiltroModel {
     Nome?: string,
     TipoAnexo?: string,
 }
@@ -33,14 +33,16 @@ const AnexoService = {
             })
     },
 
-    getByID: async (id:number): Promise<RespostaWebAPI<any>> => {
+    getByID: async (id: number): Promise<RespostaWebAPI<any>> => {
         return Api.get(`${OperacoesWebAPI.Anexo}/getbyid?id=${id}`)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data
             })
     },
 
-    post: async (anexoModel: IAnexoModel): Promise<RespostaWebAPI<any>> => {
+    post: async (anexoModel: IAnexoModel, formData: any): Promise<RespostaWebAPI<any>> => {
+        console.log(formData);
+        
         return Api.post(`${OperacoesWebAPI.Anexo}`, anexoModel)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data
@@ -53,8 +55,8 @@ const AnexoService = {
                 return axiosResponse.data
             })
     },
-    
-    delete: async (anexoID : number): Promise<RespostaWebAPI<any>> => {
+
+    delete: async (anexoID: number): Promise<RespostaWebAPI<any>> => {
         return Api.delete(`${OperacoesWebAPI.Anexo}?id=${anexoID}`)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data

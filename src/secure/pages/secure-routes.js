@@ -2,6 +2,7 @@ import React from 'react'
 import MenuPage from './Menu/menu-page'
 import OcorrenciaCadastrarPage from './Ocorrencia/CadastrarOcorrencia/ocorrencia-cadastro-page'
 import OcorrenciaDashboardPage from './Ocorrencia/DashboardOcorrencia/ocorrencia-dashboard-page'
+import OcorrenciaVisualizarPage from './Ocorrencia/VisualizarOcorrencia/ocorrencia-visualizar-page'
 import PermissaoPage from './Permissao/permissao-page'
 import SetorPage from './Setor/setor-page'
 import TipoOcorrenciaPage from './TipoOcorrencia/tipo-ocorrencia-page'
@@ -17,6 +18,7 @@ const SecureRoutes = [
   { path: '/ocorrencia', exact: true, name: 'Ocorrência', element: OcorrenciaCadastrarPage },
   { path: '/ocorrencia/cadastrar', exact: true, name: 'Cadastrar', element: OcorrenciaCadastrarPage },
   { path: '/ocorrencia/consultar', exact: true, name: 'Consultar', element: OcorrenciaCadastrarPage },
+  { path: '/ocorrencia/visualizar', exact: true, name: 'Visualizar', element: OcorrenciaVisualizarPage },
   { path: '/ocorrencia/dashboard', exact: true, name: 'Dashboard', element: OcorrenciaDashboardPage },
 
 ]

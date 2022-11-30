@@ -48,8 +48,6 @@ const OcorrenciaService = {
     },
 
     post: async (ocorrenciaModel: IOcorrenciaModel, formData: any): Promise<RespostaWebAPI<any>> => {
-        console.log(formData);
-
         ocorrenciaModel.File = formData;
         return Api.post(`${OperacoesWebAPI.Ocorrencia}`, ocorrenciaModel, { headers: { "Content-Type": "multipart/form-data" } })
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {

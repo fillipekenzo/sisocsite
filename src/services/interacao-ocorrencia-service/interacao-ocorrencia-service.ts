@@ -9,9 +9,10 @@ interface IInteracaoOcorrenciaModel {
     Descricao: string,
     UsuarioID?: number,
     OcorrenciaID?: number,
+    File?: any
 }
 
-interface  IInteracaoOcorrenciaFiltroModel {
+interface IInteracaoOcorrenciaFiltroModel {
     Assunto?: string,
     Descricao?: string,
 }
@@ -32,15 +33,16 @@ const InteracaoOcorrenciaService = {
             })
     },
 
-    getByID: async (id:number): Promise<RespostaWebAPI<any>> => {
+    getByID: async (id: number): Promise<RespostaWebAPI<any>> => {
         return Api.get(`${OperacoesWebAPI.InteracaoOcorrencia}/getbyid?id=${id}`)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data
             })
     },
 
-    post: async (interacaoOcorrenciaModel: IInteracaoOcorrenciaModel): Promise<RespostaWebAPI<any>> => {
-        return Api.post(`${OperacoesWebAPI.InteracaoOcorrencia}`, interacaoOcorrenciaModel)
+    post: async (interacaoOcorrenciaModel: IInteracaoOcorrenciaModel, formData: any): Promise<RespostaWebAPI<any>> => {
+        interacaoOcorrenciaModel.File = formData;
+        return Api.post(`${OperacoesWebAPI.InteracaoOcorrencia}`, interacaoOcorrenciaModel, { headers: { "Content-Type": "multipart/form-data" } })
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data
             })
@@ -52,8 +54,8 @@ const InteracaoOcorrenciaService = {
                 return axiosResponse.data
             })
     },
-    
-    delete: async (interacaoOcorrenciaID : number): Promise<RespostaWebAPI<any>> => {
+
+    delete: async (interacaoOcorrenciaID: number): Promise<RespostaWebAPI<any>> => {
         return Api.delete(`${OperacoesWebAPI.InteracaoOcorrencia}?id=${interacaoOcorrenciaID}`)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data

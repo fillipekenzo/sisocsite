@@ -37,6 +37,7 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
 
                 data.data.map((d: any) => {
                     d.AssuntoDescricao = { Assunto: d.Assunto, Descricao: d.Descricao };
+                    d.UsuarioAtribuidoNome = d.UsuarioAtribuido == null ? "" : d.UsuarioAtribuido.Nome
                     d.UsuarioCadastroNome = d.UsuarioCadastro.Nome
                     d.SetorNome = d.Setor.Nome
                     d.DataHoraCadastro = moment(new Date(d.DataHoraCadastro)).format('DD/MM/YYYY HH:mm:SS')
@@ -107,6 +108,17 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
                     )
                 }
 
+            },
+            {
+                accessorKey: 'UsuarioAtribuidoNome',
+                header: 'Atribuido a',
+                muiTableHeadCellProps: {
+                    align: 'center',
+                },
+                muiTableBodyCellProps: {
+                    align: 'center',
+                },
+                size: 20
             },
             {
                 accessorKey: 'UsuarioCadastroNome',
@@ -184,7 +196,7 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
             </div>
             <MaterialReactTable
                 initialState={{
-                    density:'compact'
+                    density: 'compact'
                 }}
                 autoResetAll={true}
                 columns={columns}

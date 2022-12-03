@@ -14,6 +14,7 @@ import OcorrenciaDashboardPage from '../Ocorrencia/DashboardOcorrencia/ocorrenci
 import PermissaoPage from '../Permissao/permissao-page';
 import OcorrenciaVisualizarPage from '../Ocorrencia/VisualizarOcorrencia/ocorrencia-visualizar-page'
 import OcorrenciaEditarPage from '../Ocorrencia/EditarOcorrencia/ocorrencia-editar-page'
+import UsuarioPage from '../Usuario/usuario-page'
 
 const SecuredRoute = ({ children, redirectTo }: any) => {
     const isLoggedIn = !!localStorage.getItem('usuarioLogado');
@@ -38,6 +39,7 @@ const HomePage: React.FC<any> = (prop) => {
                                     <Route path="/setor" element={<SetorPage />} />
                                     <Route path="/menu" element={<MenuPage />} />
                                     <Route path="/permissao" element={<PermissaoPage />} />
+                                    <Route path="/usuario" element={<UsuarioPage />} />
                                     <Route path="/ocorrencia" element={<OcorrenciaPage />} />
                                     <Route path="/ocorrencia/cadastrar" element={<OcorrenciaCadastrarPage />} />
                                     <Route path="/ocorrencia/consultar" element={<OcorrenciaPage />} />

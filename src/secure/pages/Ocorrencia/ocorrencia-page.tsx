@@ -22,6 +22,7 @@ import { MRT_Localization_PT_BR } from 'material-react-table/locales/pt-BR';
 const OcorrenciaPage: React.FC<any> = (prop) => {
     const [loading, setLoading] = useState(false);
     const [dados, setDados] = useState<any[]>([]);
+    const [filtroOcorrencia, setFiltroOcorrencia] = useState<any>();
     const { addToast } = useToast();
     const navigate = useNavigate();
 
@@ -33,8 +34,6 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
         setLoading(true)
         OcorrenciaService.get()
             .then((data) => {
-                console.log(data);
-
                 data.data.map((d: any) => {
                     d.AssuntoDescricao = { Assunto: d.Assunto, Descricao: d.Descricao };
                     d.UsuarioAtribuidoNome = d.UsuarioAtribuido == null ? "" : d.UsuarioAtribuido.Nome
@@ -70,6 +69,17 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
             document.getElementById(`excluir${id}`)?.click()
         }, []
     )
+
+    const retornaCorLinha = (value: any) => {
+        console.log(value);
+        if (value == "EmAtendimento")
+            return "#39f"
+        else if (value == "Resolvido")
+            return "#2b9f3f"
+
+        // else if (value == "Resolvido")
+        //     return "#e55353"
+    }
 
     const columns = useMemo<MRT_ColumnDef<any>[]>(
         () => [
@@ -181,16 +191,18 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
     return (
         <>
             <CSpinner hidden={!loading} />
-            <h2>Ocorrencia</h2>
+            <h2>Ocorrência</h2>
             <div className={Style.divButtonCadastar}>
                 <CButton color="primary" variant="outline" onClick={() => { navigate('/ocorrencia/cadastrar') }}>Nova Ocorrência</CButton>
                 <CInputGroup className={Style.filtroTabela}>
                     <CInputGroupText>Filtrar por:</CInputGroupText>
-                    <CFormSelect color="primary" onClick={() => { }}>
+                    <CFormSelect color="primary" onChange={(e) => {
+                        console.log(e.target.value);
+                    }}>
                         <option value={1}>Todos os chamados</option>
-                        <option value={1}>Meus chamados atribuidos</option>
-                        <option value={2}>Meus chamados criados</option>
-                        <option value={3}>Meu Setor</option>
+                        <option value={2}>Meus chamados atribuidos</option>
+                        <option value={3}>Meus chamados criados</option>
+                        <option value={4}>Meu Setor</option>
                     </CFormSelect>
                 </CInputGroup>
             </div>
@@ -204,6 +216,7 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
                 enableColumnActions={false}
                 localization={MRT_Localization_PT_BR}
                 muiTableBodyRowProps={({ row }) => ({
+                    style: { backgroundColor: retornaCorLinha(row._valuesCache.Situacao) },
                     onClick: (event) => {
                         navigate(`/ocorrencia/visualizar/${row._valuesCache.OcorrenciaID}`)
                         console.log(row._valuesCache.OcorrenciaID);

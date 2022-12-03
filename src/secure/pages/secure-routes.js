@@ -8,6 +8,7 @@ import PermissaoPage from './Permissao/permissao-page'
 import SetorPage from './Setor/setor-page'
 import TipoOcorrenciaPage from './TipoOcorrencia/tipo-ocorrencia-page'
 import TipoUsuarioPage from './TipoUsuario/tipo-usuario-page'
+import UsuarioPage from './Usuario/usuario-page'
 
 const SecureRoutes = [
   { path: '/', exact: true, name: 'Home' },
@@ -16,6 +17,7 @@ const SecureRoutes = [
   { path: '/setor', exact: true, name: 'Setor', element: SetorPage },
   { path: '/menu', exact: true, name: ' Menu', element: MenuPage },
   { path: '/permissao', exact: true, name: 'Permissao', element: PermissaoPage },
+  { path: '/usuario', exact: true, name: 'Usuário', element: UsuarioPage },
   { path: '/ocorrencia', exact: true, name: 'Ocorrência', element: OcorrenciaCadastrarPage },
   { path: '/ocorrencia/cadastrar', exact: true, name: 'Cadastrar', element: OcorrenciaCadastrarPage },
   { path: '/ocorrencia/consultar', exact: true, name: 'Consultar', element: OcorrenciaCadastrarPage },

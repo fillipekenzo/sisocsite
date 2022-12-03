@@ -21,7 +21,10 @@ import {
   cilTask,
   cilUser,
   cilAccountLogout,
-  cilCog
+  cilCog,
+  cilContact,
+  cilAddressBook,
+  cilGroup
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 
@@ -53,8 +56,8 @@ const AppHeaderDropdown: React.FC<any> = (prop) => {
 
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-light fw-semibold py-2">Conta</CDropdownHeader>
-        <CDropdownItem href="#">
-          <CIcon icon={cilBell} className="me-2" />
+        <CDropdownItem>
+          <CIcon icon={cilUser} className="me-2" />
           {user.Nome}
         </CDropdownItem>
         <CDropdownItem>
@@ -62,12 +65,8 @@ const AppHeaderDropdown: React.FC<any> = (prop) => {
           {user.Email}
         </CDropdownItem>
         <CDropdownItem >
-          <CIcon icon={cilTask} className="me-2" />
+          <CIcon icon={cilGroup} className="me-2" />
           {user.TipoUsuario.Nome}
-        </CDropdownItem>
-        <CDropdownItem >
-          <CIcon icon={cilCog} className="me-2" />
-          Configurações
         </CDropdownItem>
         <CDropdownItem onClick={() => { signOut(), navigate('/login') }}>
           <CIcon icon={cilAccountLogout} className="me-2" />

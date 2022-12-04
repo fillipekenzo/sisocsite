@@ -18,10 +18,12 @@ import PermissaoService from '../../../services/permissao-service.ts/permissao-s
 import MenuService from '../../../services/menu-service/menu-service';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import TipoUsuarioService from '../../../services/tipo-usuario-service/tipo-usuario-service';
 
 const PermissaoPage: React.FC<any> = (prop) => {
     const [loading, setLoading] = useState(false);
     const [dados, setDados] = useState<any[]>([]);
+    const [tipoUsuarios, setTipoUsuarios] = useState<any[]>([]);
     const [menus, setMenus] = useState<any[]>([]);
     const [menuID, setMenuID] = useState<number>(0);
     const { addToast } = useToast();
@@ -43,10 +45,17 @@ const PermissaoPage: React.FC<any> = (prop) => {
             .finally(() => {
                 setLoading(false)
             })
+        TipoUsuarioService.get()
+            .then((data) => {
+                setTipoUsuarios(data.data);
+            })
+            .finally(() => {
+                setLoading(false)
+            })
 
     };
 
-    const selecionarMenu = async (id: number) => {
+    const selecionarMenu = (id: number) => {
         setLoading(true);
         PermissaoService.getByMenuID(id)
             .then((data) => {
@@ -54,14 +63,15 @@ const PermissaoPage: React.FC<any> = (prop) => {
                 data.data.map((d: any) => {
                     d.TipoUsuarioString = d.TipoUsuarioNavigation.Nome;
                     d.PossuiMenuString = d.PossuiMenu ? 'Sim' : 'Não';
-                    d.ConsultarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d, "Consultar") }} /></>;
-                    d.CadastrarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Cadastrar} onChange={(e: any) => { onNativeChange(e, d, "Cadastrar") }} /></>;
-                    d.EditarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Editar} onChange={(e: any) => { onNativeChange(e, d, "Editar") }} /></>;
-                    d.ExcluirCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Excluir") }} /></>;
-                    d.TodosCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar && d.Cadastrar && d.Editar && d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Todos") }} /></>;
+                    d.ConsultarCheck = <><CFormCheck type="checkbox" id="gridCheck" checked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d, "Consultar") }} /></>;
+                    d.CadastrarCheck = <><CFormCheck type="checkbox" id="gridCheck" checked={d.Cadastrar} onChange={(e: any) => { onNativeChange(e, d, "Cadastrar") }} /></>;
+                    d.EditarCheck = <><CFormCheck type="checkbox" id="gridCheck" checked={d.Editar} onChange={(e: any) => { onNativeChange(e, d, "Editar") }} /></>;
+                    d.ExcluirCheck = <><CFormCheck type="checkbox" id="gridCheck" checked={d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Excluir") }} /></>;
+                    d.TodosCheck = <><CFormCheck type="checkbox" id="gridCheck" checked={d.Consultar && d.Cadastrar && d.Editar && d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Todos") }} /></>;
                 })
 
                 setDados(data.data);
+                criarPermissoesPadrao(data.data, id)
             })
             .finally(() => {
                 setMenuID(id)
@@ -85,7 +95,7 @@ const PermissaoPage: React.FC<any> = (prop) => {
             .finally(() => {
 
                 if (permissaoResponse != null) {
-                    if (e.target.checked) {
+                    if (!e.target.checked) {
                         if (acao == 'Consultar')
                             permissaoResponse.Consultar = true;
                         if (acao == 'Cadastrar')
@@ -120,6 +130,9 @@ const PermissaoPage: React.FC<any> = (prop) => {
                     console.log(permissaoResponse);
 
                     PermissaoService.put(permissaoResponse)
+                        .then(() => {
+                            selecionarMenu(permissaoResponse.MenuID);
+                        })
                         .finally(() => {
                             selecionarMenu(permissaoResponse.MenuID);
                             setLoading(false)
@@ -165,6 +178,35 @@ const PermissaoPage: React.FC<any> = (prop) => {
             })
 
     };
+
+    const criarPermissoesPadrao = async (permissoes: any, menuid: any) => {
+        await tipoUsuarios.forEach((tipoUsuario: any) => {
+            var query = permissoes.find((x: any) => x.TipoUsuarioID == tipoUsuario.TipoUsuarioID && x.MenuID == menuid);
+            console.log(query);
+
+            // Caso o perfil não tenha nenhuma permissão cadastrada neste modulo, insere um registro sem as permissões.                   
+            if (query == undefined) {
+
+                let permissao = {
+                    PermissaoID: 0,
+                    MenuID: menuid,
+                    SubMenuID: 1,
+                    TipoUsuarioID: tipoUsuario.TipoUsuarioID,
+                    Consultar: false,
+                    Cadastrar: false,
+                    Editar: false,
+                    Excluir: false
+                }
+                PermissaoService.post(permissao)
+                    .finally(() => { })
+                    .then(() => {
+                        selecionarMenu(permissao.MenuID)
+                    });
+            }
+
+        });
+
+    }
 
     const columns = useMemo<MRT_ColumnDef<any>[]>(
         () => [

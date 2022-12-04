@@ -46,6 +46,13 @@ const UsuarioService = {
             })
     },
 
+    postRegistrar: async (usuarioModel: IUsuarioModel): Promise<RespostaWebAPI<any>> => {
+        return Api.post(`${OperacoesWebAPI.Usuario}/registrar`, usuarioModel)
+            .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
+                return axiosResponse.data
+            })
+    },
+
     put: async (usuarioModel: IUsuarioModel): Promise<RespostaWebAPI<any>> => {
         return Api.put(`${OperacoesWebAPI.Usuario}`, usuarioModel)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {

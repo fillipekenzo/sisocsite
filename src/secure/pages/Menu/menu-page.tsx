@@ -47,7 +47,6 @@ const MenuPage: React.FC<any> = (prop) => {
         setLoading(true)
         MenuService.get()
             .then((data) => {
-                console.log(data);
                 data.data.map((d: any) => {
                     d.AtivoString = d.Ativo ? 'Sim' : 'Não';
                     d.PossuiMenuString = d.PossuiMenu ? 'Sim' : 'Não';

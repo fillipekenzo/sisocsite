@@ -1,10 +1,16 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import {
     CButton,
+    CCol,
+    CDropdown,
+    CDropdownItem,
+    CDropdownMenu,
+    CDropdownToggle,
     CFormSelect,
     CInputGroup,
     CInputGroupText,
     CPopover,
+    CRow,
     CSpinner,
     CTable,
     CTooltip,
@@ -18,26 +24,109 @@ import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
 import { MRT_Localization_PT_BR } from 'material-react-table/locales/pt-BR';
+import EnumeradorService from '../../../services/enumerador-service/enumerador-service';
 
 const OcorrenciaPage: React.FC<any> = (prop) => {
     const [loading, setLoading] = useState(false);
+    const [urgenciaENUM, setUrgenciaENUM] = useState<any[]>([]);
+    const [situacaoENUM, setSituacaoENUM] = useState<any[]>([]);
     const [dados, setDados] = useState<any[]>([]);
-    const [filtroOcorrencia, setFiltroOcorrencia] = useState<any>();
+    const [filtroOcorrencia, setFiltroOcorrencia] = useState<any[]>();
     const { addToast } = useToast();
     const navigate = useNavigate();
+    const userLogado = JSON.parse(localStorage.getItem('@Sisoc:user') || '');
 
     useEffect(() => {
         carregarDados();
+        carregarFiltros();
     }, [])
 
-    const carregarDados = async (): Promise<void> => {
+    const carregarFiltros = () => {
+        var filtroAux;
+        if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ADMIN" || userLogado.TipoUsuario?.Nome.toUpperCase() == "SUPORTE") {
+            filtroAux = [
+                { Value: 1, Texto: "Todas as Ocorrências" },
+                { Value: 2, Texto: "Ocorrências atribuidas" },
+                { Value: 3, Texto: "Ocorrências criadas" },
+                { Value: 4, Texto: "Ocorrências atribuidas abertas" },
+                { Value: 5, Texto: "Ocorrências criadas abertas" },
+                { Value: 6, Texto: "Ocorrências do Setor" },
+            ]
+        }
+        else if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ATENDIMENTO" ) {
+            filtroAux = [
+                { Value: 2, Texto: "Ocorrências atribuidas" },
+                { Value: 3, Texto: "Ocorrências criadas" },
+                { Value: 4, Texto: "Ocorrências atribuidas abertas" },
+                { Value: 5, Texto: "Ocorrências criadas abertas" },
+                { Value: 6, Texto: "Ocorrências do Setor" },
+            ]
+        }
+        else {
+            filtroAux = [
+                { Value: 3, Texto: "Ocorrências criadas" },
+                { Value: 5, Texto: "Ocorrências criadas abertas" },
+            ]
+        }
+        setFiltroOcorrencia(filtroAux)
+    }
+
+    const carregarDados = () => {
+        if(userLogado.TipoUsuario?.Nome.toUpperCase() == "ADMIN" || userLogado.TipoUsuario?.Nome.toUpperCase() == "SUPORTE"){
+            filtrarOcorrencias(1)
+        }
+        else if(userLogado.TipoUsuario?.Nome.toUpperCase() == "ATENDIMENTO" ){
+            filtrarOcorrencias(2)
+        }
+        else{
+            filtrarOcorrencias(3)
+        }
+    };
+
+    const fecharPopover = useCallback(
+        async (id: number) => {
+            document.getElementById(`excluir${id}`)?.click()
+        }, []
+    )
+
+    const retornaCorLinha = (value: any) => {
+        if (value == "EmAtendimento")
+            return "#39f"
+        else if (value == "Resolvido")
+            return "#2b9f3f"
+    }
+
+    const filtrarOcorrencias = (value: any) => {
+        var filtroOcorrencia: any = {
+            SituacaoENUM: "",
+            SetorID: 0,
+            UsuarioAtribuidoID: 0,
+            UsuarioCadastroID: 0
+        };
+        if (value == 2) {
+            filtroOcorrencia.UsuarioAtribuidoID = userLogado.UsuarioID
+        }
+        else if (value == 3) {
+            filtroOcorrencia.UsuarioCadastroID = userLogado.UsuarioID
+        }
+        else if (value == 4) {
+            filtroOcorrencia.UsuarioAtribuidoID = userLogado.UsuarioID
+            filtroOcorrencia.SituacaoENUM = "Aberto"
+        }
+        else if (value == 5) {
+            filtroOcorrencia.UsuarioCadastroID = userLogado.UsuarioID
+            filtroOcorrencia.SituacaoENUM = "Aberto"
+        }
+        else if (value == 6) {
+            filtroOcorrencia.SetorID = userLogado.Setor.SetorID
+        }
         setLoading(true)
-        OcorrenciaService.get()
-            .then((data) => {
-                data.data.map((d: any) => {
+        OcorrenciaService.postComFiltro(filtroOcorrencia)
+            .then((res) => {
+                res.data.map((d: any) => {
                     d.AssuntoDescricao = { Assunto: d.Assunto, Descricao: d.Descricao };
                     d.UsuarioAtribuidoNome = d.UsuarioAtribuido == null ? "" : d.UsuarioAtribuido.Nome
-                    d.UsuarioCadastroNome = d.UsuarioCadastro.Nome
+                    d.UsuarioCadastroNome = d.UsuarioCadastro == null ? "" : d.UsuarioCadastro.Nome
                     d.SetorNome = d.Setor.Nome
                     d.DataHoraCadastro = moment(new Date(d.DataHoraCadastro)).format('DD/MM/YYYY HH:mm:SS')
                     d.Acoes = <>
@@ -57,28 +146,11 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
                         </CPopover>
                     </>;
                 })
-                setDados(data.data);
+                setDados(res.data);
             })
             .finally(() => {
                 setLoading(false)
             })
-    };
-
-    const fecharPopover = useCallback(
-        async (id: number) => {
-            document.getElementById(`excluir${id}`)?.click()
-        }, []
-    )
-
-    const retornaCorLinha = (value: any) => {
-        console.log(value);
-        if (value == "EmAtendimento")
-            return "#39f"
-        else if (value == "Resolvido")
-            return "#2b9f3f"
-
-        // else if (value == "Resolvido")
-        //     return "#e55353"
     }
 
     const columns = useMemo<MRT_ColumnDef<any>[]>(
@@ -143,7 +215,7 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
             },
             {
                 accessorKey: 'Urgencia',
-                header: 'Urgencia',
+                header: 'Urgência',
                 muiTableHeadCellProps: {
                     align: 'center',
                 },
@@ -153,15 +225,15 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
                 size: 20
             },
             {
-                accessorKey: 'Situacao',
-                header: 'Situacao',
+                accessorKey: 'SituacaoTexto',
+                header: 'Situação',
                 muiTableHeadCellProps: {
                     align: 'center',
                 },
                 muiTableBodyCellProps: {
                     align: 'center',
                 },
-                size: 20
+                size: 20,
             },
             {
                 accessorKey: 'SetorNome',
@@ -193,16 +265,33 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
             <CSpinner hidden={!loading} />
             <h2>Ocorrência</h2>
             <div className={Style.divButtonCadastar}>
-                <CButton color="primary" variant="outline" onClick={() => { navigate('/ocorrencia/cadastrar') }}>Nova Ocorrência</CButton>
+                <CRow>
+                    <CCol sm="auto">
+                        <CButton color="primary" variant="outline" onClick={() => { navigate('/ocorrencia/cadastrar') }}>Nova Ocorrência</CButton>
+                    </CCol>
+                    <CCol sm="auto">
+                        <CDropdown className={Style.legendaDropDown}>
+                            <CDropdownToggle color="secondary">Legenda</CDropdownToggle>
+                            <CDropdownMenu>
+                                <CDropdownItem disabled><div className={Style.legendaDiv}><span>Aberto</span> <div className={Style.legendaAberto}></div></div></CDropdownItem>
+                                <CDropdownItem disabled><div className={Style.legendaDiv}><span>Em Atendimento</span> <div className={Style.legendaEmAtendimento}></div></div></CDropdownItem>
+                                <CDropdownItem disabled><div className={Style.legendaDiv}><span>Resolvido</span> <div className={Style.legendaResolvido}></div></div></CDropdownItem>
+                            </CDropdownMenu>
+                        </CDropdown>
+                    </CCol>
+                </CRow>
                 <CInputGroup className={Style.filtroTabela}>
                     <CInputGroupText>Filtrar por:</CInputGroupText>
                     <CFormSelect color="primary" onChange={(e) => {
-                        console.log(e.target.value);
+                        filtrarOcorrencias(e.target.value)
                     }}>
-                        <option value={1}>Todos os chamados</option>
-                        <option value={2}>Meus chamados atribuidos</option>
-                        <option value={3}>Meus chamados criados</option>
-                        <option value={4}>Meu Setor</option>
+                        {filtroOcorrencia?.map(f => {
+                            return (
+                                <>
+                                    <option value={f.Value}>{f.Texto}</option>
+                                </>
+                            )
+                        })}
                     </CFormSelect>
                 </CInputGroup>
             </div>
@@ -216,10 +305,9 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
                 enableColumnActions={false}
                 localization={MRT_Localization_PT_BR}
                 muiTableBodyRowProps={({ row }) => ({
-                    style: { backgroundColor: retornaCorLinha(row._valuesCache.Situacao) },
+                    style: { backgroundColor: retornaCorLinha(row.original.Situacao) },
                     onClick: (event) => {
                         navigate(`/ocorrencia/visualizar/${row._valuesCache.OcorrenciaID}`)
-                        console.log(row._valuesCache.OcorrenciaID);
                     },
                     sx: {
                         cursor: 'pointer',

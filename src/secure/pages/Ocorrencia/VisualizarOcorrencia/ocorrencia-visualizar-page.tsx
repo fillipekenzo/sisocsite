@@ -102,7 +102,6 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
         setLoading(true)
         OcorrenciaService.getByID(parseInt(id || ''))
             .then((response: any) => {
-                console.log(response);
                 setOcorrencia(response.data)
                 setInitialForm(response.data)
             })
@@ -113,7 +112,6 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
     });
 
     const downloadAnexo = (value: any) => {
-        console.log(value);
         let link = document.createElement('a');
         link.href = value.AnexoURL;
         link.download = value.Nome;
@@ -127,14 +125,122 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
         }, []
     )
 
+    const botoesPorSituacaoEPerfil = () => {
+        //Usuario ATENDIMENTO
+        if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ATENDIMENTO") {
+            if (ocorrencia?.SituacaoENUM.toUpperCase() == 'ABERTO') {
+                return (
+                    <>
+                        <CPopover
+                            trigger='click'
+                            title="Atribuir Ocorrência"
+                            content={<> Tem certeza que deseja atribuir essa Ocorrência a você?
+                                <div className={Style.buttonConfirm}>
+                                    <CButton color='dark' size='sm' variant="outline" onClick={() => { fecharPopover() }} >Não</CButton> <CButton color='success' size='sm' onClick={() => atribuirOcorrencia()}>Sim</CButton>
+                                </div>
+                            </>
+                            }
+                            placement="top"
+                        >
+                            <CButton color="primary" type='button' id="buttonAtribuir" className={`m-3 px-4 ${Style.buttonEntrar}`}>
+                                Atribuir Ocorrência a mim
+                            </CButton>
+                        </CPopover>
+                    </>
+                )
+            }
+            else if (ocorrencia?.SituacaoENUM.toUpperCase() == 'EMATENDIMENTO' && ocorrencia?.UsuarioAtribuidoID == userLogado?.UsuarioID) {
+                return (
+                    <>
+                        <CButton color="info" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`} onClick={() => setVisibleModalInteracao(true)}>
+                            Interagir
+                        </CButton>
+                        <CButton color="primary" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`} onClick={() => setVisibleModalResolverOcorrencia(true)}>
+                            Resolver
+                        </CButton>
+                    </>
+                )
+            }
+        }
+        //Usuario ADMIN
+        else if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ADMIN") {
+            if (ocorrencia?.SituacaoENUM.toUpperCase() == 'ABERTO') {
+                return (
+                    <>
+                        <CButton color="info" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`} onClick={() => {
+                            navigate(`/ocorrencia/editar/${initialForm?.OcorrenciaID}`)
+                        }}>
+                            Editar
+                        </CButton>
+                        <CPopover
+                            trigger='click'
+                            title="Atribuir Ocorrência"
+                            content={<> Tem certeza que deseja atribuir essa Ocorrência a você?
+                                <div className={Style.buttonConfirm}>
+                                    <CButton color='dark' size='sm' variant="outline" onClick={() => { fecharPopover() }} >Não</CButton> <CButton color='success' size='sm' onClick={() => atribuirOcorrencia()}>Sim</CButton>
+                                </div>
+                            </>
+                            }
+                            placement="top"
+                        >
+                            <CButton color="primary" type='button' id="buttonAtribuir" className={`m-3 px-4 ${Style.buttonEntrar}`}>
+                                Atribuir Ocorrência a mim
+                            </CButton>
+                        </CPopover>
+                    </>
+                )
+            }
+            else if (ocorrencia?.SituacaoENUM.toUpperCase() == 'EMATENDIMENTO' && ocorrencia?.UsuarioAtribuidoID == userLogado?.UsuarioID) {
+                return (
+                    <>
+                        <CButton color="info" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`} onClick={() => {
+                            navigate(`/ocorrencia/editar/${initialForm?.OcorrenciaID}`)
+                        }}>
+                            Editar
+                        </CButton>
+                        <CButton color="info" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`} onClick={() => setVisibleModalInteracao(true)}>
+                            Interagir
+                        </CButton>
+                        <CButton color="primary" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`} onClick={() => setVisibleModalResolverOcorrencia(true)}>
+                            Resolver
+                        </CButton>
+                    </>
+                )
+            }
+        }
+        //Usuario Comum
+        else {
+            if (ocorrencia?.SituacaoENUM.toUpperCase() == 'ABERTO') {
+                return (
+                    <>
+                        <CButton color="info" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`} onClick={() => {
+                            navigate(`/ocorrencia/editar/${initialForm?.OcorrenciaID}`)
+                        }}>
+                            Editar
+                        </CButton>
+                    </>
+                )
+            }
+            else if (ocorrencia?.SituacaoENUM.toUpperCase() == 'EMATENDIMENTO' && ocorrencia?.UsuarioCadastroID == userLogado?.UsuarioID) {
+                return (
+                    <>
+                        <CButton color="info" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`} onClick={() => setVisibleModalInteracao(true)}>
+                            Interagir
+                        </CButton>
+                    </>
+                )
+            }
+        }
+
+    }
+
     const atribuirOcorrencia = async (): Promise<void> => {
         setLoading(true)
         ocorrencia.UsuarioAtribuidoID = userLogado.UsuarioID;
-        ocorrencia.SituacaoENUM = "EmAndamento";
+        ocorrencia.SituacaoENUM = "EmAtendimento";
         setOcorrencia(ocorrencia);
         OcorrenciaService.put(ocorrencia)
             .then((response: any) => {
-                console.log(response);
                 carregarOcorrencia();
             })
             .finally(() => setLoading(false))
@@ -360,42 +466,7 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
                     <CButton color="dark" type='button' onClick={() => { navigate(from) }} className={`m-3 px-4 ${Style.buttonEntrar}`}>
                         Voltar
                     </CButton>
-                    <CButton color="info" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`} onClick={() => setVisibleModalInteracao(true)}>
-                        Interagir
-                    </CButton>
-                    {userLogado?.UsuarioID == ocorrencia?.UsuarioCadastroID ?
-                        <CButton color="info" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`} onClick={() => {
-                            navigate(`/ocorrencia/editar/${initialForm?.OcorrenciaID}`)
-                        }}>
-                            Editar
-                        </CButton> :
-                        <>
-                            <CButton color="primary" type='button' className={`m-3 px-4 ${Style.buttonEntrar}`} onClick={() => setVisibleModalResolverOcorrencia(true)}>
-                                Resolver
-                            </CButton>
-                        </>
-                    }
-                    {userLogado?.UsuarioID != ocorrencia?.UsuarioCadastroID && ocorrencia?.SituacaoENUM.toUpperCase() == 'ABERTO' ?
-                        <>
-                            <CPopover
-                                trigger='click'
-                                title="Atribuir Ocorrência"
-                                content={<> Tem certeza que deseja atribuir essa Ocorrência a você?
-                                    <div className={Style.buttonConfirm}>
-                                        <CButton color='dark' size='sm' variant="outline" onClick={() => { fecharPopover() }} >Não</CButton> <CButton color='success' size='sm' onClick={() => atribuirOcorrencia()}>Sim</CButton>
-                                    </div>
-                                </>
-                                }
-                                placement="top"
-                            >
-                                <CButton color="primary" type='button' id="buttonAtribuir" className={`m-3 px-4 ${Style.buttonEntrar}`}>
-                                    Atribuir Ocorrência a mim
-                                </CButton>
-                            </CPopover>
-                        </>
-
-                        : null
-                    }
+                    {botoesPorSituacaoEPerfil()}
                 </CCol>
             </CRow>
         </>

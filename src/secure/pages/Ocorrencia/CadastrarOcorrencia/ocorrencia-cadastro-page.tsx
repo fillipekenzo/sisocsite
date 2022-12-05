@@ -77,14 +77,11 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
     });
 
     const changeFile = (value: any) => {
-        console.log(value);
         setFileAnexo(value);
     }
 
     const handleSubmit = (data: any) => {
         try {
-            console.log(fileAnexo);
-            console.log(data);
             data.UsuarioCadastroID = user.UsuarioID;
             OcorrenciaService.post(data, fileAnexo)
                 .then((res) => {

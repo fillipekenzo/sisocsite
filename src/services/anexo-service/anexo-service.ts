@@ -41,7 +41,6 @@ const AnexoService = {
     },
 
     post: async (anexoModel: IAnexoModel, formData: any): Promise<RespostaWebAPI<any>> => {
-        console.log(formData);
         
         return Api.post(`${OperacoesWebAPI.Anexo}`, anexoModel)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {

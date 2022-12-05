@@ -69,7 +69,6 @@ const OcorrenciaEditarPage: React.FC<any> = (prop) => {
             .finally(() => setLoading(false))
         OcorrenciaService.getByID(parseInt(id || ''))
             .then((response: any) => {
-                console.log(response);
                 setInitialForm(response.data)
                 setOcorrencia(response.data)
             })
@@ -89,12 +88,10 @@ const OcorrenciaEditarPage: React.FC<any> = (prop) => {
     });
 
     const changeFile = (value: any) => {
-        console.log(value);
         setFileAnexo(value);
     }
 
     const downloadAnexo = (value: any) => {
-        console.log(value);
         let link = document.createElement('a');
         link.href = value.AnexoURL;
         link.download = value.Nome;
@@ -104,8 +101,6 @@ const OcorrenciaEditarPage: React.FC<any> = (prop) => {
     
     const handleSubmit = (data: any) => {
         try {
-            console.log(fileAnexo);
-            console.log(data);
             data.UsuarioCadastroID = user.UsuarioID;
             OcorrenciaService.put(data)
                 .then((res) => {

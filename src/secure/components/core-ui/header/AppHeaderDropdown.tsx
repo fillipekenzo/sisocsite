@@ -68,7 +68,7 @@ const AppHeaderDropdown: React.FC<any> = (prop) => {
           <CIcon icon={cilGroup} className="me-2" />
           {user.TipoUsuario.Nome}
         </CDropdownItem>
-        <CDropdownItem onClick={() => { signOut(), navigate('/login') }}>
+        <CDropdownItem className={Style.linkSair} onClick={() => { signOut(), navigate('/login') }}>
           <CIcon icon={cilAccountLogout} className="me-2" />
           Sair
         </CDropdownItem>

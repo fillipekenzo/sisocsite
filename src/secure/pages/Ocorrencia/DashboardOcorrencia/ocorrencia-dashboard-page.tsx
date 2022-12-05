@@ -32,7 +32,6 @@ const OcorrenciaDashboardPage: React.FC<any> = (prop) => {
         setLoading(true)
         OcorrenciaService.get()
             .then((data) => {
-                console.log(data);
                 data.data.map((d: any) => {
                     d.UsuarioCadastroNome = d.UsuarioCadastro.Nome
                     d.DataHoraCadastro = moment(new Date(d.DataHoraCadastro)).format('DD/MM/YYYY HH:mm:SS')

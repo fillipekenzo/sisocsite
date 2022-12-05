@@ -89,7 +89,6 @@ const CadastroPage: React.FC<any> = (prop) => {
 
     const handleSubmit = (data: any) => {
         try {
-            console.log(data);
             UsuarioService.postRegistrar(data)
                 .then((res) => {
                     if (res.success) {

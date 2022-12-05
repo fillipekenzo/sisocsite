@@ -1,10 +1,47 @@
-.filtroTabela{
-    width:30% !important;
+.filtroTabela {
+    width: 30% !important;
 }
 
-.divButtonCadastar{
+.divButtonCadastar {
     display: flex;
     margin-bottom: 10px;
     margin-top: 10px;
     justify-content: space-between;
+}
+
+.legendaDropDown{
+    margin-left: 1em;
+}
+
+.legendaDiv {
+    width: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.legendaAberto {
+    margin: auto;
+    margin-right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.legendaEmAtendimento {
+    margin: auto;
+    margin-right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: #39f;
+    border: 1px solid black;
+}
+
+.legendaResolvido {
+    margin: auto;
+    margin-right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: #2b9f3f;
+    border: 1px solid black;
 }

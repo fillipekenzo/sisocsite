@@ -37,27 +37,24 @@ const AppHeader: React.FC<any> = (prop) => {
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderBrand className="mx-auto d-md-none">
-          <div style={{display:'flex'}}>
+          <div style={{ display: 'flex' }}>
             <h3 style={{ margin: '0px' }}>SISOC</h3>
             <img src={logoIFMS} style={{ width: '30px' }}></img>
           </div>
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
-          <CNavItem>
-            <CNavLink to="/home" component={NavLink}>
-              Home
-            </CNavLink>
-          </CNavItem>
+          <AppBreadcrumb />
         </CHeaderNav>
-        
+
         <CHeaderNav className="ms-3">
           <AppHeaderDropdown />
         </CHeaderNav>
       </CContainer>
-      <CHeaderDivider />
+      
+      {/* <CHeaderDivider />
       <CContainer fluid>
         <AppBreadcrumb />
-      </CContainer>
+      </CContainer> */}
     </CHeader>
   )
 }

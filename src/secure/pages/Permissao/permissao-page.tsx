@@ -59,7 +59,6 @@ const PermissaoPage: React.FC<any> = (prop) => {
         setLoading(true);
         PermissaoService.getByMenuID(id)
             .then((data) => {
-                console.log(data.data);
                 data.data.map((d: any) => {
                     d.TipoUsuarioString = d.TipoUsuarioNavigation.Nome;
                     d.PossuiMenuString = d.PossuiMenu ? 'Sim' : 'Não';
@@ -81,14 +80,10 @@ const PermissaoPage: React.FC<any> = (prop) => {
 
     const onNativeChange = async (e: any, permissao: any, acao: any) => {
         let permissaoResponse: any = null;
-        console.log(e);
-        console.log(acao);
-        console.log(permissao);
 
         setLoading(true);
         PermissaoService.getByMenuIDTipoUsuarioID(permissao.MenuID, permissao.TipoUsuarioID)
             .then(response => {
-                console.log(response);
                 if (response.data)
                     permissaoResponse = response.data;
             })
@@ -127,7 +122,6 @@ const PermissaoPage: React.FC<any> = (prop) => {
                             permissaoResponse.Excluir = false;
                         }
                     }
-                    console.log(permissaoResponse);
 
                     PermissaoService.put(permissaoResponse)
                         .then(() => {
@@ -141,9 +135,6 @@ const PermissaoPage: React.FC<any> = (prop) => {
                                 description: 'Registro alterado com sucesso',
                                 type: 'success',
                             });
-                            // MenuService.getPorPerfil(sessionStorage.getItem('grupoID')).then((response) => {
-                            //     sessionStorage.setItem('modulos', JSON.stringify(response.data));
-                            // })
                         })
                         .then((data) => {
 
@@ -157,20 +148,16 @@ const PermissaoPage: React.FC<any> = (prop) => {
         setLoading(true)
         PermissaoService.getByMenuID(menuID)
             .then((data) => {
-                console.log(data.data);
 
                 data.data.map((d: any) => {
                     d.TipoUsuarioString = d.TipoUsuarioNavigation.Nome;
                     d.PossuiMenuString = d.PossuiMenu ? 'Sim' : 'Não';
                     d.ConsultarCheck = <><input className="form-check-input" type="checkbox" value={d.Consultar} id="flexCheckChecked" checked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d, "Consultar") }} /></>;
-
-                    {/* <CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar} onChange={(e: any) => { onNativeChange(e, d, "Consultar") }} /></>; */ }
                     d.CadastrarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Cadastrar} onChange={(e: any) => { onNativeChange(e, d, "Cadastrar") }} /></>;
                     d.EditarCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Editar} onChange={(e: any) => { onNativeChange(e, d, "Editar") }} /></>;
                     d.ExcluirCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Excluir") }} /></>;
                     d.TodosCheck = <><CFormCheck type="checkbox" id="gridCheck" defaultChecked={d.Consultar && d.Cadastrar && d.Editar && d.Excluir} onChange={(e: any) => { onNativeChange(e, d, "Todos") }} /></>;
                 })
-                console.log(data.data);
                 setDados(data.data);
             })
             .finally(() => {
@@ -182,8 +169,6 @@ const PermissaoPage: React.FC<any> = (prop) => {
     const criarPermissoesPadrao = async (permissoes: any, menuid: any) => {
         await tipoUsuarios.forEach((tipoUsuario: any) => {
             var query = permissoes.find((x: any) => x.TipoUsuarioID == tipoUsuario.TipoUsuarioID && x.MenuID == menuid);
-            console.log(query);
-
             // Caso o perfil não tenha nenhuma permissão cadastrada neste modulo, insere um registro sem as permissões.                   
             if (query == undefined) {
 

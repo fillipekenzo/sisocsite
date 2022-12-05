@@ -22,6 +22,7 @@ const UsuarioPage: React.FC<any> = (prop) => {
     const [loading, setLoading] = useState(false);
     const [dados, setDados] = useState<any[]>([]);
     const { addToast } = useToast();
+    const userLogado = JSON.parse(localStorage.getItem('@Sisoc:user') || '');
 
     useEffect(() => {
         carregarDados();
@@ -36,7 +37,6 @@ const UsuarioPage: React.FC<any> = (prop) => {
         UsuarioService.get()
             .then((data) => {
                 data.data.map((d: any) => {
-                    console.log(d);
                     d.Setor = d.SetorNavigation?.Sigla
                     d.TipoUsuario = d.TipoUsuarioNavigation?.Nome
                     d.Acoes = <>
@@ -52,7 +52,7 @@ const UsuarioPage: React.FC<any> = (prop) => {
                             }
                             placement="top"
                         >
-                            <CButton shape="rounded-pill" variant="ghost" id={`excluir${d.UsuarioID}`} color="danger" size="sm">Excluir</CButton>
+                            <CButton hidden={!ehUsuarioADM()} shape="rounded-pill" variant="ghost" id={`excluir${d.UsuarioID}`} color="danger" size="sm">Excluir</CButton>
                         </CPopover>
                     </>;
                 })
@@ -69,43 +69,55 @@ const UsuarioPage: React.FC<any> = (prop) => {
         }, []
     )
 
+    const ehUsuarioADM = () => {
+        return userLogado.TipoUsuario?.Nome.toUpperCase() == "ADMIN"
+    }
+
     const excluirRegistro = useCallback(
         async (id: number) => {
             try {
-                setLoading(true)
-                UsuarioService.delete(id)
-                    .then((data) => {
-                        if (data.success) {
-                            addToast({
-                                title: 'Sucesso',
-                                description: 'Registro excluído com sucesso!',
-                                type: 'success',
-                            });
-                        }
-                    }).finally(() => {
-                        carregarDados();
-                        fecharPopover(id)
-                        setLoading(false)
-                    })
-                    .catch((ex: any) => {
-                        if (ex.response != undefined && ex.response.data.error?.length > 0) {
-                            ex.response.data.error?.map((a: any) => {
+                if (ehUsuarioADM()) {
+                    setLoading(true)
+                    UsuarioService.delete(id)
+                        .then((data) => {
+                            if (data.success) {
+                                addToast({
+                                    title: 'Sucesso',
+                                    description: 'Registro excluído com sucesso!',
+                                    type: 'success',
+                                });
+                            }
+                        }).finally(() => {
+                            carregarDados();
+                            fecharPopover(id)
+                            setLoading(false)
+                        })
+                        .catch((ex: any) => {
+                            if (ex.response != undefined && ex.response.data.error?.length > 0) {
+                                ex.response.data.error?.map((a: any) => {
+                                    addToast({
+                                        title: 'Erro',
+                                        description: a,
+                                        type: 'error',
+                                    });
+                                })
+                            }
+                            else {
                                 addToast({
                                     title: 'Erro',
-                                    description: a,
+                                    description: 'Erro na conexão com servidor',
                                     type: 'error',
                                 });
-                            })
-                        }
-                        else {
-                            addToast({
-                                title: 'Erro',
-                                description: 'Erro na conexão com servidor',
-                                type: 'error',
-                            });
-                        }
-                    })
-
+                            }
+                        })
+                }
+                else {
+                    addToast({
+                        title: 'Erro',
+                        description: "Você não tem permissão para realizar a exclusão",
+                        type: 'error',
+                    });
+                }
             } catch (ex: any) {
                 addToast({
                     title: 'Erro',

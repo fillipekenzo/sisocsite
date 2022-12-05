@@ -30,7 +30,6 @@ const SubmenuCadastroModal: React.FC<SubmenuCadastroModalProps> = (props) => {
 
     useEffect(() => {
         setVisible(props.visivel)
-        console.log(props.menuID);
         
     }, [props.visivel])
 

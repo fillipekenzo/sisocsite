@@ -18,10 +18,10 @@ interface IOcorrenciaModel {
 }
 
 interface IOcorrenciaFiltroModel {
-    Assunto?: string,
-    Descricao?: string,
+    UsuarioCadastroID?: number,
+    UsuarioAtribuidoID?: number,
+    SetorID?: number,
     SituacaoENUM: string,
-    UrgenciaENUM: string,
 }
 
 const OcorrenciaService = {
@@ -33,8 +33,8 @@ const OcorrenciaService = {
             })
     },
 
-    getComFiltro: async (ocorrenciaFiltroModel: IOcorrenciaFiltroModel): Promise<RespostaWebAPI<any>> => {
-        return Api.get(`${OperacoesWebAPI.Ocorrencia}/comfiltros?assunto=${ocorrenciaFiltroModel?.Assunto}&descricao=${ocorrenciaFiltroModel.Descricao}&situacaoENUM=${ocorrenciaFiltroModel.SituacaoENUM}&urgenciaENUM=${ocorrenciaFiltroModel.UrgenciaENUM}`,)
+    postComFiltro: async (ocorrenciaFiltroModel: IOcorrenciaFiltroModel): Promise<RespostaWebAPI<any>> => {
+        return Api.post(`${OperacoesWebAPI.Ocorrencia}/postcomfiltros`, ocorrenciaFiltroModel)
             .then((axiosResponse: AxiosResponse<RespostaWebAPI<any>>) => {
                 return axiosResponse.data
             })

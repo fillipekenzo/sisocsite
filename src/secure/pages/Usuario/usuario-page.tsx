@@ -37,6 +37,7 @@ const UsuarioPage: React.FC<any> = (prop) => {
         UsuarioService.get()
             .then((data) => {
                 data.data.map((d: any) => {
+                    d.SetorID = d.SetorID == undefined ? '' : d.SetorID
                     d.Setor = d.SetorNavigation?.Sigla
                     d.TipoUsuario = d.TipoUsuarioNavigation?.Nome
                     d.Acoes = <>

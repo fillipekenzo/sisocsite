@@ -41,7 +41,8 @@ const UsuarioEdicaoModal: React.FC<UsuarioCadastroModalProps> = (props) => {
     });
 
     useEffect(() => {
-        props.model.SetorID = props.model?.SetorID == undefined ? '' : props.model.SetorID
+        console.log(props);
+        
         setVisible(props.visivel)
         setInitialForm(props.model)
         carregarDados()

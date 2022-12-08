@@ -41,8 +41,6 @@ const UsuarioEdicaoModal: React.FC<UsuarioCadastroModalProps> = (props) => {
     });
 
     useEffect(() => {
-        console.log(props);
-        
         setVisible(props.visivel)
         setInitialForm(props.model)
         carregarDados()

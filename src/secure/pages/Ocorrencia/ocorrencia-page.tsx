@@ -76,7 +76,7 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
             filtrarOcorrencias(1)
         }
         else if(userLogado.TipoUsuario?.Nome.toUpperCase() == "ATENDIMENTO" ){
-            filtrarOcorrencias(2)
+            filtrarOcorrencias(6)
         }
         else{
             filtrarOcorrencias(3)

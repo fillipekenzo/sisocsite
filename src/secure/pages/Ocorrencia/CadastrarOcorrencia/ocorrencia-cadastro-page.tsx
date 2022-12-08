@@ -38,7 +38,7 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
 
     const carregarDados = async (): Promise<void> => {
         setLoading(true)
-        EnumeradorService.get('ESituacaoOcorrencia')
+        EnumeradorService.get('ESituacaoOcorrenciaNova')
             .then((response: any) => { setSituacaoENUM(response.data) })
             .finally(() => setLoading(false))
 

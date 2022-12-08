@@ -7,6 +7,7 @@ import AppSidebarNav from './AppSidebarNav'
 
 import { logoNegative } from '../../../assets/brand/logo-negative'
 import logoIFMS from '../../../assets/img/ifms.png'
+import logoSISOC from '../../../assets/img/sisoc.png'
 import { sygnet } from '../../../assets/brand/sygnet'
 
 import SimpleBar from 'simplebar-react'
@@ -78,7 +79,7 @@ const AppSidebar: React.FC<any> = (prop) => {
     >
       <CSidebarBrand className="d-none d-md-flex" >
         <h3 className="sidebar-brand-full" style={{ margin: '0px' }}>SISOC</h3>
-        <img className="sidebar-brand-narrow" src={logoIFMS} style={{ width: '30px' }}></img>
+        <img className="sidebar-brand-narrow" src={logoSISOC} style={{ width: '30px' }}></img>
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>

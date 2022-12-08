@@ -20,6 +20,7 @@ import { logo } from '../../../assets/brand/logo'
 import { useAppDispatch, useAppSelector } from '../../../features/hooks'
 import { sidebarState, show } from '../../../features/slices/sidebar-slice'
 import logoIFMS from '../../../assets/img/ifms.png'
+import logoSISOC from '../../../assets/img/sisoc.png'
 import { useAuth } from '../../../features/auth'
 
 const AppHeader: React.FC<any> = (prop) => {
@@ -39,7 +40,7 @@ const AppHeader: React.FC<any> = (prop) => {
         <CHeaderBrand className="mx-auto d-md-none">
           <div style={{ display: 'flex' }}>
             <h3 style={{ margin: '0px' }}>SISOC</h3>
-            <img src={logoIFMS} style={{ width: '30px' }}></img>
+            <img src={logoSISOC} style={{ width: '30px' }}></img>
           </div>
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">

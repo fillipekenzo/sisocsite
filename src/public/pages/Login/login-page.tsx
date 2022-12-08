@@ -15,6 +15,7 @@ import { cilLockLocked, cilUser, cilLockUnlocked } from '@coreui/icons'
 import { useEffect } from 'react';
 import Style from './login-page.module.scss'
 import logoIFMS from '../../../assets/img/ifms-logo.png'
+import logoSISOCIFMS from '../../../assets/img/sisoc-ifms-logo.png'
 import { useToast } from '../../../features/toast'
 import { useAuth } from '../../../features/auth'
 
@@ -90,70 +91,74 @@ const LoginPage: React.FC<LoginProps> = (prop) => {
     return (
         <>
             <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
-                <CContainer>
+                <CContainer >
                     <CRow className="justify-content-center">
                         <CCol md={8}>
                             <CCardGroup>
-                                <CCard className={`text-white py-5`} >
+                                <CCard className={`text-white py-5 ${Style.cardLogo}`}>
                                     <CCardBody className="text-center">
                                         <div>
-                                            <img src={logoIFMS} className={Style.logoIFMS}></img>
+                                            <img src={logoSISOCIFMS} className={Style.logoIFMS}></img>
                                         </div>
                                     </CCardBody>
                                 </CCard>
                                 <CCard className="p-4">
                                     <CCardBody>
-                                        <div>
-                                            <h1>SISOC</h1>
-                                            <p className="text-medium-emphasis">Faça seu Login</p>
+                                        <div className={Style.loginContainer}>
+                                            <div className={Style.loginBox}>
+                                                <div>
+                                                    <h1>SISOC</h1>
+                                                    <p className="text-medium-emphasis">Faça seu Login</p>
+                                                </div>
+                                                <Formik
+                                                    initialValues={initialForm}
+                                                    onSubmit={handleSubmit}
+                                                    validationSchema={SchemaValidation}
+                                                >
+                                                    {({ errors, touched }) => (
+                                                        <Form>
+                                                            <div className="input-group mb-3">
+                                                                <span className="input-group-text" id="basic-addon3"><CIcon icon={cilUser} /></span>
+                                                                <Field type="email" className="form-control" name="email" id="email" placeholder="E-mail" />
+                                                                {errors.email && touched.email ? (
+                                                                    <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.email}</div>
+                                                                ) : null}
+                                                            </div>
+
+                                                            <div className="input-group mb-3">
+                                                                <span className="input-group-text" id="basic-addon3" onClick={() => { togglePassword() }}><CIcon icon={passwordVisible ? cilLockUnlocked : cilLockLocked} /></span>
+                                                                <Field type={passwordType} className="form-control" name="senha" id="senha" placeholder="Senha" />
+                                                                {errors.senha && touched.senha ? (
+                                                                    <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.senha}</div>
+                                                                ) : null}
+                                                            </div>
+
+                                                            <CRow>
+                                                                <CCol xs={12}>
+                                                                    <CButton color="primary" type='submit' className={`px-4 ${Style.buttonEntrar}`}>
+                                                                        Entrar
+                                                                    </CButton>
+                                                                </CCol>
+                                                            </CRow>
+                                                            <CRow>
+                                                                <CCol xs={6}>
+                                                                    <Link to="/cadastrar">
+                                                                        <CButton color="link" className={`px-0 ${Style.link}`}>
+                                                                            Cadastre-se
+                                                                        </CButton>
+                                                                    </Link>
+                                                                </CCol>
+                                                                <CCol xs={6} className="text-right">
+                                                                    <CButton color="link" className={`px-0 ${Style.link}`}>
+                                                                        Esqueceu sua senha?
+                                                                    </CButton>
+                                                                </CCol>
+                                                            </CRow>
+                                                        </Form>
+                                                    )}
+                                                </Formik>
+                                            </div>
                                         </div>
-                                        <Formik
-                                            initialValues={initialForm}
-                                            onSubmit={handleSubmit}
-                                            validationSchema={SchemaValidation}
-                                        >
-                                            {({ errors, touched }) => (
-                                                <Form>
-                                                    <div className="input-group mb-3">
-                                                        <span className="input-group-text" id="basic-addon3"><CIcon icon={cilUser} /></span>
-                                                        <Field type="email" className="form-control" name="email" id="email" placeholder="E-mail" />
-                                                        {errors.email && touched.email ? (
-                                                            <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.email}</div>
-                                                        ) : null}
-                                                    </div>
-
-                                                    <div className="input-group mb-3">
-                                                        <span className="input-group-text" id="basic-addon3" onClick={() => { togglePassword() }}><CIcon icon={passwordVisible ? cilLockUnlocked : cilLockLocked} /></span>
-                                                        <Field type={passwordType} className="form-control" name="senha" id="senha" placeholder="Senha" />
-                                                        {errors.senha && touched.senha ? (
-                                                            <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.senha}</div>
-                                                        ) : null}
-                                                    </div>
-
-                                                    <CRow>
-                                                        <CCol xs={12}>
-                                                            <CButton color="primary" type='submit' className={`px-4 ${Style.buttonEntrar}`}>
-                                                                Entrar
-                                                            </CButton>
-                                                        </CCol>
-                                                    </CRow>
-                                                    <CRow>
-                                                        <CCol xs={6}>
-                                                            <Link to="/cadastrar">
-                                                                <CButton color="link" className={`px-0 ${Style.link}`}>
-                                                                    Cadastre-se
-                                                                </CButton>
-                                                            </Link>
-                                                        </CCol>
-                                                        <CCol xs={6} className="text-right">
-                                                            <CButton color="link" className={`px-0 ${Style.link}`}>
-                                                                Esqueceu sua senha?
-                                                            </CButton>
-                                                        </CCol>
-                                                    </CRow>
-                                                </Form>
-                                            )}
-                                        </Formik>
                                     </CCardBody>
                                 </CCard>
                             </CCardGroup>

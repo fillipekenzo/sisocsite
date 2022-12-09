@@ -38,7 +38,7 @@ const AppHeader: React.FC<any> = (prop) => {
         >
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
-        <CHeaderBrand className={`mx-auto d-md-none ${Style.divLogo}`}>
+        <CHeaderBrand className={` d-md-none ${Style.divLogo}`} >
           <div  style={{ display: 'flex' }}>
             <img src={logoSISOC} style={{ width: '30px' }}></img>
             &nbsp;

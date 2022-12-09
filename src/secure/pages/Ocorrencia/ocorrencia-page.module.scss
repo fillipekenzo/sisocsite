@@ -10,7 +10,7 @@
 }
 
 .legendaDropDown{
-    margin-left: 1em;
+    margin-left: 0.5em;
 }
 
 .legendaDiv {
@@ -44,4 +44,22 @@
     height: 10px;
     background-color: #2b9f3f;
     border: 1px solid black;
+}
+
+@media (max-width: 768px) {
+    .rowOcorrencia{
+        width: 200px;
+        display: flex;
+        align-content: initial;
+        text-align: initial;
+    }
+
+    .legendaDropDown{
+        margin-top: 0.5em;
+        margin-left: 0;
+    }
+    
+    .filtroDropdown{
+        margin-top: 0.5em;
+    }
 }

@@ -53,7 +53,7 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
                 { Value: 6, Texto: "Ocorrências do Setor" },
             ]
         }
-        else if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ATENDIMENTO" ) {
+        else if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ATENDIMENTO") {
             filtroAux = [
                 { Value: 2, Texto: "Ocorrências atribuidas" },
                 { Value: 3, Texto: "Ocorrências criadas" },
@@ -72,13 +72,13 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
     }
 
     const carregarDados = () => {
-        if(userLogado.TipoUsuario?.Nome.toUpperCase() == "ADMIN" || userLogado.TipoUsuario?.Nome.toUpperCase() == "SUPORTE"){
+        if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ADMIN" || userLogado.TipoUsuario?.Nome.toUpperCase() == "SUPORTE") {
             filtrarOcorrencias(1)
         }
-        else if(userLogado.TipoUsuario?.Nome.toUpperCase() == "ATENDIMENTO" ){
+        else if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ATENDIMENTO") {
             filtrarOcorrencias(6)
         }
-        else{
+        else {
             filtrarOcorrencias(3)
         }
     };
@@ -265,7 +265,7 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
             <CSpinner hidden={!loading} />
             <h2>Ocorrência</h2>
             <div className={Style.divButtonCadastar}>
-                <CRow>
+                <CRow className={Style.rowOcorrencia}>
                     <CCol sm="auto">
                         <CButton color="primary" variant="outline" onClick={() => { navigate('/ocorrencia/cadastrar') }}>Nova Ocorrência</CButton>
                     </CCol>
@@ -282,7 +282,7 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
                 </CRow>
                 <CInputGroup className={Style.filtroTabela}>
                     <CInputGroupText>Filtrar por:</CInputGroupText>
-                    <CFormSelect color="primary" onChange={(e) => {
+                    <CFormSelect className={Style.filtroDropdown} color="primary" onChange={(e) => {
                         filtrarOcorrencias(e.target.value)
                     }}>
                         {filtroOcorrencia?.map(f => {

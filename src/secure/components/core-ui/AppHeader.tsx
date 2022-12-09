@@ -22,6 +22,7 @@ import { sidebarState, show } from '../../../features/slices/sidebar-slice'
 import logoIFMS from '../../../assets/img/ifms.png'
 import logoSISOC from '../../../assets/img/sisoc.png'
 import { useAuth } from '../../../features/auth'
+import Style from './Styles.module.scss'
 
 const AppHeader: React.FC<any> = (prop) => {
   const { signOut, user } = useAuth();
@@ -37,10 +38,11 @@ const AppHeader: React.FC<any> = (prop) => {
         >
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
-        <CHeaderBrand className="mx-auto d-md-none">
-          <div style={{ display: 'flex' }}>
-            <h3 style={{ margin: '0px' }}>SISOC</h3>
+        <CHeaderBrand className={`mx-auto d-md-none ${Style.divLogo}`}>
+          <div  style={{ display: 'flex' }}>
             <img src={logoSISOC} style={{ width: '30px' }}></img>
+            &nbsp;
+            <h3 className={Style.tituloLogo} style={{ margin: '0px' }}>SISOC</h3>
           </div>
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">

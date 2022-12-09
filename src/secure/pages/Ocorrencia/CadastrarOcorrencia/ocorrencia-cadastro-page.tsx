@@ -211,7 +211,7 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
 
                             <div className="mb-3">
                                 <label htmlFor="Descricao" className="form-label">Descrição</label>
-                                <Field as="textarea" rows='10' maxLength="1000" type="text" className="form-control" name="Descricao" id="Descricao" placeholder="Descrição da Ocorrência" />
+                                <Field as="textarea" rows='8' maxLength="1000" type="text" className="form-control" name="Descricao" id="Descricao" placeholder="Descrição da Ocorrência" />
                                 {errors.Descricao && touched.Descricao ? (
                                     <div className="invalid-feedback" style={{ display: 'flex' }}>{errors.Descricao}</div>
                                 ) : null}

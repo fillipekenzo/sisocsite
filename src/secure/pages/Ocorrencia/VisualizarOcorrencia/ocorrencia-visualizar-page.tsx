@@ -35,6 +35,8 @@ import CIcon from '@coreui/icons-react';
 import { cilCommentBubble, cilCommentSquare, cilVerticalAlignBottom } from '@coreui/icons';
 import InteracaoOcorrenciaModal from '../ModalInteracaoOcorrencia/interacao-ocorrencia-modal';
 import ResolverOcorrenciaModal from '../ModalResolverOcorrencia/resolver-ocorrencia-modal';
+import jspdf from "jspdf";
+import OcorrenciaRelatorioPage from '../RelatorioOcorrencia/ocorrencia-relatorio-page';
 
 const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
     const [loading, setLoading] = useState(false);
@@ -54,6 +56,7 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
     const userLogado = JSON.parse(localStorage.getItem('@Sisoc:user') || '');
     const [visibleModalInteracao, setVisibleModalInteracao] = useState(false);
     const [visibleModalResolverOcorrencia, setVisibleModalResolverOcorrencia] = useState(false);
+    const [visibleRelatorio, setVisibleRelatorio] = useState(false);
 
     const [initialForm, setInitialForm] = useState({
         OcorrenciaID: 0,
@@ -246,6 +249,31 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
             .finally(() => setLoading(false))
     };
 
+    const gerarRelatorio = () => {
+        setLoading(true)
+        setVisibleRelatorio(true)
+        var doc = new jspdf({
+            orientation: "portrait",
+            unit: "px",
+            // format: [4, 2]
+        });
+        doc.setFont('Arial', 'normal')
+        var content = document.getElementById("relatorio") || "";
+        var comp = document.getElementById("relatorio");
+        comp?.setAttribute('style', "display:flex")
+        console.log("content", content);
+        console.log("document.body", document.body);
+        doc.html(content, {
+            callback: (doc) => {
+                console.log("in callback");
+                doc.save("Relatório_Ocorrencia_" + ocorrencia.OcorrenciaID);
+                comp?.setAttribute('style', "display:none")
+                setLoading(false)
+                setVisibleRelatorio(false)
+            }
+        });
+    }
+
     const handleSubmit = (data: any) => {
         try {
 
@@ -262,6 +290,7 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
         <>
             <InteracaoOcorrenciaModal model={ocorrencia} setVisivelFalse={() => setVisibleModalInteracao(false)} visivel={visibleModalInteracao}></InteracaoOcorrenciaModal>
             <ResolverOcorrenciaModal model={ocorrencia} setVisivelFalse={() => setVisibleModalResolverOcorrencia(false)} visivel={visibleModalResolverOcorrencia}></ResolverOcorrenciaModal>
+            {/* <CButton onClick={gerarRelatorio}>teste</CButton> */}
             <CSpinner hidden={!loading} />
             <h2 className={Style.tituloOcorrencia}>#{ocorrencia?.OcorrenciaID} - {ocorrencia?.Assunto}</h2>
             <p className={Style.subTituloOcorrencia}>Por: {ocorrencia?.UsuarioCadastroNavigation?.Nome} - Data Criação: {moment(new Date(ocorrencia?.DataHoraCadastro)).format('DD/MM/YYYY HH:mm:SS')}  </p>
@@ -459,6 +488,11 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
                             </Form>
                         )}
                     </Formik>
+                </CTabPane>
+                <CTabPane>
+                    <div className={Style.relatorioDiv} id="relatorio" >
+                        <OcorrenciaRelatorioPage ocorrencia={ocorrencia} visibleRelatorio={visibleRelatorio}></OcorrenciaRelatorioPage>
+                    </div>
                 </CTabPane>
             </CTabContent>
             <CRow>

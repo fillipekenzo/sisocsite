@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "SISOC",
+  "name": "Sistema de Ocorrências",
   "icons": [
     {
       "src": "ifms.ico",
@@ -8,18 +8,20 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "sisoc192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "sisoc.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "display": "browser",
+  "theme_color": "#2b9f3f",
+  "background_color": "#00420c",
+  "scope": "/",
+  "start_url": "/"
 }

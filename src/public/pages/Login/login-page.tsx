@@ -15,7 +15,7 @@ import { cilLockLocked, cilUser, cilLockUnlocked } from '@coreui/icons'
 import { useEffect } from 'react';
 import Style from './login-page.module.scss'
 import logoIFMS from '../../../assets/img/ifms-logo.png'
-import logoSISOCIFMS from '../../../assets/img/sisoc-ifms-logo.png'
+import logoSISOCIFMS from '../../../assets/img/sisoc-logo.png'
 import { useToast } from '../../../features/toast'
 import { useAuth } from '../../../features/auth'
 

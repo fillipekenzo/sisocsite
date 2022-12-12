@@ -65,7 +65,7 @@ const OcorrenciaRelatorioPage: React.FC<OcorrenciaRelatorioProps> = (prop) => {
         <>
             <CContainer className={Style.font}>
                 <CRow>
-                    <h1 className={Style.tituloRelatorio}>Relatório de Ocorrência</h1>
+                    <h1 className={Style.tituloRelatorio}>Relatório de Ocorrência - Data Impressão: {moment(new Date()).format('DD/MM/YYYY HH:mm:SS')} </h1>
                 </CRow>
                 <CRow>
                     <div className={Style.header}>
@@ -167,6 +167,7 @@ const OcorrenciaRelatorioPage: React.FC<OcorrenciaRelatorioProps> = (prop) => {
                         : null
                 }
             </CContainer>
+
         </>
     )
 }

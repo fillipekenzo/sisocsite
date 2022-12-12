@@ -25,6 +25,7 @@ const AppSidebar: React.FC<any> = (prop) => {
   const sidebar = useAppSelector(sidebarState);
   const [menus, setMenus] = useState<any[]>([]);
   const user = JSON.parse(localStorage.getItem('@Sisoc:user') || '');
+  const menuStorage = JSON.parse(localStorage.getItem('@Sisoc:menus') || '[]');
 
   useEffect(() => {
     carregarMenus();
@@ -34,9 +35,8 @@ const AppSidebar: React.FC<any> = (prop) => {
     let menusAux: any[] = [];
     let subMenusAux: any[] = [];
 
-    MenuService.getPorTipoUsuarioID(user.TipoUsuario.TipoUsuarioID).then((res) => {
-      res.data.map((m: any) => {
-        //Caso tenha Submenu
+    if (menuStorage.length != 0) {
+      menuStorage.map((m: any) => {
         if (m.Submenus.length > 0) {
           m.Submenus.map((s: any) => {
             subMenusAux.push({
@@ -65,7 +65,40 @@ const AppSidebar: React.FC<any> = (prop) => {
         subMenusAux = [];
       })
       setMenus(menusAux)
-    })
+    }
+    else{
+      MenuService.getPorTipoUsuarioID(user.TipoUsuario.TipoUsuarioID).then((res) => {
+        res.data.map((m: any) => {
+          if (m.Submenus.length > 0) {
+            m.Submenus.map((s: any) => {
+              subMenusAux.push({
+                component: CNavItem,
+                name: s.Nome,
+                to: m.NavegarURL + s.NavegarURL,
+              })
+            })
+            menusAux.push({
+              component: CNavGroup,
+              name: m.Nome,
+              to: m.NavegarURL,
+              icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+              items: subMenusAux
+            })
+          }
+          //Caso NÃO tenha Submenu
+          else {
+            menusAux.push({
+              component: CNavItem,
+              name: m.Nome,
+              to: m.NavegarURL,
+              icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+            })
+          }
+          subMenusAux = [];
+        })
+        setMenus(menusAux)
+      })
+    }
   }
 
   return (

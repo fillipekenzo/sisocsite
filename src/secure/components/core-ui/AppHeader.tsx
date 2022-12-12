@@ -1,5 +1,5 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CContainer,
@@ -28,7 +28,7 @@ const AppHeader: React.FC<any> = (prop) => {
   const { signOut, user } = useAuth();
   const dispatch = useAppDispatch();
   const sidebar = useAppSelector(sidebarState);
-
+ 
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>

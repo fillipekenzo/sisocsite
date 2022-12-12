@@ -1,6 +1,6 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../../components/core-ui'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate, useNavigation } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
 import Style from './login-page.module.scss'
 import TipoUsuarioPage from '../TipoUsuario/tipo-usuario-page';
@@ -15,6 +15,7 @@ import PermissaoPage from '../Permissao/permissao-page';
 import OcorrenciaVisualizarPage from '../Ocorrencia/VisualizarOcorrencia/ocorrencia-visualizar-page'
 import OcorrenciaEditarPage from '../Ocorrencia/EditarOcorrencia/ocorrencia-editar-page'
 import UsuarioPage from '../Usuario/usuario-page'
+import ErrorPage from '../Error/error-page'
 
 const SecuredRoute = ({ children, redirectTo }: any) => {
     const isLoggedIn = !!localStorage.getItem('usuarioLogado');
@@ -22,7 +23,7 @@ const SecuredRoute = ({ children, redirectTo }: any) => {
 }
 
 const HomePage: React.FC<any> = (prop) => {
-
+    
     return (
         <>
             <div>
@@ -34,6 +35,7 @@ const HomePage: React.FC<any> = (prop) => {
                             <Suspense fallback={<CSpinner color="primary" />}>
                                 <Routes>
                                     <Route path="/" element={<OcorrenciaPage />} />
+                                    <Route path="/error" element={<ErrorPage />} />
                                     <Route path="/tipo-ocorrencia" element={<TipoOcorrenciaPage />} />
                                     <Route path="/tipo-usuario" element={<TipoUsuarioPage />} />
                                     <Route path="/setor" element={<SetorPage />} />

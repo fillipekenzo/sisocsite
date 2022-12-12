@@ -15,9 +15,9 @@ import { MRT_Localization_PT_BR } from 'material-react-table/locales/pt-BR';
 import SubmenuCadastroModal from './ModalCadastroSubmenu/submenu-cadastro-modal';
 import SubmenuService from '../../../services/submenu-service/submenu-service';
 import SubmenuEdicaoModal from './ModalEdicaoSubmenu/submenu-edicao-modal';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const MenuPage: React.FC<any> = (prop) => {
-    
     const [visibleCadastrar, setVisibleCadastrar] = useState(false);
     const [visibleEditar, setVisibleEditar] = useState(false);
     const [modelEditar, setModelEditar] = useState();
@@ -30,6 +30,29 @@ const MenuPage: React.FC<any> = (prop) => {
     const [loading, setLoading] = useState(false);
     const [dados, setDados] = useState<any[]>([]);
     const { addToast } = useToast();
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        let string = location.pathname.substring(1);
+        let finalDaPalavra = string.search('/') != -1 ? string.search('/') : string.length;
+        verificarPermissao(string.substring(0, finalDaPalavra).toUpperCase());
+    }, [])
+
+    const verificarPermissao = (route: any) => {
+        let menus: any[] = JSON.parse(localStorage.getItem('@Sisoc:menus') || '[]');
+        if (menus.length > 0) {
+            let menu: any = menus.find(m => m.NavegarURL.trim().toLowerCase().replace(' ', '').includes(route.trim().replace(' ', '').toLowerCase()));
+
+            if (menu == null) {
+                navigate('/error', { state: { mensagem: `Usuário não possui permissão ao módulo - ${route}.` } })
+            }
+        }
+        else if (location.pathname !== '/error') {
+            navigate('/error', { state: { mensagem: `Usuário não possui permissão ao módulo - ${route}.` } })
+        }
+    };
 
     useEffect(() => {
         carregarDados();
@@ -65,7 +88,7 @@ const MenuPage: React.FC<any> = (prop) => {
                         >
                             <CButton shape="rounded-pill" variant="ghost" id={`excluir${d.MenuID}`} color="danger" size="sm">Excluir</CButton>
                         </CPopover>
-                        <CButton shape="rounded-pill" variant="ghost" color="primary" size="sm"  onClick={() => { setMenuID(d.MenuID), setVisibleCadastrarSubmenu(true) }}>Adicionar Submenu</CButton>
+                        <CButton shape="rounded-pill" variant="ghost" color="primary" size="sm" onClick={() => { setMenuID(d.MenuID), setVisibleCadastrarSubmenu(true) }}>Adicionar Submenu</CButton>
                     </>;
                     d.Submenus.map((sm: any) => {
                         sm.AtivoString = sm.Ativo ? 'Sim' : 'Não';
@@ -86,7 +109,7 @@ const MenuPage: React.FC<any> = (prop) => {
                             </CPopover>
                         </>;
                     })
-                    
+
                 })
                 setDados(data.data);
             })

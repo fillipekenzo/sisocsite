@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
     CButton,
     CPopover,
@@ -23,6 +23,29 @@ const TipoUsuarioPage: React.FC<any> = (prop) => {
     const [loading, setLoading] = useState(false);
     const [dados, setDados] = useState<any[]>([]);
     const { addToast } = useToast();
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        let string = location.pathname.substring(1);
+        let finalDaPalavra = string.search('/') != -1 ? string.search('/') : string.length;
+        verificarPermissao(string.substring(0, finalDaPalavra).toUpperCase());
+    }, [])
+
+    const verificarPermissao = (route: any) => {
+        let menus: any[] = JSON.parse(localStorage.getItem('@Sisoc:menus') || '[]');
+        if (menus.length > 0) {
+            let menu: any = menus.find(m => m.NavegarURL.trim().toLowerCase().replace(' ', '').includes(route.trim().replace(' ', '').toLowerCase()));
+
+            if (menu == null) {
+                navigate('/error', { state: { mensagem: `Usuário não possui permissão ao módulo - ${route}.` } })
+            }
+        }
+        else if (location.pathname !== '/error') {
+            navigate('/error', { state: { mensagem: `Usuário não possui permissão ao módulo - ${route}.` } })
+        }
+    };
 
     useEffect(() => {
         carregarDados();

@@ -265,7 +265,6 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
         console.log("document.body", document.body);
         doc.html(content, {
             callback: (doc) => {
-                console.log("in callback");
                 doc.save("Relatório_Ocorrencia_" + ocorrencia.OcorrenciaID);
                 comp?.setAttribute('style', "display:none")
                 setLoading(false)

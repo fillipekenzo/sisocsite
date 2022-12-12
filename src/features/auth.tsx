@@ -1,5 +1,7 @@
 import React, { createContext, useCallback, useState, useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import MenuService from '../services/menu-service/menu-service';
 
 interface User {
   UsuarioID: number;
@@ -46,11 +48,16 @@ export const AuthProvider: React.FC<any> = ({ children }) => {
     localStorage.setItem('@Sisoc:user', JSON.stringify(response.data.data.UserToken));
 
     setData({ token, user });
+    MenuService.getPorTipoUsuarioID(response.data.data.UserToken.TipoUsuario.TipoUsuarioID).then((res) => {
+      localStorage.setItem('@Sisoc:menus', JSON.stringify(res.data));
+    })
+
   }, []);
 
   const signOut = useCallback(() => {
     localStorage.removeItem('@Sisoc:token');
     localStorage.removeItem('@Sisoc:user');
+    localStorage.removeItem('@Sisoc:menus');
 
     setData({} as AuthState);
   }, []);

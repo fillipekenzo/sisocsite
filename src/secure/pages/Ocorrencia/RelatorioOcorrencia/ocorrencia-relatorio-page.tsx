@@ -41,7 +41,7 @@ const OcorrenciaRelatorioPage: React.FC<OcorrenciaRelatorioProps> = (prop) => {
         console.log(prop.ocorrencia);
         setOcorrencia(prop.ocorrencia)
         carregarDados()
-    }, [prop.visibleRelatorio])
+    }, [prop.ocorrencia])
 
     const carregarDados = async (): Promise<void> => {
         TipoOcorrenciaService.get()
@@ -116,8 +116,8 @@ const OcorrenciaRelatorioPage: React.FC<OcorrenciaRelatorioProps> = (prop) => {
                         return (
                             <>
                                 <CCard className={Style.card}>
-                                    <CCardHeader className={Style.cardHeader}>
-                                        <CCardText>{io.UsuarioNavigation.Nome} - {moment(new Date(io.DataHoraCadastro)).format('DD/MM/YYYY HH:mm:SS')}  </CCardText>
+                                    <CCardHeader >
+                                        <CCardText className={Style.cardHeader}>{io.UsuarioNavigation.Nome} - {moment(new Date(io.DataHoraCadastro)).format('DD/MM/YYYY HH:mm:SS')}  </CCardText>
                                     </CCardHeader>
                                     <CCardBody>
                                         <CCardText>Assunto: {io.Assunto} </CCardText>

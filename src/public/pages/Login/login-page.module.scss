@@ -2,6 +2,13 @@
     width: 200px;
 }
 
+.logoIFMSMobile {
+    width: 40px;
+    display: none;
+}
+
+.tituloSisoc {}
+
 .link {
     text-decoration: none;
 }
@@ -30,8 +37,20 @@
     background: #fff;
 }
 
+.boxLogo {
+    display: inline;
+}
+
 @media (max-width: 768px) {
-    .cardLogo{
+    .cardLogo {
         display: none !important;
+    }
+
+    .tituloSisoc {
+        display: none;
+    }
+
+    .logoIFMSMobile {
+        display: inline-flex;
     }
 }

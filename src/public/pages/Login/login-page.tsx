@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import Style from './login-page.module.scss'
 import logoIFMS from '../../../assets/img/ifms-logo.png'
 import logoSISOCIFMS from '../../../assets/img/sisoc-logo.png'
+import logoSISOC from '../../../assets/img/sisoc.png'
 import { useToast } from '../../../features/toast'
 import { useAuth } from '../../../features/auth'
 
@@ -107,7 +108,10 @@ const LoginPage: React.FC<LoginProps> = (prop) => {
                                         <div className={Style.loginContainer}>
                                             <div className={Style.loginBox}>
                                                 <div>
-                                                    <h1>SISOC</h1>
+                                                    <img src={logoSISOC} className={Style.logoIFMSMobile}></img>
+                                                </div>
+                                                <div>
+                                                    <h1 className={Style.tituloSisoc}>SISOC</h1>
                                                     <p className="text-medium-emphasis">Faça seu Login</p>
                                                 </div>
                                                 <Formik

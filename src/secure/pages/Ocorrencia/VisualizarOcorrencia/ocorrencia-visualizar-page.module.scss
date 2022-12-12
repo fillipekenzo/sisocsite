@@ -1,38 +1,48 @@
-.formulario{
+.formulario {
     text-align: start;
 }
 
-.buttonCadastrar{
+.buttonCadastrar {
     text-align: center;
 }
 
-.tituloOcorrencia{
+.divTitulo {
+    display: flex;
+}
+
+.tituloOcorrencia {
     text-align: left;
 }
 
-.subTituloOcorrencia{
+.subTituloOcorrencia {
     text-align: left;
     font-size: 15px;
 }
 
-.tab{
+.tab {
     margin-top: 15px;
 }
 
-.card{
+.card {
     text-align: left;
 }
 
-.dateHeaderCard{
+.dateHeaderCard {
     font-size: 13px;
 }
 
-.buttonConfirm{
+.buttonConfirm {
     text-align: end;
 }
 
-.relatorioDiv{
+.relatorioDiv {
     width: 446px;
     font-family: Arial, Helvetica, sans-serif;
     display: none;
+}
+
+@media (max-width: 768px) {
+    .linhaTitulo {
+        width: 90%;
+    }
 }

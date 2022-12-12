@@ -289,9 +289,15 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
         <>
             <InteracaoOcorrenciaModal model={ocorrencia} setVisivelFalse={() => setVisibleModalInteracao(false)} visivel={visibleModalInteracao}></InteracaoOcorrenciaModal>
             <ResolverOcorrenciaModal model={ocorrencia} setVisivelFalse={() => setVisibleModalResolverOcorrencia(false)} visivel={visibleModalResolverOcorrencia}></ResolverOcorrenciaModal>
-            {/* <CButton onClick={gerarRelatorio}>teste</CButton> */}
             <CSpinner hidden={!loading} />
-            <h2 className={Style.tituloOcorrencia}>#{ocorrencia?.OcorrenciaID} - {ocorrencia?.Assunto}</h2>
+            <CRow className={Style.linhaTitulo}>
+                <CCol xs={10}>
+                    <h2 className={Style.tituloOcorrencia}>#{ocorrencia?.OcorrenciaID} - {ocorrencia?.Assunto}</h2>
+                </CCol>
+                <CCol xs={2}>
+                    <CButton className={Style.botaoImprimirRelatorio} onClick={gerarRelatorio}>Imprimir Relatório</CButton>
+                </CCol>
+            </CRow>
             <p className={Style.subTituloOcorrencia}>Por: {ocorrencia?.UsuarioCadastroNavigation?.Nome} - Data Criação: {moment(new Date(ocorrencia?.DataHoraCadastro)).format('DD/MM/YYYY HH:mm:SS')}  </p>
             <CNav variant="tabs" role="tablist">
                 <CNavItem>
@@ -434,33 +440,34 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
                     </Formik>
                 </CTabPane>
                 <CTabPane className={Style.tab} role="tabpanel" aria-labelledby="profile-tab" visible={activeKey === 2}>
-                    {ocorrencia?.InteracaoOcorrencias?.length > 0 ? ocorrencia?.InteracaoOcorrencias?.map((io: any) => {
-                        return (
-                            <>
-                                <CCard className={Style.card}>
-                                    <CCardHeader><CIcon icon={cilCommentSquare} className="me-2" /><b>{io.UsuarioNavigation.Nome} </b>- {moment(new Date(io.DataHoraCadastro)).format('DD/MM/YYYY HH:mm:SS')} </CCardHeader>
-                                    <CCardBody>
-                                        <CCardText><b>Assunto:</b> {io.Assunto} </CCardText>
-                                        <CCardText><b>Descrição:</b> {io.Descricao}</CCardText>
-                                        <div className="mb-3">
-                                            <label htmlFor="Anexos" className="form-label">Anexos </label>
-                                            <br></br>
-                                            {io?.Anexos?.map((a: any) => {
-                                                return (
-                                                    <>
-                                                        <div>
-                                                            <CButton color="Dark" variant="outline" onClick={() => downloadAnexo(a)}>{a.Nome}  <CIcon icon={cilVerticalAlignBottom} className="me-2" /></CButton>
-                                                        </div>
-                                                    </>
-                                                )
-                                            })}
-                                        </div>
-                                    </CCardBody>
-                                </CCard>
-                                <br></br>
-                            </>
-                        )
-                    }) :
+                    {ocorrencia?.InteracaoOcorrencias?.length > 0 ?
+                        ocorrencia?.InteracaoOcorrencias?.map((io: any) => {
+                            return (
+                                <>
+                                    <CCard className={Style.card}>
+                                        <CCardHeader><CIcon icon={cilCommentSquare} className="me-2" /><b>{io.UsuarioNavigation.Nome} </b>- {moment(new Date(io.DataHoraCadastro)).format('DD/MM/YYYY HH:mm:SS')} </CCardHeader>
+                                        <CCardBody>
+                                            <CCardText><b>Assunto:</b> {io.Assunto} </CCardText>
+                                            <CCardText><b>Descrição:</b> {io.Descricao}</CCardText>
+                                            <div className="mb-3">
+                                                <label htmlFor="Anexos" className="form-label">Anexos </label>
+                                                <br></br>
+                                                {io?.Anexos?.map((a: any) => {
+                                                    return (
+                                                        <>
+                                                            <div>
+                                                                <CButton color="Dark" variant="outline" onClick={() => downloadAnexo(a)}>{a.Nome}  <CIcon icon={cilVerticalAlignBottom} className="me-2" /></CButton>
+                                                            </div>
+                                                        </>
+                                                    )
+                                                })}
+                                            </div>
+                                        </CCardBody>
+                                    </CCard>
+                                    <br></br>
+                                </>
+                            )
+                        }) :
                         <h4> Nenhuma interação registrada.</h4>
                     }
 

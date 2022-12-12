@@ -1,12 +1,30 @@
-.header{
+.header {
     margin-right: 20px;
     margin-left: 20px;
 }
 
-.titulo{
+.font {
+    font-size: 13px;
+}
+
+.tituloRelatorio {
+    font-style: italic;
+    text-align: center;
     font-size: 15px;
 }
 
-.subtitulo{
+.titulo {
+    font-size: 15px;
+}
+
+.subtitulo {
     font-size: 13px;
+}
+
+.anexo {
+    max-height: 100px;
+}
+
+.cardHeader {
+    color: white;
 }

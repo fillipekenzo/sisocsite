@@ -10,4 +10,5 @@ export enum OperacoesWebAPI {
     TipoOcorrencia = 'tipoOcorrencia',
     TipoUsuario = 'tipoUsuario',
     Enumerador = 'enumerador',
+    Grafico = 'grafico',
 }

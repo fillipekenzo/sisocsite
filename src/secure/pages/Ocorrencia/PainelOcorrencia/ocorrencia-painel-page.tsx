@@ -23,9 +23,10 @@ import { useToast } from '../../../../features/toast';
 import { CChartLine } from '@coreui/react-chartjs';
 import { cibFacebook, cilArrowBottom } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import LineChart from '../../../components/charts/Line/line-chart-component';
+import BarChart from '../../../components/charts/Bar/bar-chart-component';
 import PieChart from '../../../components/charts/Pie/pie-chart-component';
 import SetorService from '../../../../services/setor-service/setor-service';
+import GraficoService from '../../../../services/grafico-service/grafico-service';
 
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 let i = 0;
@@ -35,13 +36,13 @@ export const data1 = {
     datasets: [
         {
             label: 'Dataset 1',
-            data: labels.map(() => i++),
+            data: labels.map((a, index) => i += index),
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
         },
         {
             label: 'Dataset 2',
-            data: labels.map(() => j--),
+            data: labels.map((a, index) => j -= index),
             borderColor: 'rgb(53, 162, 235)',
             backgroundColor: 'rgba(53, 162, 235, 0.5)',
         },
@@ -78,10 +79,13 @@ export const data = {
 const OcorrenciaPainelPage: React.FC<any> = (prop) => {
     const [loading, setLoading] = useState(false);
     const [carregarDadosPie, setcarregarDadosPie] = useState(false);
+    const [carregarDadosBar, setcarregarDadosBar] = useState(false);
     const [dados, setDados] = useState<any[]>([]);
     const [setor, setSetor] = useState<any[]>([]);
     const { addToast } = useToast();
+    const [consultaGraficoBar, setConsultaGraficoBar] = useState<any>();
     const [dadosPie, setDadosPie] = useState<any>(data);
+    const [dadosBar, setDadosBar] = useState<any>(data1);
 
     useEffect(() => {
         carregarDados()
@@ -92,7 +96,11 @@ const OcorrenciaPainelPage: React.FC<any> = (prop) => {
             console.log(carregarDadosPie);
             formatarDadosPie()
         }
-    }, [carregarDadosPie])
+        if (carregarDadosBar == true) {
+            console.log(carregarDadosPie);
+            formatarDadosBar()
+        }
+    }, [carregarDadosPie, carregarDadosBar])
 
     const carregarDados = async (): Promise<void> => {
         setLoading(true)
@@ -115,6 +123,12 @@ const OcorrenciaPainelPage: React.FC<any> = (prop) => {
                 setLoading(false)
             })
 
+        GraficoService.getDadosGraficoVertical()
+            .then((res) => {
+                setConsultaGraficoBar(res.data)
+            }).finally(() => {
+                setcarregarDadosBar(true);
+            })
     };
 
     const formatarDadosPie = () => {
@@ -161,6 +175,41 @@ const OcorrenciaPainelPage: React.FC<any> = (prop) => {
         setDadosPie(dataTeste);
     }
 
+    const formatarDadosBar = () => {
+        let setorString: any[] = [];
+        let dataSet: any[] = [];
+        let dataformat: any[] = [];
+
+        dataSet.push(
+            {
+                label: 'Abertas',
+                data: consultaGraficoBar.QuantidadeAberto,
+                borderColor: 'rgb(53, 162, 235)',
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            },
+            {
+                label: 'Resolvidas',
+                data: consultaGraficoBar.QuantidadeResolvido,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+        )
+
+        console.log(setor);
+        console.log(dataformat);
+        console.log(setorString);
+
+        let dataTeste = {
+            labels: consultaGraficoBar.Meses,
+            datasets: dataSet
+        }
+
+        console.log(consultaGraficoBar);
+        console.log(dataTeste);
+
+        setDadosBar(dataTeste);
+    }
+
     return (
         <>
             <CSpinner hidden={!loading} />
@@ -175,14 +224,14 @@ const OcorrenciaPainelPage: React.FC<any> = (prop) => {
                             </CCardBody>
                         </CCard>
                     </CCol>
-                    {/* <CCol sm={6}>
+                    <CCol sm={6}>
                         <CCard className="text-center">
                             <CCardHeader>Ocorrências por Situação</CCardHeader>
                             <CCardBody>
-                                <LineChart data={data1}></LineChart>
+                                <BarChart data={dadosBar}></BarChart>
                             </CCardBody>
                         </CCard>
-                    </CCol> */}
+                    </CCol>
                 </CRow>
             </CContainer>
 

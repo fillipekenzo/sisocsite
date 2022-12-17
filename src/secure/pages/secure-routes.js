@@ -1,7 +1,6 @@
 import React from 'react'
 import MenuPage from './Menu/menu-page'
 import OcorrenciaCadastrarPage from './Ocorrencia/CadastrarOcorrencia/ocorrencia-cadastro-page'
-import OcorrenciaDashboardPage from './Ocorrencia/PainelOcorrencia/ocorrencia-painel-page'
 import OcorrenciaEditarPage from './Ocorrencia/EditarOcorrencia/ocorrencia-editar-page'
 import OcorrenciaVisualizarPage from './Ocorrencia/VisualizarOcorrencia/ocorrencia-visualizar-page'
 import PermissaoPage from './Permissao/permissao-page'
@@ -9,6 +8,7 @@ import SetorPage from './Setor/setor-page'
 import TipoOcorrenciaPage from './TipoOcorrencia/tipo-ocorrencia-page'
 import TipoUsuarioPage from './TipoUsuario/tipo-usuario-page'
 import UsuarioPage from './Usuario/usuario-page'
+import OcorrenciaPainelPage from './Ocorrencia/PainelOcorrencia/ocorrencia-painel-page'
 
 const SecureRoutes = [
   { path: '/', exact: true, name: 'Home' },
@@ -23,8 +23,7 @@ const SecureRoutes = [
   { path: '/ocorrencia/consultar', exact: true, name: 'Consultar', element: OcorrenciaCadastrarPage },
   { path: '/ocorrencia/visualizar', exact: true, name: 'Visualizar', element: OcorrenciaVisualizarPage },
   { path: '/ocorrencia/editar', exact: true, name: 'Editar', element: OcorrenciaEditarPage },
-  { path: '/ocorrencia/dashboard', exact: true, name: 'Dashboard', element: OcorrenciaDashboardPage },
-
+  { path: '/ocorrencia/painel', exact: true, name: 'Painel', element: OcorrenciaPainelPage },
 ]
 
 export default SecureRoutes

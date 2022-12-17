@@ -64,22 +64,22 @@ const UsuarioPage: React.FC<any> = (prop) => {
                     d.SetorID = d.SetorID == undefined ? '' : d.SetorID
                     d.Setor = d.SetorNavigation?.Sigla
                     d.TipoUsuario = d.TipoUsuarioNavigation?.Nome
-                    d.Acoes = <>
-                        <CButton shape="rounded-pill" variant="ghost" color="info" size="sm" onClick={() => { setModelEditar(d), setVisibleEditar(true) }}>Editar</CButton>
-                        <CPopover
-                            trigger='click'
-                            title="Exluir registro"
-                            content={<> Tem certeza que deseja excluir esse registro?
-                                <div className={Style.buttonConfirm}>
-                                    <CButton color='dark' size='sm' variant="outline" onClick={() => { fecharPopover(d.UsuarioID) }} >Não</CButton> <CButton color='danger' size='sm' onClick={() => excluirRegistro(d.UsuarioID)}>Sim</CButton>
-                                </div>
-                            </>
-                            }
-                            placement="top"
-                        >
-                            <CButton hidden={!ehUsuarioADM()} shape="rounded-pill" variant="ghost" id={`excluir${d.UsuarioID}`} color="danger" size="sm">Excluir</CButton>
-                        </CPopover>
-                    </>;
+                    // d.Acoes = <>
+                    //     <CButton shape="rounded-pill" variant="ghost" color="info" size="sm" onClick={() => { setModelEditar(d), setVisibleEditar(true) }}>Editar</CButton>
+                    //     <CPopover
+                    //         trigger='click'
+                    //         title="Exluir registro"
+                    //         content={<> Tem certeza que deseja excluir esse registro?
+                    //             <div className={Style.buttonConfirm}>
+                    //                 <CButton color='dark' size='sm' variant="outline" onClick={() => { fecharPopover(d.UsuarioID) }} >Não</CButton> <CButton color='danger' size='sm' onClick={() => excluirRegistro(d.UsuarioID)}>Sim</CButton>
+                    //             </div>
+                    //         </>
+                    //         }
+                    //         placement="top"
+                    //     >
+                    //         <CButton hidden={!ehUsuarioADM()} shape="rounded-pill" variant="ghost" id={`excluir${d.UsuarioID}`} color="danger" size="sm">Excluir</CButton>
+                    //     </CPopover>
+                    // </>;
                 })
                 setDados(data.data);
             })

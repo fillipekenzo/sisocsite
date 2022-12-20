@@ -217,7 +217,7 @@ const OcorrenciaPainelPage: React.FC<any> = (prop) => {
         let ocorrencias: any[] = []
 
         if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ATENDIMENTO") {
-            ocorrencias = dados.filter(o => o.UsuarioAtribuidoID == userLogado.UsuarioID)
+            ocorrencias = dados.filter(o => o.UsuarioAtribuidoID == userLogado.UsuarioID || (o.SetorID == userLogado.Setor.SetorID && o.UsuarioAtribuidoID == null))
         }
         else if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ESTUDANTE" || userLogado.TipoUsuario?.Nome.toUpperCase() == "DOCENTE") {
             ocorrencias = dados.filter(o => o.UsuarioCadastroID == userLogado.UsuarioID)

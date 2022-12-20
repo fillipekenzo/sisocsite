@@ -5,6 +5,7 @@ import {
     CContainer,
     CRow,
     CSpinner,
+    CTooltip,
 } from '@coreui/react'
 
 import { useEffect } from 'react';
@@ -18,6 +19,7 @@ import EnumeradorService from '../../../../services/enumerador-service/enumerado
 import SetorService from '../../../../services/setor-service/setor-service';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../features/auth';
+import { S } from 'chart.js/dist/chunks/helpers.core';
 
 const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
     const [loading, setLoading] = useState(false);
@@ -144,7 +146,7 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
                                             <option value='' disabled>Selecione</option>
                                             {tipoOcorrencias.map(t => {
                                                 return (
-                                                    <option value={t.TipoOcorrenciaID}>{t.Nome}</option>
+                                                    <option value={t.TipoOcorrenciaID}><b>{t.Nome}</b> - {t.Descricao}</option>
                                                 )
                                             })}
                                         </Field>
@@ -158,7 +160,9 @@ const OcorrenciaCadastrarPage: React.FC<any> = (prop) => {
                                             <option value='' disabled>Selecione</option>
                                             {setores.map(s => {
                                                 return (
-                                                    <option value={s.SetorID}>{s.Nome}</option>
+                                                    <>
+                                                        <option value={s.SetorID}>{s.Nome}</option>
+                                                    </>
                                                 )
                                             })}
                                         </Field>

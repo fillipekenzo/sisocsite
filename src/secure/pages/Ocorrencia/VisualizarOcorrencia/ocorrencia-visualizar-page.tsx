@@ -46,7 +46,7 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
     const [situacaoENUM, setSituacaoENUM] = useState<any[]>([]);
     const { addToast } = useToast();
     const location = useLocation();
-    const { from } = location.state || { from: { pathname: '/' } };
+    const { from } = location.state == undefined ? { from: { pathname: '/' } } : { from: { pathname: location.state } } || { from: { pathname: '/' } };
     const navigate = useNavigate();
     const { user } = useAuth();
     const [fileAnexo, setFileAnexo] = useState<any>(null);
@@ -261,8 +261,6 @@ const OcorrenciaVisualizarPage: React.FC<any> = (prop) => {
         var content = document.getElementById("relatorio") || "";
         var comp = document.getElementById("relatorio");
         comp?.setAttribute('style', "display:flex")
-        console.log("content", content);
-        console.log("document.body", document.body);
         doc.html(content, {
             callback: (doc) => {
                 doc.save("Relatório_Ocorrencia_" + ocorrencia.OcorrenciaID);

@@ -38,7 +38,6 @@ const OcorrenciaRelatorioPage: React.FC<OcorrenciaRelatorioProps> = (prop) => {
     const [setorSelecionado, setSetorSelecionado] = useState<any>();
 
     useEffect(() => {
-        console.log(prop.ocorrencia);
         setOcorrencia(prop.ocorrencia)
         carregarDados()
     }, [prop.ocorrencia])
@@ -48,7 +47,6 @@ const OcorrenciaRelatorioPage: React.FC<OcorrenciaRelatorioProps> = (prop) => {
             .then((response: any) => { setTipoOcorrencias(response.data) })
             .finally(() => {
                 let tipo = tipoOcorrencias.find(t => t.TipoOcorrenciaID == ocorrencia?.TipoOcorrenciaID)
-                console.log(tipo);
                 setTipoOcorrenciaSelecionado(tipo);
             })
 
@@ -56,7 +54,6 @@ const OcorrenciaRelatorioPage: React.FC<OcorrenciaRelatorioProps> = (prop) => {
             .then((response: any) => { setSetores(response.data) })
             .finally(() => {
                 let setor = setores.find(t => t.SetorID == ocorrencia?.SetorID)
-                console.log(setor);
                 setSetorSelecionado(setor);
             })
     };

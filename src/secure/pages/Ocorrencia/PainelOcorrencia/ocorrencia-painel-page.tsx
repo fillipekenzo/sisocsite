@@ -12,7 +12,9 @@ import {
     CSpinner,
     CTable,
     CWidgetStatsA,
+    CWidgetStatsB,
     CWidgetStatsD,
+    CWidgetStatsF,
 } from '@coreui/react'
 
 import { useEffect } from 'react';
@@ -21,86 +23,52 @@ import moment from 'moment';
 import OcorrenciaService from '../../../../services/ocorrencia-service/ocorrencia-service';
 import { useToast } from '../../../../features/toast';
 import { CChartLine } from '@coreui/react-chartjs';
-import { cibFacebook, cilArrowBottom } from '@coreui/icons';
+import { cibFacebook, cilArrowBottom, cilChartPie } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import BarChart from '../../../components/charts/Bar/bar-chart-component';
 import PieChart from '../../../components/charts/Pie/pie-chart-component';
 import SetorService from '../../../../services/setor-service/setor-service';
 import GraficoService from '../../../../services/grafico-service/grafico-service';
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-let i = 0;
-let j = 100;
-export const data1 = {
-    labels,
-    datasets: [
-        {
-            label: 'Dataset 1',
-            data: labels.map((a, index) => i += index),
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-        {
-            label: 'Dataset 2',
-            data: labels.map((a, index) => j -= index),
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        },
-    ],
-};
-
-export const data = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [
-        {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)',
-            ],
-            borderWidth: 1,
-        },
-    ],
-};
+import { data, data1 } from './initial-date-chart';
+import TipoOcorrenciaService from '../../../../services/tipo-ocorrencia-service/tipo-ocorrencia-service';
+import { useNavigate } from 'react-router-dom';
 
 const OcorrenciaPainelPage: React.FC<any> = (prop) => {
     const [loading, setLoading] = useState(false);
-    const [carregarDadosPie, setcarregarDadosPie] = useState(false);
-    const [carregarDadosBar, setcarregarDadosBar] = useState(false);
     const [dados, setDados] = useState<any[]>([]);
     const [setor, setSetor] = useState<any[]>([]);
+    const [tipoOcorrencia, setTipoOcorrencia] = useState<any[]>([]);
     const { addToast } = useToast();
-    const [consultaGraficoBar, setConsultaGraficoBar] = useState<any>();
-    const [dadosPie, setDadosPie] = useState<any>(data);
-    const [dadosBar, setDadosBar] = useState<any>(data1);
+    const navigate = useNavigate();
+    const [dadosPieSetor, setDadosPieSetor] = useState<any>(data);
+    const [dadosPieTipoOcorrencia, setDadosPieSetorTipoOcorrencia] = useState<any>(data);
+    const [consultaGraficoBarSituacao, setConsultaGraficoBarSituacao] = useState<any>();
+    const [dadosBarSituacao, setDadosBarSituacao] = useState<any>(data1);
+    const [carregarDadosPieSetor, setcarregarDadosPieSetor] = useState(false);
+    const [carregarDadosBarSituacao, setcarregarDadosBarSituacao] = useState(false);
+    const [carregarDadosBarTipoOcorrencia, setcarregarDadosBarTipoOcorrencia] = useState(false);
+    const userLogado = JSON.parse(localStorage.getItem('@Sisoc:user') || '');
+    const [ocorrenciasAbertas, setOcorrenciasAbertas] = useState(0);
+    const [ocorrenciasEmAtendimento, setOcorrenciasEmAtendimento] = useState(0);
+    const [ocorrenciasResolvidas, setOcorrenciasResolvidas] = useState(0);
 
     useEffect(() => {
         carregarDados()
     }, [])
 
     useEffect(() => {
-        if (carregarDadosPie == true) {
-            console.log(carregarDadosPie);
-            formatarDadosPie()
+        if (carregarDadosBarTipoOcorrencia == true) {
+            formatarDadosPieTipoOcorrencia()
         }
-        if (carregarDadosBar == true) {
-            console.log(carregarDadosPie);
+        if (carregarDadosPieSetor == true) {
+            formatarDadosPieSetor()
+        }
+        if (carregarDadosBarSituacao == true) {
             formatarDadosBar()
+            formatarDadosOcorrencias()
+
         }
-    }, [carregarDadosPie, carregarDadosBar])
+    }, [carregarDadosPieSetor, carregarDadosBarSituacao, carregarDadosBarTipoOcorrencia])
 
     const carregarDados = async (): Promise<void> => {
         setLoading(true)
@@ -118,20 +86,28 @@ const OcorrenciaPainelPage: React.FC<any> = (prop) => {
                         setSetor(data.data)
                     })
                     .finally(() => {
-                        setcarregarDadosPie(true)
+                        setcarregarDadosPieSetor(true)
+                    })
+
+                TipoOcorrenciaService.get()
+                    .then((data) => {
+                        setTipoOcorrencia(data.data)
+                    })
+                    .finally(() => {
+                        setcarregarDadosBarTipoOcorrencia(true);
                     })
                 setLoading(false)
             })
 
         GraficoService.getDadosGraficoVertical()
             .then((res) => {
-                setConsultaGraficoBar(res.data)
+                setConsultaGraficoBarSituacao(res.data)
             }).finally(() => {
-                setcarregarDadosBar(true);
+                setcarregarDadosBarSituacao(true);
             })
     };
 
-    const formatarDadosPie = () => {
+    const formatarDadosPieSetor = () => {
         let setorString: any[] = [];
         let dataSet: any[] = [];
         let dataformat: any[] = [];
@@ -163,16 +139,50 @@ const OcorrenciaPainelPage: React.FC<any> = (prop) => {
             borderWidth: 1,
         })
 
-        console.log(setor);
-        console.log(dados);
-        console.log(dataformat);
-        console.log(setorString);
-
         let dataTeste = {
             labels: setorString,
             datasets: dataSet
         }
-        setDadosPie(dataTeste);
+        setDadosPieSetor(dataTeste);
+    }
+
+    const formatarDadosPieTipoOcorrencia = () => {
+        let tipoOcorrenciaString: any[] = [];
+        let dataSet: any[] = [];
+        let dataformat: any[] = [];
+
+        tipoOcorrencia.map(t => {
+            tipoOcorrenciaString.push(t.Nome)
+            dataformat.push(dados.filter(d => t.TipoOcorrenciaID == d.TipoOcorrenciaID).length);
+        })
+
+        dataSet.push({
+            label: 'Quantidade Ocorrências',
+            data: dataformat,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+            ],
+            borderWidth: 1,
+        })
+
+        let dataTeste = {
+            labels: tipoOcorrenciaString,
+            datasets: dataSet
+        }
+        setDadosPieSetorTipoOcorrencia(dataTeste);
     }
 
     const formatarDadosBar = () => {
@@ -183,58 +193,116 @@ const OcorrenciaPainelPage: React.FC<any> = (prop) => {
         dataSet.push(
             {
                 label: 'Abertas',
-                data: consultaGraficoBar.QuantidadeAberto,
+                data: consultaGraficoBarSituacao.QuantidadeAberto,
                 borderColor: 'rgb(53, 162, 235)',
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
             },
             {
                 label: 'Resolvidas',
-                data: consultaGraficoBar.QuantidadeResolvido,
+                data: consultaGraficoBarSituacao.QuantidadeResolvido,
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
         )
 
-        console.log(setor);
-        console.log(dataformat);
-        console.log(setorString);
-
         let dataTeste = {
-            labels: consultaGraficoBar.Meses,
+            labels: consultaGraficoBarSituacao.Meses,
             datasets: dataSet
         }
 
-        console.log(consultaGraficoBar);
-        console.log(dataTeste);
+        setDadosBarSituacao(dataTeste);
+    }
 
-        setDadosBar(dataTeste);
+    const formatarDadosOcorrencias = () => {
+        let ocorrencias: any[] = []
+
+        if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ATENDIMENTO") {
+            ocorrencias = dados.filter(o => o.UsuarioAtribuidoID == userLogado.UsuarioID)
+        }
+        else if (userLogado.TipoUsuario?.Nome.toUpperCase() == "ESTUDANTE" || userLogado.TipoUsuario?.Nome.toUpperCase() == "DOCENTE") {
+            ocorrencias = dados.filter(o => o.UsuarioCadastroID == userLogado.UsuarioID)
+        }
+        setOcorrenciasAbertas(ocorrencias.filter(o => o.Situacao.toUpperCase() == "ABERTO").length)
+        setOcorrenciasEmAtendimento(ocorrencias.filter(o => o.Situacao.toUpperCase() == "EMATENDIMENTO").length)
+        setOcorrenciasResolvidas(ocorrencias.filter(o => o.Situacao.toUpperCase() == "RESOLVIDO").length)
+    }
+
+    const validaUsuario = () => {
+        return userLogado.TipoUsuario?.Nome.toUpperCase() == "ADMIN" || userLogado.TipoUsuario?.Nome.toUpperCase() == "SUPORTE"
     }
 
     return (
         <>
             <CSpinner hidden={!loading} />
             <h2>Painel de Ocorrências</h2>
-            <CContainer>
-                <CRow>
-                    <CCol sm={6}>
-                        <CCard className="text-center">
-                            <CCardHeader>Ocorrências por Setor</CCardHeader>
-                            <CCardBody>
-                                <PieChart data={dadosPie}></PieChart>
-                            </CCardBody>
-                        </CCard>
-                    </CCol>
-                    <CCol sm={6}>
-                        <CCard className="text-center">
-                            <CCardHeader>Ocorrências por Situação</CCardHeader>
-                            <CCardBody>
-                                <BarChart data={dadosBar}></BarChart>
-                            </CCardBody>
-                        </CCard>
-                    </CCol>
-                </CRow>
-            </CContainer>
+            <div className={Style.divPainel}>
+                {validaUsuario() ?
+                    <CContainer>
+                        <CRow>
+                            <CCol sm={4}>
+                                <CCard className="text-center">
+                                    <CCardHeader>Ocorrências por Setor</CCardHeader>
+                                    <CCardBody>
+                                        <PieChart data={dadosPieSetor}></PieChart>
+                                    </CCardBody>
+                                </CCard>
+                            </CCol>
 
+                            <CCol sm={4}>
+                                <CCard className="text-center">
+                                    <CCardHeader>Ocorrências por Situação</CCardHeader>
+                                    <CCardBody>
+                                        <BarChart data={dadosBarSituacao}></BarChart>
+                                    </CCardBody>
+                                </CCard>
+                            </CCol>
+
+                            <CCol sm={4}>
+                                <CCard className="text-center">
+                                    <CCardHeader>Ocorrências por Tipo de Ocorrência</CCardHeader>
+                                    <CCardBody>
+                                        <PieChart data={dadosPieTipoOcorrencia}></PieChart>
+                                    </CCardBody>
+                                </CCard>
+                            </CCol>
+                        </CRow>
+                    </CContainer>
+                    :
+                    <CContainer>
+                        <CRow>
+                            <CCol sm={4}>
+                                <CWidgetStatsB
+                                    className={`mb-3 ${Style.cardOcorrencia}`}
+                                    title="Ocorrências Abertas"
+                                    value={ocorrenciasAbertas}
+                                    onClick={() => { navigate("/ocorrencia/consultar") }}
+                                />
+                            </CCol>
+                            <CCol sm={4}>
+                                <CWidgetStatsB
+                                    className={`mb-3 ${Style.cardOcorrencia}`}
+                                    color="info"
+                                    inverse
+                                    title="Ocorrências Em Atendimento"
+                                    value={ocorrenciasEmAtendimento}
+                                    onClick={() => { navigate("/ocorrencia/consultar") }}
+                                />
+                            </CCol>
+                            <CCol sm={4}>
+                                <CWidgetStatsB
+                                    className={`mb-3 ${Style.cardOcorrencia}`}
+                                    color="primary"
+                                    inverse
+                                    title="Ocorrências Resolvidas"
+                                    value={ocorrenciasResolvidas}
+                                    onClick={() => { navigate("/ocorrencia/consultar") }}
+                                />
+                            </CCol>
+                        </CRow>
+                    </CContainer>
+                }
+
+            </div>
         </>
     )
 }

@@ -205,7 +205,7 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
                     return (
                         <>
                             <CTooltip
-                                content={'Descrição: ' + cell.row.original.AssuntoDescricao.Descricao}
+                                content={<><span className={Style.tooltipText}>Descrição: {cell.row.original.AssuntoDescricao.Descricao}</span></>}
                                 placement="top"
                             >
                                 <span>{cell.row.original.AssuntoDescricao.Assunto}</span>
@@ -213,7 +213,6 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
                         </>
                     )
                 }
-
             },
             {
                 accessorKey: 'UsuarioAtribuidoNome',
@@ -287,7 +286,7 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
     return (
         <>
             <CSpinner hidden={!loading} />
-            <h2>Ocorrência</h2>
+            <h2>Listagem de Ocorrências</h2>
             <div className={Style.divButtonCadastar}>
                 <CRow className={Style.rowOcorrencia}>
                     <CCol sm="auto">
@@ -331,7 +330,7 @@ const OcorrenciaPage: React.FC<any> = (prop) => {
                 muiTableBodyRowProps={({ row }) => ({
                     style: { backgroundColor: retornaCorLinha(row.original.Situacao) },
                     onClick: (event) => {
-                        navigate(`/ocorrencia/visualizar/${row._valuesCache.OcorrenciaID}`)
+                        navigate(`/ocorrencia/visualizar/${row._valuesCache.OcorrenciaID}`,{state:"/ocorrencia/consultar"})
                     },
                     sx: {
                         cursor: 'pointer',

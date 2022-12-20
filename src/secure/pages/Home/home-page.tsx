@@ -34,7 +34,7 @@ const HomePage: React.FC<any> = (prop) => {
                         <CContainer lg>
                             <Suspense fallback={<CSpinner color="primary" />}>
                                 <Routes>
-                                    <Route path="/" element={<OcorrenciaPage />} />
+                                    <Route path="/" element={<OcorrenciaPainelPage />} />
                                     <Route path="/error" element={<ErrorPage />} />
                                     <Route path="/tipo-ocorrencia" element={<TipoOcorrenciaPage />} />
                                     <Route path="/tipo-usuario" element={<TipoUsuarioPage />} />

@@ -167,7 +167,7 @@ const TipoUsuarioPage: React.FC<any> = (prop) => {
 
             {
                 accessorKey: 'Descricao',
-                header: 'Descricao',
+                header: 'Descrição',
                 muiTableHeadCellProps: {
                     align: 'center',
                 },

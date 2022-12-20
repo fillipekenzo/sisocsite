@@ -46,6 +46,10 @@
     border: 1px solid black;
 }
 
+.tooltipText{
+    text-align: left;
+}
+
 @media (max-width: 768px) {
     .rowOcorrencia{
         width: 200px;

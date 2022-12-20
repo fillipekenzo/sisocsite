@@ -24,7 +24,9 @@ import {
   cilCog,
   cilContact,
   cilAddressBook,
-  cilGroup
+  cilGroup,
+  cilBriefcase,
+  cilEnvelopeClosed
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 
@@ -61,13 +63,22 @@ const AppHeaderDropdown: React.FC<any> = (prop) => {
           {user.Nome}
         </CDropdownItem>
         <CDropdownItem>
-          <CIcon icon={cilEnvelopeOpen} className="me-2" />
+          <CIcon icon={cilEnvelopeClosed} className="me-2" />
           {user.Email}
         </CDropdownItem>
         <CDropdownItem >
           <CIcon icon={cilGroup} className="me-2" />
           {user.TipoUsuario.Nome}
         </CDropdownItem>
+        {
+          user.Setor ?
+            <CDropdownItem >
+              <CIcon icon={cilBriefcase} className="me-2" />
+              {user.Setor?.Sigla}
+            </CDropdownItem>
+            :
+            null
+        }
         <CDropdownItem className={Style.linkSair} onClick={() => { signOut(), navigate('/login') }}>
           <CIcon icon={cilAccountLogout} className="me-2" />
           Sair

@@ -10,6 +10,9 @@ interface User {
   TipoUsuario: {
     Nome: string;
   };
+  Setor: {
+    Sigla: string;
+  };
 }
 
 interface AuthState {

@@ -62,7 +62,7 @@ const TipoUsuarioPage: React.FC<any> = (prop) => {
                 data.data.map((d: any) => {
                     d.Acoes = <>
                         <CButton shape="rounded-pill" variant="ghost" color="info" size="sm" onClick={() => { setModelEditar(d), setVisibleEditar(true) }}>Editar</CButton>
-                        <CPopover
+                        {/* <CPopover
                             trigger='click'
                             title="Exluir registro"
                             content={<> Tem certeza que deseja excluir esse registro?
@@ -74,7 +74,7 @@ const TipoUsuarioPage: React.FC<any> = (prop) => {
                             placement="top"
                         >
                             <CButton shape="rounded-pill" variant="ghost" id={`excluir${d.TipoUsuarioID}`} color="danger" size="sm">Excluir</CButton>
-                        </CPopover>
+                        </CPopover> */}
                     </>;
                 })
                 setDados(data.data);

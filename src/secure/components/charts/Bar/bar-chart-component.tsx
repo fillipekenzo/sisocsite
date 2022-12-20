@@ -25,10 +25,6 @@ export const options = {
     legend: {
       position: 'top' as const,
     },
-    title: {
-      display: true,
-      text: 'Chart.js Bar Chart',
-    },
   },
 };
 
